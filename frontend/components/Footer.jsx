@@ -93,7 +93,7 @@ export default function Footer({ settings, categories = [] }) {
               </a>
             </li>
             <li className="num" dir="ltr">{faNum(settings?.mobile || '۰۹۱۲-۱۲۳-۴۵۶۷')}</li>
-            <li dir="ltr" className="text-white/45">{settings?.email || 'info@lifttire.ir'}</li>
+            <li dir="ltr" className="text-white/45">{settings?.email || 'info@lifttire.com'}</li>
             <li className="leading-6">{settings?.address}</li>
             <li className="text-white/40">{settings?.work_hours}</li>
           </ul>

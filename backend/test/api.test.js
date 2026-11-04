@@ -81,7 +81,7 @@ async function req(path, opts = {}) {
   const me = await req('/api/customer/me', { headers: { Authorization: `Bearer ${login.data.token}` } });
   ok('GET /api/customer/me', me.status === 200 && me.data.phone === '09121234567');
 
-  const admin = await req('/api/admin/login', { method: 'POST', body: JSON.stringify({ email: 'admin@lifttire.ir', password: 'Lift@12345' }) });
+  const admin = await req('/api/admin/login', { method: 'POST', body: JSON.stringify({ email: 'admin@lifttire.com', password: 'Lift@12345' }) });
   ok('ورود ادمین', admin.status === 200 && !!admin.data.token);
   const token = admin.data.token;
   const dash = await req('/api/admin/dashboard', { headers: { Authorization: `Bearer ${token}` } });

@@ -53,6 +53,7 @@ wait_db() {
 do_install() {
   need_root_hint
   ensure_env
+  render_nginx_conf
   info "بیلد ایمیج‌ها…"
   $COMPOSE build
   info "بالا آوردن سرویس‌ها…"
@@ -111,6 +112,7 @@ do_backup() {
 
 do_restart() {
   need_root_hint
+  render_nginx_conf
   $COMPOSE restart
   info "سرویس‌ها ری‌استارت شدند."
   do_status
@@ -129,13 +131,29 @@ do_status() {
 
 do_logs() { $COMPOSE logs -f --tail=120 "${2:-}"; }
 
+resolve_domain() {
+  if [ -z "${DOMAIN:-}" ] && [ -f .env ]; then
+    DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2 | tr -d '"'"'"' ')"
+  fi
+  export DOMAIN="${DOMAIN:-lifttire.com}"
+}
+
+render_nginx_conf() {
+  resolve_domain
+  if [ -f nginx/conf/lifttire.conf.template ]; then
+    sed "s|__DOMAIN__|${DOMAIN}|g" nginx/conf/lifttire.conf.template > nginx/conf/lifttire.conf
+    info "کانفیگ nginx برای دامنه ${DOMAIN} ساخته شد."
+  fi
+}
+
 do_seed() {
   need_root_hint
   $COMPOSE exec -T api node src/seed.js "${2:-}"
 }
 
 do_ssl_check() {
-  if [ -f nginx/certbot/conf/live/lifttire.ir/fullchain.pem ]; then
+  resolve_domain
+  if [ -f "nginx/certbot/conf/live/${DOMAIN}/fullchain.pem" ]; then
     info "گواهی SSL موجود است."
     return 0
   fi

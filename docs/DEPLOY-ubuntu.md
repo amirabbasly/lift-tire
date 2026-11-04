@@ -1,6 +1,6 @@
 # 🚀 راهنمای کامل دیپلوی «لیفت تایر» روی سرور تازه Ubuntu 24.04
 
-این راهنما از صفر تا آنلاین‌شدن سایت را پوشش می‌دهد؛ فرض بر این است که یک VPS تازه با **Ubuntu 24.04 LTS** خریده‌اید و دامنه `lifttire.ir` را در اختیار دارید.
+این راهنما از صفر تا آنلاین‌شدن سایت را پوشش می‌دهد؛ فرض بر این است که یک VPS تازه با **Ubuntu 24.04 LTS** خریده‌اید و دامنه `lifttire.com` را در اختیار دارید.
 
 ---
 
@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | IP سرور | مثلاً `185.x.x.x` | در پنل ارائه‌دهنده |
 | دسترسی SSH | کاربر `root` یا کاربر sudo | رمز یا کلید SSH |
-| دامنه | `lifttire.ir` | قابل مدیریت DNS |
+| دامنه | `lifttire.com` | قابل مدیریت DNS |
 | رم سرور | حداقل ۲ گیگابایت | ۱ گیگ با swap هم کار می‌کند ولی بیلد کند است |
 
 **رکوردهای DNS** (در پنل دامنه):
@@ -23,8 +23,8 @@
 بررسی انتشار DNS از سیستم خودتان:
 
 ```bash
-dig +short lifttire.ir
-dig +short www.lifttire.ir
+dig +short lifttire.com
+dig +short www.lifttire.com
 ```
 
 > تا وقتی این دو دستور IP سرور را برنگردانند، مرحله SSL را انجام ندهید.
@@ -113,19 +113,19 @@ ufw status verbose
 ## ۶) دریافت کد پروژه
 
 ```bash
-mkdir -p /var/www/lifttire.ir
-cd /var/www/lifttire.ir
+mkdir -p /var/www/lifttire.com
+cd /var/www/lifttire.com
 git clone <REPO_URL> .
 ```
 
-مسیر استاندارد پروژه: **`/var/www/lifttire.ir`**
+مسیر استاندارد پروژه: **`/var/www/lifttire.com`**
 
 ---
 
 ## ۷) تنظیم متغیرهای محیطی
 
 ```bash
-cd /var/www/lifttire.ir
+cd /var/www/lifttire.com
 cp .env.example .env
 
 # تولید JWT_SECRET و رمز دیتابیس
@@ -138,13 +138,17 @@ nano .env
 مقادیر مهم:
 
 ```env
+DOMAIN=lifttire.com
+NEXT_PUBLIC_SITE_URL=https://lifttire.com
 JWT_SECRET=<رشته تصادفی ۶۴ کاراکتری>
 POSTGRES_PASSWORD=<رمز قوی>
-ADMIN_EMAIL=admin@lifttire.ir
+ADMIN_EMAIL=admin@lifttire.com
 ADMIN_PASSWORD=<رمز دلخواه مدیر>
 NEXT_PUBLIC_API_BASE=
 API_INTERNAL_URL=http://api:4000
 ```
+
+> 🔁 **تغییر دامنه:** اگر دامنه‌تان چیز دیگری است، `DOMAIN` و `NEXT_PUBLIC_SITE_URL` را عوض کنید؛ `deploy.sh` هنگام `install`/`restart` کانفیگ nginx را از قالب می‌سازد (`sed` روی `nginx/conf/lifttire.conf.template`).
 
 > ⚠️ `ADMIN_PASSWORD` پیش‌فرض (`Lift@12345`) را حتماً عوض کنید — همان رمزی است که در `seed` ساخته می‌شود.
 
@@ -154,14 +158,14 @@ API_INTERNAL_URL=http://api:4000
 
 ```bash
 chmod +x deploy.sh scripts/ssl-certbot.sh
-DOMAIN=lifttire.ir EMAIL=you@example.com ./scripts/ssl-certbot.sh
+DOMAIN=lifttire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
 ```
 
 خروجی موفق:
 
 ```
-live/lifttire.ir/fullchain.pem
-live/lifttire.ir/privkey.pem
+live/lifttire.com/fullchain.pem
+live/lifttire.com/privkey.pem
 ```
 
 ---
@@ -186,17 +190,17 @@ live/lifttire.ir/privkey.pem
 
 ```bash
 ./deploy.sh status
-curl -I https://lifttire.ir
-curl -s https://lifttire.ir/api/health
-curl -s https://lifttire.ir/api/products?limit=1
+curl -I https://lifttire.com
+curl -s https://lifttire.com/api/health
+curl -s https://lifttire.com/api/products?limit=1
 ```
 
 انتظار می‌رود:
 
-- `https://lifttire.ir` → کد ۲۰۰ و صفحه فارسی
+- `https://lifttire.com` → کد ۲۰۰ و صفحه فارسی
 - `/api/health` → `{"status":"ok","db":"postgres",...}`
-- پنل مدیریت: `https://lifttire.ir/admin`
-- `http://lifttire.ir` و `https://www.lifttire.ir` → ریدایرکت به `https://lifttire.ir`
+- پنل مدیریت: `https://lifttire.com/admin`
+- `http://lifttire.com` و `https://www.lifttire.com` → ریدایرکت به `https://lifttire.com`
 
 ---
 
@@ -209,10 +213,10 @@ crontab -e
 
 ```cron
 # بکاپ روزانه ۳ بامداد
-0 3 * * * cd /var/www/lifttire.ir && ./deploy.sh backup >> backups/cron.log 2>&1
+0 3 * * * cd /var/www/lifttire.com && ./deploy.sh backup >> backups/cron.log 2>&1
 
 # تمدید خودکار SSL (هر روز ۴ بامداد)
-0 4 * * * cd /var/www/lifttire.ir && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 4 * * * cd /var/www/lifttire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
 ```
 
 بکاپ‌ها در `backups/` ذخیره و ۱۴ نسخه آخر نگه داشته می‌شود. برای انتقال به فضای ابری:
@@ -227,7 +231,7 @@ rsync -avz backups/ backup@other-server:/backups/lifttire/
 ## ۱۲) بروزرسانی سایت
 
 ```bash
-cd /var/www/lifttire.ir
+cd /var/www/lifttire.com
 ./deploy.sh update
 ```
 
@@ -273,7 +277,7 @@ docker stats --no-stream
 
 ```bash
 # وضعیت
-cd /var/www/lifttire.ir && ./deploy.sh status
+cd /var/www/lifttire.com && ./deploy.sh status
 
 # ری‌استارت
 ./deploy.sh restart
@@ -310,7 +314,7 @@ apt install -y curl ca-certificates gnupg git ufw unzip htop nano cron rsync
 **پس از پایان:** آدرس سایت، پنل ادمین و حساب‌های ورود را با تیم خود به اشتراک بگذارید و اولین بکاپ را دانلود کنید.
 
 ```text
-🌐 https://lifttire.ir
-🔐 https://lifttire.ir/admin
-📧 admin@lifttire.ir  /  <ADMIN_PASSWORD>
+🌐 https://lifttire.com
+🔐 https://lifttire.com/admin
+📧 admin@lifttire.com  /  <ADMIN_PASSWORD>
 ```

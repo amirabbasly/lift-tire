@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════
-#  دریافت گواهی SSL رایگان Let's Encrypt برای lifttire.ir
+#  دریافت گواهی SSL رایگان Let's Encrypt برای lifttire.com
 #  پیش‌نیاز: دامنه به IP سرور اشاره کند و پورت ۸۰ آزاد باشد.
 # ══════════════════════════════════════════════════════════════
 set -euo pipefail
@@ -8,8 +8,13 @@ set -euo pipefail
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$APP_DIR"
 
-DOMAIN="${DOMAIN:-lifttire.ir}"
-EMAIL="${EMAIL:-admin@lifttire.ir}"
+# اگر .env وجود دارد، دامنه و ایمیل از آن خوانده می‌شود
+if [ -f .env ] && [ -z "${DOMAIN:-}" ]; then
+  DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2 | tr -d '"'"'"' ')"
+fi
+
+DOMAIN="${DOMAIN:-lifttire.com}"
+EMAIL="${EMAIL:-admin@lifttire.com}"
 CONF="$APP_DIR/nginx/certbot/conf"
 WWW="$APP_DIR/nginx/certbot/www"
 

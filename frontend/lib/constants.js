@@ -1,4 +1,7 @@
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lifttire.com';
+
 export const SITE = {
+  url: SITE_URL,
   name: 'لیفت تایر',
   nameEn: 'LIFT TIRE',
   tagline: 'لاستیک اصل، ایمنی واقعی',
