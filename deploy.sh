@@ -177,7 +177,7 @@ do_doctor() {
     ips="$(getent ahostsv4 "$d" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' || true)"
     echo "   $d → ${ips:-نامشخص}"
     case " $ips " in
-      *" 104.21."*|*" 172.67."*|*" 172.64."*) echo "     ↳ پشت Cloudflare (روش DNS-01 یا Origin Certificate مناسب است)" ;;
+      *" 104.21."*|*" 172.67."*|*" 172.64."*) echo "     ↳ پشت Cloudflare — برای certbot موقتاً رکورد را DNS only کنید (یا Origin Certificate)" ;;
       *"${SERVER_IP:-__none__}"*) echo "     ↳ مستقیم به این سرور ✓" ;;
     esac
   done

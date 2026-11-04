@@ -322,6 +322,12 @@ docker compose exec postgres psql -U lifttire -d lifttire
 # اجرای تست API روی سرور
 docker compose exec api node test/api.test.js
 
+# گرفتن / تمدید گواهی SSL (بدون API Token)
+./deploy.sh ssl
+
+# حالت nginx
+docker compose logs --tail=20 nginx | grep lifttire-nginx
+
 # حجم دیسک
 df -h && docker system df
 ```
