@@ -69,9 +69,20 @@ function fixPath(p, fallback) {
   return p;
 }
 
-/** اگر USE_PGLITE صریحاً true نبود ولی DATABASE_URL قابل استفاده نبود، PGlite انتخاب می‌شود */
-const USE_PGLITE = String(FILE_ENV.USE_PGLITE ?? '').toLowerCase() === 'true';
-const DB_URL = (FILE_ENV.DATABASE_URL || '').replace('@postgres:', '@127.0.0.1:');
+/**
+ * انتخاب دیتابیس — امن‌سازی مهم:
+ * اگر .env اصلاً USE_PGLITE نداشت یا DATABASE_URL خالی/غیرقابل‌استفاده بود،
+ * به PGlite برمی‌گردیم تا API هرگز کرش‌لوپ نشود (خطای رایج «postgres:5432» روی سرور بدون Postgres).
+ */
+const RAW_USE_PGLITE = String(FILE_ENV.USE_PGLITE ?? '').toLowerCase();
+const DB_URL = (FILE_ENV.DATABASE_URL || '').trim().replace('@postgres:', '@127.0.0.1:');
+const DB_USABLE = /^postgres(ql)?:\/\/.+@.+:\d+\//.test(DB_URL);
+
+let USE_PGLITE;
+if (RAW_USE_PGLITE === 'true') USE_PGLITE = true;
+else if (RAW_USE_PGLITE === 'false') USE_PGLITE = DB_USABLE ? false : true; // صریحاً pg خواسته ولی آدرس ناقص است
+else USE_PGLITE = !DB_USABLE; // تعیین‌نشده → اگر آدرس سالم نبود PGlite
+
 const UPLOAD_PATH = fixPath(FILE_ENV.UPLOAD_DIR, path.join(BACKEND, 'uploads'));
 const PG_PATH = fixPath(FILE_ENV.PGDATA, path.join(BACKEND, 'data', 'pglite'));
 
