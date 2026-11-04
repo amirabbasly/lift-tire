@@ -21,14 +21,25 @@ CERT_ROOT="${CERT_ROOT:-/etc/letsencrypt}"
 
 log() { echo "[lifttire-nginx] $*"; }
 
+# خواندن مسیرهای گواهی از https.conf؛ اگر فایل رندرشده نبود از قالب می‌خوانیم
+conf_source() {
+  if [ -f "$SITE_DIR/https.conf" ]; then
+    echo "$SITE_DIR/https.conf"
+  elif [ -f "$SITE_DIR/https.conf.template" ]; then
+    echo "$SITE_DIR/https.conf.template"
+  fi
+}
+
 has_cert() {
-  [ -f "$SITE_DIR/https.conf" ] || return 1
-  cert="$(sed -n 's|.*\(/etc/letsencrypt/live/[^/]*/fullchain\.pem\).*|\1|p' "$SITE_DIR/https.conf" | head -1)"
-  key="$(sed -n 's|.*\(/etc/letsencrypt/live/[^/]*/privkey\.pem\).*|\1|p' "$SITE_DIR/https.conf" | head -1)"
-  if [ -n "$cert" ] && [ -n "$key" ]; then
-    cert="${CERT_ROOT}${cert#/etc/letsencrypt}"
-    key="${CERT_ROOT}${key#/etc/letsencrypt}"
-    [ -f "$cert" ] && [ -f "$key" ] && return 0
+  src="$(conf_source)"
+  if [ -n "$src" ]; then
+    cert="$(sed -n 's|.*\(/etc/letsencrypt/live/[^/]*/fullchain\.pem\).*|\1|p' "$src" | head -1)"
+    key="$(sed -n 's|.*\(/etc/letsencrypt/live/[^/]*/privkey\.pem\).*|\1|p' "$src" | head -1)"
+    if [ -n "$cert" ] && [ -n "$key" ]; then
+      cert="${CERT_ROOT}${cert#/etc/letsencrypt}"
+      key="${CERT_ROOT}${key#/etc/letsencrypt}"
+      [ -f "$cert" ] && [ -f "$key" ] && return 0
+    fi
   fi
   # fallback: هر گواهی معتبر داخل live
   for f in "$CERT_ROOT"/live/*/fullchain.pem; do
