@@ -66,8 +66,13 @@ do_install() {
   else
     warn "seed قبلاً اجرا شده یا با خطا مواجه شد — برای بازسازی: ./deploy.sh seed --force"
   fi
-  do_ssl_check || true
-  $COMPOSE up -d nginx
+  if do_ssl_check; then
+    $COMPOSE up -d nginx
+  else
+    warn "nginx بالا نیامد (چون گواهی SSL هنوز نیست)."
+    warn "بعد از درست‌کردن DNS اجرا کنید: ./scripts/ssl-certbot.sh"
+    warn "سپس: ./deploy.sh restart"
+  fi
   info "نصب کامل شد 🎉"
   do_status
 }
@@ -113,7 +118,12 @@ do_backup() {
 do_restart() {
   need_root_hint
   render_nginx_conf
-  $COMPOSE restart
+  if do_ssl_check; then
+    $COMPOSE restart
+  else
+    warn "گواهی SSL موجود نیست — nginx ری‌استارت نشد. اجرا کنید: ./scripts/ssl-certbot.sh"
+    $COMPOSE up -d postgres api web
+  fi
   info "سرویس‌ها ری‌استارت شدند."
   do_status
 }

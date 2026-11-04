@@ -318,3 +318,72 @@ apt install -y curl ca-certificates gnupg git ufw unzip htop nano cron rsync
 🔐 https://lifttire.com/admin
 📧 admin@lifttire.com  /  <ADMIN_PASSWORD>
 ```
+
+---
+
+## ۱۹) عیب‌یابی SSL و «nginx در حال ری‌استارت»
+
+اگر در `./deploy.sh install` این پیام را دیدید:
+
+```
+⚠ گواهی SSL یافت نشد — nginx تا زمان اجرای scripts/ssl-certbot.sh بالا نمی‌آید.
+lifttire_nginx ... Restarting (1)
+```
+
+یعنی `nginx` دارد بالا می‌آید و چون فایل گواهی وجود ندارد، کرش می‌کند و دوباره تلاش می‌کند. **این طبیعی است**؛ تا گرفتن گواهی ادامه دارد. برای متوقف‌کردن حلقه:
+
+```bash
+cd /var/www/lifttire.com/lift-tire
+docker compose stop nginx
+```
+
+### چرا certbot شکست می‌خورد؟
+
+خروجی certbot دقیقاً می‌گوید کدام دامنه مشکل دارد:
+
+| پیام | معنی | راه‌حل |
+| --- | --- | --- |
+| `Timeout during connect` | پورت ۸۰ از بیرون بسته است یا IP اشتباه است | باز کردن ۸۰/۴۴۳ در ufw **و در فایروال پنل ارائه‌دهنده** |
+| `Invalid response ... 404` با یک IP دیگر | رکورد A به سرور دیگری اشاره می‌کند | اصلاح رکورد A در پنل DNS |
+| `unauthorized` برای دامنه اصلی ولی www سالم | معمولاً A یا AAAA دامنه اصلی اشتباه است | حذف AAAA/CNAME اشتباه، ست‌کردن A درست |
+
+بررسی سریع:
+
+```bash
+curl -4 -s https://api.ipify.org; echo          # IP واقعی این سرور
+getent ahostsv4 lifttire.com                     # دامنه اصلی به کجا می‌رود؟
+getent ahostsv4 www.lifttire.com                 # www به کجا می‌رود؟
+ss -lntp | grep ':80'                            # چه چیزی پورت ۸۰ را گرفته؟
+ufw status
+```
+
+رکوردهای لازم:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | `@` | IP سرور |
+| A | `www` | IP سرور |
+| AAAA | `@` / `www` | ❌ حذف شود (اگر به این سرور اشاره نمی‌کند) |
+| CNAME | `www` | ❌ حذف شود |
+
+### گرفتن گواهی (نسخهٔ مقاوم اسکریپت)
+
+از نسخهٔ جدید `scripts/ssl-certbot.sh` استفاده کنید؛ اول DNS را چک می‌کند، بعد یک nginx موقت روی پورت ۸۰ بالا می‌آورد و با روش **webroot** گواهی می‌گیرد (بدون درگیرشدن با پورت اشغال‌شده):
+
+```bash
+./scripts/ssl-certbot.sh --dry-run     # تست بدون مصرف سهمیه
+./scripts/ssl-certbot.sh               # دریافت واقعی
+./deploy.sh restart                    # بالا آمدن nginx با HTTPS
+```
+
+### اگر پشت Cloudflare هستید
+
+مؤقتاً رکورد را روی **DNS only** (ابر خاکستری) بگذارید تا certbot کار کند؛ بعد از گرفتن گواهی می‌توانید Proxy را روشن کنید (حالت Full/Strict).
+
+### تمدید خودکار
+
+```cron
+0 4 * * * cd /var/www/lifttire.com/lift-tire && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+```
+
+> اگر مخزن را داخل `/var/www/lifttire.com/lift-tire` کلون کرده‌اید، مسیرها در cron و بکاپ باید همان مسیر باشند.
