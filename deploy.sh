@@ -90,7 +90,13 @@ do_update() {
   info "بیلد مجدد…"
   $COMPOSE build
   info "ری‌استارت سرویس‌ها…"
-  $COMPOSE up -d --remove-orphans
+  $COMPOSE up -d --remove-orphans postgres api web
+  if do_ssl_check; then
+    $COMPOSE up -d nginx
+  else
+    warn "گواهی SSL موجود نیست — nginx بالا نیامد."
+    warn "برای راه‌اندازی سریع: ./scripts/cf-flexible.sh enable  |  گواهی Origin: ./scripts/install-origin-cert.sh <cert> <key>"
+  fi
   sleep 4
   info "بروزرسانی انجام شد ✅"
   do_status
