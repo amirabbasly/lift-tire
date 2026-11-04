@@ -67,7 +67,7 @@ do_install() {
     warn "seed قبلاً اجرا شده یا با خطا مواجه شد — برای بازسازی: ./deploy.sh seed --force"
   fi
   info "بالا آوردن nginx (حالت خودکار: با گواهی → HTTPS، بدون گواهی → HTTP)…"
-  $COMPOSE up -d nginx
+  start_nginx || warn "nginx بالا نیامد — راهنمای بالا را ببینید. بقیهٔ سرویس‌ها سالم‌اند."
   sleep 2
   if do_ssl_check >/dev/null 2>&1; then
     info "nginx با HTTPS بالا آمد."
@@ -92,7 +92,7 @@ do_update() {
   $COMPOSE build
   info "ری‌استارت سرویس‌ها…"
   $COMPOSE up -d --remove-orphans postgres api web
-  $COMPOSE up -d nginx
+  start_nginx || true
   if do_ssl_check >/dev/null 2>&1; then
     info "nginx در حالت HTTPS."
   else
@@ -128,7 +128,7 @@ do_restart() {
   render_nginx_conf
   $COMPOSE up -d postgres api web
   # nginx با ری‌استارت، حالت خودکار (http/https) را دوباره تشخیص می‌دهد
-  $COMPOSE up -d --force-recreate nginx
+  start_nginx --force-recreate || warn "nginx بالا نیامد؛ docker compose logs nginx را ببینید."
   info "سرویس‌ها ری‌استارت شدند."
   do_status
 }
@@ -249,6 +249,14 @@ do_status() {
 
   # حالت nginx: HTTP یا HTTPS
   resolve_domain
+  NGINX_STATE="$(docker inspect -f '{{.State.Status}}' lifttire_nginx 2>/dev/null || echo "missing")"
+  if [ "$NGINX_STATE" != "running" ]; then
+    echo ""
+    error "کانتینر nginx در حال اجرا نیست (وضعیت: $NGINX_STATE)"
+    echo "   docker compose logs --tail=40 nginx"
+    echo "   docker compose up -d nginx"
+    return 1
+  fi
   HTTP_CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1/healthz 2>/dev/null || true)"
   echo ""
   if [ -f "nginx/certbot/conf/live/${DOMAIN}/fullchain.pem" ]; then
@@ -266,6 +274,28 @@ do_status() {
 }
 
 do_logs() { $COMPOSE logs -f --tail=120 "${2:-}"; }
+
+# بالا آوردن nginx با پیام خطای فارسی و تشخیص اشغال‌بودن پورت‌ها
+start_nginx() {
+  local args="${1:-}"
+  # shellcheck disable=SC2086
+  if ! $COMPOSE up -d $args nginx >/tmp/lifttire-nginx-up.log 2>&1; then
+    error "بالا آوردن nginx ناموفق بود:"
+    sed -n '1,20p' /tmp/lifttire-nginx-up.log || true
+    if grep -qiE "port is already allocated|address already in use" /tmp/lifttire-nginx-up.log 2>/dev/null \
+       || { command -v ss >/dev/null 2>&1 && ss -lntp 2>/dev/null | grep -qE ':(80|443)\s'; }; then
+      warn "پورت ۸۰ یا ۴۴۳ توسط سرویس دیگری اشغال شده است."
+      command -v ss >/dev/null 2>&1 && ss -lntp 2>/dev/null | grep -E ':(80|443)\s' || true
+      echo "   اگر nginx یا apache روی خودِ سیستم نصب است:"
+      echo "      systemctl disable --now nginx apache2"
+      echo "   چه سرویسی پورت را گرفته:"
+      echo "      sudo ss -lntp | grep -E ':80|:443'"
+    fi
+    warn "لاگ کامل:  docker compose logs --tail=50 nginx"
+    return 1
+  fi
+  return 0
+}
 
 resolve_domain() {
   if [ -z "${DOMAIN:-}" ] && [ -f .env ]; then
@@ -301,7 +331,7 @@ do_ssl() {
       return 0 ;;
   esac
   info "ری‌استارت nginx برای فعال‌سازی HTTPS…"
-  $COMPOSE up -d --force-recreate nginx
+  start_nginx --force-recreate || warn "nginx بالا نیامد؛ لاگ را ببینید."
   sleep 2
   do_status
 }
