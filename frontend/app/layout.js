@@ -24,7 +24,7 @@ const barlow = localFont({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://lifttire.com'),
+  metadataBase: new URL('https://lift-tire.com'),
   title: {
     default: 'لیفت تایر | خرید لاستیک اصل خودرو با ضمانت اصالت',
     template: '%s | لیفت تایر',

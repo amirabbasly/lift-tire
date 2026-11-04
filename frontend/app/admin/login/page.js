@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
           <div className="mt-5 space-y-3">
             <div>
               <label className="label">ایمیل مدیر</label>
-              <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="field" dir="ltr" placeholder="admin@lifttire.com" />
+              <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="field" dir="ltr" placeholder="admin@lift-tire.com" />
             </div>
             <div>
               <label className="label">رمز عبور</label>
@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
 
           <div className="mt-4 rounded-xl bg-white p-3 text-[11px] text-steel-500 shadow-card">
             <p className="font-bold text-graphite-800">دسترسی نمایشی</p>
-            <p className="mt-1">ایمیل: <span className="num" dir="ltr">admin@lifttire.com</span></p>
+            <p className="mt-1">ایمیل: <span className="num" dir="ltr">admin@lift-tire.com</span></p>
             <p>رمز: <span className="num" dir="ltr">Lift@12345</span></p>
           </div>
         </form>

@@ -99,7 +99,7 @@ const settings = {
   tagline_en: 'LIFT TIRE — GRIP THE ROAD',
   phone: '021-91001234',
   mobile: '0912-123-4567',
-  email: 'info@lifttire.com',
+  email: 'info@lift-tire.com',
   address: 'تهران، بزرگراه شهید همت، مجتمع تجاری لاستیک، پلاک ۱۲',
   work_hours: 'شنبه تا پنجشنبه ۹ تا ۱۹',
   instagram: 'https://instagram.com/lifttire',
@@ -183,14 +183,14 @@ async function run() {
   // admin
   await query(
     'INSERT INTO admins (email, name, password_hash) VALUES ($1,$2,$3) ON CONFLICT (email) DO UPDATE SET password_hash = $3',
-    [process.env.ADMIN_EMAIL || 'admin@lifttire.com', 'مدیر لیفت تایر', hash(process.env.ADMIN_PASSWORD || 'Lift@12345')],
+    [process.env.ADMIN_EMAIL || 'admin@lift-tire.com', 'مدیر لیفت تایر', hash(process.env.ADMIN_PASSWORD || 'Lift@12345')],
   );
 
   // demo customer
   const cust = await one(
     `INSERT INTO customers (phone, name, email, password_hash) VALUES ($1,$2,$3,$4)
      ON CONFLICT (phone) DO UPDATE SET name = $2 RETURNING id`,
-    ['09121234567', 'کاربر دمو', 'demo@lifttire.com', hash('test1234')],
+    ['09121234567', 'کاربر دمو', 'demo@lift-tire.com', hash('test1234')],
   );
   await query(
     `INSERT INTO addresses (customer_id, title, province, city, address, postal_code, receiver, phone, is_default)
@@ -343,7 +343,7 @@ async function run() {
     SELECT 'brands', COUNT(*)::int FROM brands UNION ALL SELECT 'categories', COUNT(*)::int FROM categories UNION ALL
     SELECT 'banners', COUNT(*)::int FROM banners UNION ALL SELECT 'posts', COUNT(*)::int FROM posts`);
   console.log('✅ داده دمو آماده شد:', counts.map((r) => `${r.t}=${r.c}`).join(' · '));
-  console.log('   ادمین: admin@lifttire.com / Lift@12345');
+  console.log('   ادمین: admin@lift-tire.com / Lift@12345');
   console.log('   مشتری: 09121234567 / test1234');
 }
 

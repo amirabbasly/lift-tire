@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04T16:14:02.474Z",
+ "generatedAt": "2026-11-04T16:35:03.196Z",
  "home": {
   "settings": {
    "site_name": "لیفت تایر",
@@ -8,7 +8,6 @@
    "tagline_en": "LIFT TIRE — GRIP THE ROAD",
    "phone": "021-91001234",
    "mobile": "0912-123-4567",
-   "email": "info@lifttire.com",
    "address": "تهران، بزرگراه شهید همت، مجتمع تجاری لاستیک، پلاک ۱۲",
    "work_hours": "شنبه تا پنجشنبه ۹ تا ۱۹",
    "instagram": "https://instagram.com/lifttire",
@@ -104,7 +103,8 @@
      "value": 10,
      "suffix": ""
     }
-   ]
+   ],
+   "email": "info@lift-tire.com"
   },
   "banners": {
    "hero": [
@@ -954,11 +954,11 @@
     "price": 690000,
     "old_price": null,
     "discount": 0,
-    "stock": 59,
+    "stock": 58,
     "sku": "LT-1020",
     "rating": 4.6,
     "rating_count": 92,
-    "sold_count": 351,
+    "sold_count": 352,
     "badge": null,
     "country": "ایران",
     "made_year": 2024,
@@ -1241,11 +1241,11 @@
     "price": 690000,
     "old_price": null,
     "discount": 0,
-    "stock": 59,
+    "stock": 58,
     "sku": "LT-1020",
     "rating": 4.6,
     "rating_count": 92,
-    "sold_count": 351,
+    "sold_count": 352,
     "badge": null,
     "country": "ایران",
     "made_year": 2024,
@@ -2199,11 +2199,11 @@
    "price": 690000,
    "old_price": null,
    "discount": 0,
-   "stock": 59,
+   "stock": 58,
    "sku": "LT-1020",
    "rating": 4.6,
    "rating_count": 92,
-   "sold_count": 351,
+   "sold_count": 352,
    "badge": null,
    "country": "ایران",
    "made_year": 2024,

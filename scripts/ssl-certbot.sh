@@ -18,6 +18,26 @@ green() { printf '\033[32m%s\033[0m\n' "$*"; }
 yellow(){ printf '\033[33m%s\033[0m\n' "$*"; }
 bold()  { printf '\033[1m%s\033[0m\n' "$*"; }
 
+# آیا IP داده‌شده متعلق به Cloudflare است؟ (برای تشخیص حالت پروکسی)
+is_cf_ip() {
+  local ip="$1" a b
+  IFS=. read -r a b _ <<< "$ip"
+  case "$a" in
+    104) [ "$b" -ge 16 ] 2>/dev/null && [ "$b" -le 31 ] 2>/dev/null ;;
+    172) [ "$b" -ge 64 ] 2>/dev/null && [ "$b" -le 71 ] 2>/dev/null ;;
+    108) [ "$b" -eq 162 ] 2>/dev/null ;;
+    162) [ "$b" -ge 158 ] 2>/dev/null && [ "$b" -le 159 ] 2>/dev/null ;;
+    173) [ "$b" -eq 245 ] 2>/dev/null ;;
+    103) [ "$b" -eq 21 ] 2>/dev/null || [ "$b" -eq 22 ] 2>/dev/null || [ "$b" -eq 31 ] 2>/dev/null ;;
+    141) [ "$b" -eq 101 ] 2>/dev/null ;;
+    190) [ "$b" -eq 93 ] 2>/dev/null ;;
+    188) [ "$b" -eq 114 ] 2>/dev/null ;;
+    197) [ "$b" -eq 234 ] 2>/dev/null ;;
+    198) [ "$b" -eq 41 ] 2>/dev/null ;;
+    *) return 1 ;;
+  esac
+}
+
 # ── خواندن دامنه/ایمیل از .env ────────────────────────────────
 if [ -f .env ]; then
   if [ -z "${DOMAIN:-}" ]; then
@@ -27,8 +47,8 @@ if [ -f .env ]; then
     EMAIL="$(grep -E '^ADMIN_EMAIL=' .env | head -1 | cut -d= -f2 | tr -d '"'"'"' ' || true)"
   fi
 fi
-DOMAIN="${DOMAIN:-lifttire.com}"
-EMAIL="${EMAIL:-admin@lifttire.com}"
+DOMAIN="${DOMAIN:-lift-tire.com}"
+EMAIL="${EMAIL:-admin@lift-tire.com}"
 CONF="$APP_DIR/nginx/certbot/conf"
 WWW="$APP_DIR/nginx/certbot/www"
 ACME_NAME="lifttire-acme"
@@ -54,6 +74,40 @@ DNS_WWW="$(getent ahostsv4 "www.$DOMAIN" 2>/dev/null | awk '{print $1}' | sort -
 echo "   IP این سرور        : ${SERVER_IP:-نامشخص}"
 echo "   $DOMAIN  →  ${DNS_MAIN:-نامشخص}"
 echo "   www.$DOMAIN  →  ${DNS_WWW:-نامشخص}"
+
+# ── تشخیص Cloudflare ─────────────────────────────────────────
+ALL_IPS="$(printf '%s %s\n' "$DNS_MAIN" "$DNS_WWW" | tr ' ' '\n' | grep -v '^$' | sort -u | tr '\n' ' ')"
+CF_HIT=0
+for ip in $ALL_IPS; do
+  if is_cf_ip "$ip"; then CF_HIT=1; fi
+done
+
+if [ "$CF_HIT" -eq 1 ]; then
+  cat <<EOF
+
+$(yellow "این دامنه پشت Cloudflare است (IPهای ${ALL_IPS}متعلق به Cloudflare هستند).")
+$(yellow "در این حالت certbot نمی‌تواند HTTP-01 را رد کند؛ دو راه دارید:")
+
+$(bold "راه ۱ (پیشنهادی) — گواهی Origin از خود Cloudflare (رایگان، ۱۵ ساله):")
+   1) پنل Cloudflare → SSL/TLS → Origin Server → Create Certificate
+      Hostnames:  $DOMAIN  و  *.$DOMAIN        Validity: 15 years
+   2) دو فایل را روی سرور ذخیره کنید (مثلاً /root/origin-cert.pem و /root/origin-key.pem)
+   3) نصب:
+        ./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
+   4) در پنل Cloudflare: SSL/TLS → Overview → حالت  Full (strict)
+   5) در رکوردهای DNS، A دامنه اصلی و www باید به IP همین سرور اشاره کنند (${SERVER_IP:-IP_سرور}) و پروکسی می‌تواند روشن بماند.
+
+$(bold "راه ۲ — موقتاً پروکسی را خاموش کنید و certbot بگیرید:")
+   1) پنل Cloudflare → DNS → برای رکوردهای @ و www گزینه Proxy status را روی  DNS only (ابر خاکستری) بگذارید
+   2) مقدار A باید IP همین سرور باشد: ${SERVER_IP:-IP_سرور}
+   3) ./scripts/ssl-certbot.sh
+   4) بعد از گرفتن گواهی، پروکسی را روشن کنید و SSL mode را  Full (strict)  بگذارید
+
+$(yellow "توجه: اگر SSL mode روی Flexible باشد، سایت وارد حلقهٔ ریدایرکت می‌شود.")
+
+EOF
+  exit 2
+fi
 
 DNS_OK=1
 if [ -n "$SERVER_IP" ]; then

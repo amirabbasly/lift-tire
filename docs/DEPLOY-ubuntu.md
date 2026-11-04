@@ -1,6 +1,6 @@
 # 🚀 راهنمای کامل دیپلوی «لیفت تایر» روی سرور تازه Ubuntu 24.04
 
-این راهنما از صفر تا آنلاین‌شدن سایت را پوشش می‌دهد؛ فرض بر این است که یک VPS تازه با **Ubuntu 24.04 LTS** خریده‌اید و دامنه `lifttire.com` را در اختیار دارید.
+این راهنما از صفر تا آنلاین‌شدن سایت را پوشش می‌دهد؛ فرض بر این است که یک VPS تازه با **Ubuntu 24.04 LTS** خریده‌اید و دامنه `lift-tire.com` را در اختیار دارید.
 
 ---
 
@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | IP سرور | مثلاً `185.x.x.x` | در پنل ارائه‌دهنده |
 | دسترسی SSH | کاربر `root` یا کاربر sudo | رمز یا کلید SSH |
-| دامنه | `lifttire.com` | قابل مدیریت DNS |
+| دامنه | `lift-tire.com` | قابل مدیریت DNS |
 | رم سرور | حداقل ۲ گیگابایت | ۱ گیگ با swap هم کار می‌کند ولی بیلد کند است |
 
 **رکوردهای DNS** (در پنل دامنه):
@@ -23,8 +23,8 @@
 بررسی انتشار DNS از سیستم خودتان:
 
 ```bash
-dig +short lifttire.com
-dig +short www.lifttire.com
+dig +short lift-tire.com
+dig +short www.lift-tire.com
 ```
 
 > تا وقتی این دو دستور IP سرور را برنگردانند، مرحله SSL را انجام ندهید.
@@ -113,19 +113,19 @@ ufw status verbose
 ## ۶) دریافت کد پروژه
 
 ```bash
-mkdir -p /var/www/lifttire.com
-cd /var/www/lifttire.com
+mkdir -p /var/www/lift-tire.com
+cd /var/www/lift-tire.com
 git clone <REPO_URL> .
 ```
 
-مسیر استاندارد پروژه: **`/var/www/lifttire.com`**
+مسیر استاندارد پروژه: **`/var/www/lift-tire.com`**
 
 ---
 
 ## ۷) تنظیم متغیرهای محیطی
 
 ```bash
-cd /var/www/lifttire.com
+cd /var/www/lift-tire.com
 cp .env.example .env
 
 # تولید JWT_SECRET و رمز دیتابیس
@@ -138,11 +138,11 @@ nano .env
 مقادیر مهم:
 
 ```env
-DOMAIN=lifttire.com
-NEXT_PUBLIC_SITE_URL=https://lifttire.com
+DOMAIN=lift-tire.com
+NEXT_PUBLIC_SITE_URL=https://lift-tire.com
 JWT_SECRET=<رشته تصادفی ۶۴ کاراکتری>
 POSTGRES_PASSWORD=<رمز قوی>
-ADMIN_EMAIL=admin@lifttire.com
+ADMIN_EMAIL=admin@lift-tire.com
 ADMIN_PASSWORD=<رمز دلخواه مدیر>
 NEXT_PUBLIC_API_BASE=
 API_INTERNAL_URL=http://api:4000
@@ -158,14 +158,14 @@ API_INTERNAL_URL=http://api:4000
 
 ```bash
 chmod +x deploy.sh scripts/ssl-certbot.sh
-DOMAIN=lifttire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
+DOMAIN=lift-tire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
 ```
 
 خروجی موفق:
 
 ```
-live/lifttire.com/fullchain.pem
-live/lifttire.com/privkey.pem
+live/lift-tire.com/fullchain.pem
+live/lift-tire.com/privkey.pem
 ```
 
 ---
@@ -190,17 +190,17 @@ live/lifttire.com/privkey.pem
 
 ```bash
 ./deploy.sh status
-curl -I https://lifttire.com
-curl -s https://lifttire.com/api/health
-curl -s https://lifttire.com/api/products?limit=1
+curl -I https://lift-tire.com
+curl -s https://lift-tire.com/api/health
+curl -s https://lift-tire.com/api/products?limit=1
 ```
 
 انتظار می‌رود:
 
-- `https://lifttire.com` → کد ۲۰۰ و صفحه فارسی
+- `https://lift-tire.com` → کد ۲۰۰ و صفحه فارسی
 - `/api/health` → `{"status":"ok","db":"postgres",...}`
-- پنل مدیریت: `https://lifttire.com/admin`
-- `http://lifttire.com` و `https://www.lifttire.com` → ریدایرکت به `https://lifttire.com`
+- پنل مدیریت: `https://lift-tire.com/admin`
+- `http://lift-tire.com` و `https://www.lift-tire.com` → ریدایرکت به `https://lift-tire.com`
 
 ---
 
@@ -213,10 +213,10 @@ crontab -e
 
 ```cron
 # بکاپ روزانه ۳ بامداد
-0 3 * * * cd /var/www/lifttire.com && ./deploy.sh backup >> backups/cron.log 2>&1
+0 3 * * * cd /var/www/lift-tire.com && ./deploy.sh backup >> backups/cron.log 2>&1
 
 # تمدید خودکار SSL (هر روز ۴ بامداد)
-0 4 * * * cd /var/www/lifttire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 4 * * * cd /var/www/lift-tire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
 ```
 
 بکاپ‌ها در `backups/` ذخیره و ۱۴ نسخه آخر نگه داشته می‌شود. برای انتقال به فضای ابری:
@@ -231,7 +231,7 @@ rsync -avz backups/ backup@other-server:/backups/lifttire/
 ## ۱۲) بروزرسانی سایت
 
 ```bash
-cd /var/www/lifttire.com
+cd /var/www/lift-tire.com
 ./deploy.sh update
 ```
 
@@ -277,7 +277,7 @@ docker stats --no-stream
 
 ```bash
 # وضعیت
-cd /var/www/lifttire.com && ./deploy.sh status
+cd /var/www/lift-tire.com && ./deploy.sh status
 
 # ری‌استارت
 ./deploy.sh restart
@@ -314,9 +314,9 @@ apt install -y curl ca-certificates gnupg git ufw unzip htop nano cron rsync
 **پس از پایان:** آدرس سایت، پنل ادمین و حساب‌های ورود را با تیم خود به اشتراک بگذارید و اولین بکاپ را دانلود کنید.
 
 ```text
-🌐 https://lifttire.com
-🔐 https://lifttire.com/admin
-📧 admin@lifttire.com  /  <ADMIN_PASSWORD>
+🌐 https://lift-tire.com
+🔐 https://lift-tire.com/admin
+📧 admin@lift-tire.com  /  <ADMIN_PASSWORD>
 ```
 
 ---
@@ -333,7 +333,7 @@ lifttire_nginx ... Restarting (1)
 یعنی `nginx` دارد بالا می‌آید و چون فایل گواهی وجود ندارد، کرش می‌کند و دوباره تلاش می‌کند. **این طبیعی است**؛ تا گرفتن گواهی ادامه دارد. برای متوقف‌کردن حلقه:
 
 ```bash
-cd /var/www/lifttire.com/lift-tire
+cd /var/www/lift-tire.com/lift-tire
 docker compose stop nginx
 ```
 
@@ -351,8 +351,8 @@ docker compose stop nginx
 
 ```bash
 curl -4 -s https://api.ipify.org; echo          # IP واقعی این سرور
-getent ahostsv4 lifttire.com                     # دامنه اصلی به کجا می‌رود؟
-getent ahostsv4 www.lifttire.com                 # www به کجا می‌رود؟
+getent ahostsv4 lift-tire.com                     # دامنه اصلی به کجا می‌رود؟
+getent ahostsv4 www.lift-tire.com                 # www به کجا می‌رود؟
 ss -lntp | grep ':80'                            # چه چیزی پورت ۸۰ را گرفته؟
 ufw status
 ```
@@ -383,7 +383,61 @@ ufw status
 ### تمدید خودکار
 
 ```cron
-0 4 * * * cd /var/www/lifttire.com/lift-tire && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 4 * * * cd /var/www/lift-tire.com/lift-tire && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
 ```
 
-> اگر مخزن را داخل `/var/www/lifttire.com/lift-tire` کلون کرده‌اید، مسیرها در cron و بکاپ باید همان مسیر باشند.
+> اگر مخزن را داخل `/var/www/lift-tire.com/lift-tire` کلون کرده‌اید، مسیرها در cron و بکاپ باید همان مسیر باشند.
+
+---
+
+## ۲۰) دامنهٔ پشت Cloudflare — روش درست SSL
+
+اگر `getent ahostsv4 lift-tire.com` چیزی شبیه `104.21.x.x` یا `172.67.x.x` برگرداند، یعنی رکوردها **Proxied (ابر نارنجی)** هستند و ترافیک از Cloudflare می‌گذرد. در این حالت `certbot` نمی‌تواند چالش HTTP-01 را از سرور شما بخواند (چون درخواست به Cloudflare می‌رسد).
+
+### راه ۱ (پیشنهادی) — Cloudflare Origin Certificate
+
+رایگان، ۱۵ ساله، بدون تمدید و بدون cron:
+
+1. پنل Cloudflare → **SSL/TLS → Origin Server → Create Certificate**
+   - Hostnames: `lift-tire.com` و `*.lift-tire.com`
+   - Validity: **15 years**
+2. محتوای دو فایل را روی سرور ذخیره کنید (`/root/origin-cert.pem` و `/root/origin-key.pem`).
+3. نصب روی nginx:
+
+```bash
+cd /var/www/lift-tire.com/lift-tire     # مسیر مخزن شما
+./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
+```
+
+4. پنل Cloudflare → **SSL/TLS → Overview → Full (strict)**
+5. **SSL/TLS → Edge Certificates → Always Use HTTPS: On**
+6. رکوردهای DNS: `A @` و `A www` باید به **IP همین سرور** اشاره کنند (پروکسی می‌تواند روشن بماند).
+
+بررسی:
+
+```bash
+curl -I https://lift-tire.com
+docker compose ps
+```
+
+### راه ۲ — خاموش‌کردن موقت پروکسی و گرفتن گواهی Let's Encrypt
+
+1. Cloudflare → **DNS** → برای `@` و `www` گزینهٔ **Proxy status = DNS only** (ابر خاکستری)
+2. مقدار رکورد A = IP سرور (`curl -4 -s https://api.ipify.org`)
+3. `./scripts/ssl-certbot.sh` (اسکریپت خودش DNS را چک می‌کند)
+4. بعد از موفقیت، پروکسی را دوباره روشن کنید و SSL mode را **Full (strict)** بگذارید.
+
+> با پروکسی روشن، تمدید خودکار هم باید از راه **webroot** انجام شود (نه standalone) — دستور cron بخش ۱۱ همین است.
+
+### اشتباه‌های رایج
+
+| نشانه | علت | راه‌حل |
+| --- | --- | --- |
+| `ERR_TOO_MANY_REDIRECTS` | SSL mode روی **Flexible** و ریدایرکت HTTPS در nginx | حالت را Full (strict) کنید |
+| `502 Bad Gateway` | Cloudflare به origin می‌رسد ولی کانتینر web/api خاموش است | `docker compose ps` و `./deploy.sh logs web` |
+| گواهی معتبر ولی سایت بالا نمی‌آید | nginx بدون گواهی بالا نیامده | `./deploy.sh restart` بعد از نصب Origin cert |
+| خطای ۵۲۶ / ۵۲۵ | SSL mode Full ولی گواهی روی سرور نصب نیست | Origin cert را نصب کنید |
+
+### پورت‌ها
+
+Cloudflare در حالت Proxy فقط پورت‌های ۸۰ و ۴۴۳ (و چند پورت خاص) را فوروارد می‌کند؛ لازم نیست پورت ۳۰۰۰ یا ۴۰۰۰ را به اینترنت باز کنید — همان `127.0.0.1` در compose درست است.

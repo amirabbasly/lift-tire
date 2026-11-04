@@ -152,7 +152,7 @@ PORT=4000
 USE_PGLITE=true
 PGDATA=./data/pglite
 JWT_SECRET=dev-secret-change-me
-ADMIN_EMAIL=admin@lifttire.com
+ADMIN_EMAIL=admin@lift-tire.com
 ADMIN_PASSWORD=Lift@12345
 UPLOAD_DIR=./uploads
 ENV
@@ -228,7 +228,7 @@ JWT_SECRET=$(openssl rand -hex 32) node src/server.js
 | `USE_PGLITE` | `true` در توسعه | `false` برای PostgreSQL |
 | `PGDATA` | `./data/pglite` | محل ذخیره PGlite |
 | `JWT_SECRET` | — | **الزامی در پروداکشن** (حداقل ۳۲ کاراکتر) |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | `admin@lifttire.com` / `Lift@12345` | حساب مدیر اولیه (seed) |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | `admin@lift-tire.com` / `Lift@12345` | حساب مدیر اولیه (seed) |
 | `UPLOAD_DIR` | `./uploads` | مسیر ذخیره تصاویر آپلودی |
 | `NEXT_PUBLIC_API_BASE` | خالی | آدرس API در سمت مرورگر؛ خالی = هم‌مبدأ |
 | `API_INTERNAL_URL` | `http://127.0.0.1:4000` | آدرس داخلی API برای رندر سمت سرور |
@@ -279,7 +279,7 @@ sudo ufw --force enable
 
 **۴. تنظیم DNS دامنه**
 
-در پنل دامنه، دو رکورد بسازید و منتظر انتشار بمانید (`dig lifttire.com +short`):
+در پنل دامنه، دو رکورد بسازید و منتظر انتشار بمانید (`dig lift-tire.com +short`):
 
 | Type | Name | Value |
 | --- | --- | --- |
@@ -289,9 +289,9 @@ sudo ufw --force enable
 ### 🚀 نصب پروژه
 
 ```bash
-sudo mkdir -p /var/www/lifttire.com
-sudo chown -R $USER:$USER /var/www/lifttire.com
-cd /var/www/lifttire.com
+sudo mkdir -p /var/www/lift-tire.com
+sudo chown -R $USER:$USER /var/www/lift-tire.com
+cd /var/www/lift-tire.com
 
 git clone <REPO_URL> .
 cp .env.example .env
@@ -306,7 +306,9 @@ nano .env   # مقادیر ADMIN_PASSWORD و ... را بررسی کنید
 
 ```bash
 chmod +x scripts/ssl-certbot.sh deploy.sh
-DOMAIN=lifttire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
+# اگر دامنه پشت Cloudflare (ابر نارنجی) است، به‌جای certbot از گواهی Origin استفاده کنید:
+#   ./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
+DOMAIN=lift-tire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
 ```
 
 **نصب کامل:**
@@ -321,14 +323,14 @@ DOMAIN=lifttire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
 
 ```bash
 ./deploy.sh status
-curl -I https://lifttire.com
-curl -s https://lifttire.com/api/health
+curl -I https://lift-tire.com
+curl -s https://lift-tire.com/api/health
 ```
 
 ### 🔄 بروزرسانی
 
 ```bash
-cd /var/www/lifttire.com
+cd /var/www/lift-tire.com
 ./deploy.sh update     # بکاپ خودکار → git pull → بیلد → ری‌استارت
 ```
 
@@ -346,7 +348,7 @@ cd /var/www/lifttire.com
 ## SSL و دامنه
 
 - گواهی با `scripts/ssl-certbot.sh` (Let's Encrypt، حالت standalone) گرفته می‌شود.
-- مسیر گواهی در کانتینر: `/etc/letsencrypt/live/lifttire.com/` (روی هاست: `nginx/certbot/conf/…`).
+- مسیر گواهی در کانتینر: `/etc/letsencrypt/live/lift-tire.com/` (روی هاست: `nginx/certbot/conf/…`).
 - **تمدید خودکار** را با cron اضافه کنید:
 
 ```bash
@@ -354,7 +356,7 @@ sudo crontab -e
 ```
 
 ```cron
-0 3 * * * cd /var/www/lifttire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 3 * * * cd /var/www/lift-tire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
 ```
 
 ---
@@ -372,7 +374,7 @@ sudo crontab -e
 **بکاپ زمان‌بندی‌شده (روزانه ۳ بامداد)**
 
 ```cron
-0 3 * * * cd /var/www/lifttire.com && ./deploy.sh backup >> backups/cron.log 2>&1
+0 3 * * * cd /var/www/lift-tire.com && ./deploy.sh backup >> backups/cron.log 2>&1
 ```
 
 **بازیابی دیتابیس**
@@ -435,7 +437,7 @@ POST /upload (multipart: files[])
 
 | نقش | ورود | رمز |
 | --- | --- | --- |
-| مدیر | `admin@lifttire.com` | `Lift@12345` |
+| مدیر | `admin@lift-tire.com` | `Lift@12345` |
 | مشتری | `09121234567` | `test1234` |
 
 کدهای تخفیف دمو: **`LIFT10`** (۱۰٪ تا سقف ۱٬۵۰۰٬۰۰۰ تومان) و **`FREESHIP`** (فقط هزینه ارسال).

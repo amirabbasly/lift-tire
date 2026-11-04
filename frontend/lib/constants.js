@@ -1,4 +1,4 @@
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lifttire.com';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lift-tire.com';
 
 export const SITE = {
   url: SITE_URL,

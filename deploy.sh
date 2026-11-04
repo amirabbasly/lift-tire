@@ -71,6 +71,7 @@ do_install() {
   else
     warn "nginx بالا نیامد (چون گواهی SSL هنوز نیست)."
     warn "بعد از درست‌کردن DNS اجرا کنید: ./scripts/ssl-certbot.sh"
+    warn "اگر دامنه پشت Cloudflare است: ./scripts/install-origin-cert.sh <cert> <key>"
     warn "سپس: ./deploy.sh restart"
   fi
   info "نصب کامل شد 🎉"
@@ -145,7 +146,7 @@ resolve_domain() {
   if [ -z "${DOMAIN:-}" ] && [ -f .env ]; then
     DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2 | tr -d '"'"'"' ')"
   fi
-  export DOMAIN="${DOMAIN:-lifttire.com}"
+  export DOMAIN="${DOMAIN:-lift-tire.com}"
 }
 
 render_nginx_conf() {
