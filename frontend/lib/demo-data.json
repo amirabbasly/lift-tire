@@ -1,0 +1,3362 @@
+{
+ "generatedAt": "2026-11-04T15:02:24.089Z",
+ "home": {
+  "settings": {
+   "site_name": "لیفت تایر",
+   "site_name_en": "Lift Tire",
+   "tagline": "لاستیک اصل، ایمنی واقعی",
+   "tagline_en": "LIFT TIRE — GRIP THE ROAD",
+   "phone": "021-91001234",
+   "mobile": "0912-123-4567",
+   "email": "info@lifttire.ir",
+   "address": "تهران، بزرگراه شهید همت، مجتمع تجاری لاستیک، پلاک ۱۲",
+   "work_hours": "شنبه تا پنجشنبه ۹ تا ۱۹",
+   "instagram": "https://instagram.com/lifttire",
+   "telegram": "https://t.me/lifttire",
+   "whatsapp": "https://wa.me/989121234567",
+   "footer_text": "لیفت تایر از سال ۱۳۸۴ با تمرکز بر فروش لاستیک اصل و مشاوره تخصصی، همراه رانندگان ایرانی است. ارسال به سراسر ایران با باربری و پست پیشتاز.",
+   "meta_description": "فروشگاه اینترنتی لیفت تایر؛ خرید لاستیک اصل خودرو با ضمانت اصالت، ارسال به سراسر ایران و مشاوره تخصصی رایگان.",
+   "shipping": [
+    {
+     "id": "freight",
+     "cost": 180000,
+     "days": "۳ تا ۵ روز کاری",
+     "title": "باربری (سراسر ایران)"
+    },
+    {
+     "id": "post",
+     "cost": 95000,
+     "days": "۲ تا ۴ روز کاری",
+     "title": "پست پیشتاز"
+    },
+    {
+     "id": "courier",
+     "cost": 120000,
+     "days": "همان روز",
+     "title": "پیک تهران"
+    }
+   ],
+   "services": [
+    {
+     "desc": "باربری و پست پیشتاز",
+     "icon": "/images/icons/service-shipping.png",
+     "title": "ارسال به سراسر ایران"
+    },
+    {
+     "desc": "لاستیک با گارانتی کتبی",
+     "icon": "/images/icons/service-authentic.png",
+     "title": "ضمانت اصالت و تاریخ تولید"
+    },
+    {
+     "desc": "درگاه بانکی و پرداخت در محل",
+     "icon": "/images/icons/service-payment.png",
+     "title": "پرداخت امن"
+    },
+    {
+     "desc": "کارشناس رایگان سایز و برند",
+     "icon": "/images/icons/service-consult.png",
+     "title": "مشاوره تخصصی لاستیک"
+    },
+    {
+     "desc": "بدون قید و شرط",
+     "icon": "/images/icons/service-return.png",
+     "title": "۷ روز ضمانت بازگشت"
+    }
+   ],
+   "social": [
+    {
+     "id": "instagram",
+     "url": "https://instagram.com/lifttire",
+     "icon": "/images/social/instagram.png",
+     "title": "اینستاگرام"
+    },
+    {
+     "id": "telegram",
+     "url": "https://t.me/lifttire",
+     "icon": "/images/social/telegram.png",
+     "title": "تلگرام"
+    },
+    {
+     "id": "whatsapp",
+     "url": "https://wa.me/989121234567",
+     "icon": "/images/social/whatsapp.png",
+     "title": "واتساپ"
+    }
+   ],
+   "stats": [
+    {
+     "label": "مشتری راضی",
+     "value": 4000,
+     "suffix": "+"
+    },
+    {
+     "label": "سال تجربه",
+     "value": 20,
+     "suffix": ""
+    },
+    {
+     "label": "لاستیک فروخته‌شده",
+     "value": 12000,
+     "suffix": "+"
+    },
+    {
+     "label": "برند معتبر",
+     "value": 10,
+     "suffix": ""
+    }
+   ]
+  },
+  "banners": {
+   "hero": [
+    {
+     "id": 1,
+     "title": "لاستیک اصل، ایمنی واقعی",
+     "subtitle": "مجموعه‌ای از معتبرترین برندهای جهان با ضمانت اصالت و تاریخ تولید",
+     "badge": "فروشگاه تخصصی لاستیک لیفت تایر",
+     "image": "/images/hero/hero-1.jpg",
+     "mobile_image": null,
+     "link": "/products",
+     "cta_text": "مشاهده محصولات",
+     "placement": "hero",
+     "stat1_value": "۴۰۰۰+",
+     "stat1_label": "مشتری راضی",
+     "stat2_value": "۲۰",
+     "stat2_label": "سال تجربه",
+     "sort": 1,
+     "is_active": true,
+     "created_at": "2026-11-04T15:01:35.024Z"
+    },
+    {
+     "id": 2,
+     "title": "فرمان را بسپار به آج",
+     "subtitle": "لاستیک‌های اسپرت و پرفورمنس با چسبندگی بالا برای رانندگی مطمئن",
+     "badge": "پیشنهاد ویژه ماه",
+     "image": "/images/hero/hero-2.jpg",
+     "mobile_image": null,
+     "link": "/products?season=تابستانی",
+     "cta_text": "خرید لاستیک اسپرت",
+     "placement": "hero",
+     "stat1_value": "۱۰",
+     "stat1_label": "برند معتبر",
+     "stat2_value": "۱۲۰۰۰+",
+     "stat2_label": "لاستیک فروخته‌شده",
+     "sort": 2,
+     "is_active": true,
+     "created_at": "2026-11-04T15:01:35.027Z"
+    },
+    {
+     "id": 3,
+     "title": "برای جاده‌های سخت ساخته شده",
+     "subtitle": "لاستیک آفرود و شاسی‌بلند با دنده‌های درشت و مقاومت بالا در مسیرهای ناهموار",
+     "badge": "دسته آفرود و شاسی‌بلند",
+     "image": "/images/hero/hero-3.jpg",
+     "mobile_image": null,
+     "link": "/category/offroad",
+     "cta_text": "مشاهده لاستیک آفرود",
+     "placement": "hero",
+     "stat1_value": "۷ روز",
+     "stat1_label": "ضمانت بازگشت",
+     "stat2_value": "۱۹۲",
+     "stat2_label": "سایز موجود",
+     "sort": 3,
+     "is_active": true,
+     "created_at": "2026-11-04T15:01:35.028Z"
+    }
+   ],
+   "strip": [
+    {
+     "id": 6,
+     "title": "تخفیف ویژه لاستیک‌های اسپرت",
+     "subtitle": "تا ۲۰ درصد تخفیف روی برندهای منتخب",
+     "badge": null,
+     "image": "/images/banners/strip-offer.jpg",
+     "mobile_image": null,
+     "link": "/products?on_sale=1",
+     "cta_text": "مشاهده پیشنهادها",
+     "placement": "strip",
+     "stat1_value": null,
+     "stat1_label": null,
+     "stat2_value": null,
+     "stat2_label": null,
+     "sort": 1,
+     "is_active": true,
+     "created_at": "2026-11-04T15:01:35.032Z"
+    }
+   ],
+   "category": [
+    {
+     "id": 4,
+     "title": "لاستیک سواری شهری",
+     "subtitle": "نرم، بی‌صدا و کم‌مصرف",
+     "badge": null,
+     "image": "/images/banners/category-passenger.jpg",
+     "mobile_image": null,
+     "link": "/category/passenger",
+     "cta_text": "خرید لاستیک سواری",
+     "placement": "category",
+     "stat1_value": null,
+     "stat1_label": null,
+     "stat2_value": null,
+     "stat2_label": null,
+     "sort": 1,
+     "is_active": true,
+     "created_at": "2026-11-04T15:01:35.029Z"
+    },
+    {
+     "id": 5,
+     "title": "آفرود و شاسی‌بلند",
+     "subtitle": "آماده هر مسیر و هر زمین",
+     "badge": null,
+     "image": "/images/banners/category-offroad.jpg",
+     "mobile_image": null,
+     "link": "/category/offroad",
+     "cta_text": "خرید لاستیک آفرود",
+     "placement": "category",
+     "stat1_value": null,
+     "stat1_label": null,
+     "stat2_value": null,
+     "stat2_label": null,
+     "sort": 2,
+     "is_active": true,
+     "created_at": "2026-11-04T15:01:35.031Z"
+    }
+   ]
+  },
+  "categories": [
+   {
+    "id": 1,
+    "slug": "passenger",
+    "name": "لاستیک سواری",
+    "parent_id": null,
+    "image": "/images/products/tire-passenger-a.png",
+    "description": "لاستیک خودروهای سواری و شهری با کیفیت بالا و گارانتی اصالت",
+    "sort": 1,
+    "is_active": true,
+    "created_at": "2026-11-04T15:01:34.294Z",
+    "product_count": 12
+   },
+   {
+    "id": 2,
+    "slug": "offroad",
+    "name": "آفرود و شاسی‌بلند",
+    "parent_id": null,
+    "image": "/images/products/tire-mud.png",
+    "description": "لاستیک آفرود، گل‌آج و شاسی‌بلند برای مسیرهای سخت",
+    "sort": 2,
+    "is_active": true,
+    "created_at": "2026-11-04T15:01:34.297Z",
+    "product_count": 4
+   },
+   {
+    "id": 3,
+    "slug": "truck",
+    "name": "لاستیک باری",
+    "parent_id": null,
+    "image": "/images/products/tire-truck.png",
+    "description": "لاستیک وانتی و باری با دوام بالا برای مسیرهای طولانی",
+    "sort": 3,
+    "is_active": true,
+    "created_at": "2026-11-04T15:01:34.299Z",
+    "product_count": 2
+   },
+   {
+    "id": 4,
+    "slug": "rim",
+    "name": "رینگ و تیوب",
+    "parent_id": null,
+    "image": "/images/products/rim-alloy.png",
+    "description": "رینگ آلومینیومی، تیوب و نوار لاستیک",
+    "sort": 4,
+    "is_active": true,
+    "created_at": "2026-11-04T15:01:34.301Z",
+    "product_count": 1
+   },
+   {
+    "id": 5,
+    "slug": "accessories",
+    "name": "لوازم جانبی",
+    "parent_id": null,
+    "image": "/images/products/accessory-tube.png",
+    "description": "لوازم جانبی و تجهیزات نگهداری لاستیک",
+    "sort": 5,
+    "is_active": true,
+    "created_at": "2026-11-04T15:01:34.302Z",
+    "product_count": 1
+   }
+  ],
+  "brands": [
+   {
+    "id": 1,
+    "slug": "michelin",
+    "name_fa": "میشلن",
+    "name_en": "MICHELIN",
+    "logo": "/images/brands/michelin.png",
+    "cover": "/images/brands/michelin-cover.jpg",
+    "description": "میشلن (MICHELIN) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 1,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.304Z"
+   },
+   {
+    "id": 2,
+    "slug": "bridgestone",
+    "name_fa": "بریجستون",
+    "name_en": "BRIDGESTONE",
+    "logo": "/images/brands/bridgestone.png",
+    "cover": "/images/brands/bridgestone-cover.jpg",
+    "description": "بریجستون (BRIDGESTONE) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 2,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.307Z"
+   },
+   {
+    "id": 3,
+    "slug": "goodyear",
+    "name_fa": "گودیر",
+    "name_en": "GOODYEAR",
+    "logo": "/images/brands/goodyear.png",
+    "cover": "/images/brands/goodyear-cover.jpg",
+    "description": "گودیر (GOODYEAR) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 3,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.308Z"
+   },
+   {
+    "id": 4,
+    "slug": "continental",
+    "name_fa": "کنتیننتال",
+    "name_en": "CONTINENTAL",
+    "logo": "/images/brands/continental.png",
+    "cover": "/images/brands/continental-cover.jpg",
+    "description": "کنتیننتال (CONTINENTAL) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 4,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.310Z"
+   },
+   {
+    "id": 5,
+    "slug": "pirelli",
+    "name_fa": "پیرلی",
+    "name_en": "PIRELLI",
+    "logo": "/images/brands/pirelli.png",
+    "cover": "/images/brands/pirelli-cover.jpg",
+    "description": "پیرلی (PIRELLI) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 5,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.312Z"
+   },
+   {
+    "id": 6,
+    "slug": "hankook",
+    "name_fa": "هانکوک",
+    "name_en": "HANKOOK",
+    "logo": "/images/brands/hankook.png",
+    "cover": "/images/brands/hankook-cover.jpg",
+    "description": "هانکوک (HANKOOK) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 6,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.313Z"
+   },
+   {
+    "id": 7,
+    "slug": "kumho",
+    "name_fa": "کومهو",
+    "name_en": "KUMHO",
+    "logo": "/images/brands/kumho.png",
+    "cover": "/images/brands/kumho-cover.jpg",
+    "description": "کومهو (KUMHO) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 7,
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.316Z"
+   },
+   {
+    "id": 8,
+    "slug": "yokohama",
+    "name_fa": "یوکوهاما",
+    "name_en": "YOKOHAMA",
+    "logo": "/images/brands/yokohama.png",
+    "cover": "/images/brands/yokohama-cover.jpg",
+    "description": "یوکوهاما (YOKOHAMA) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 8,
+    "is_active": true,
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.317Z"
+   },
+   {
+    "id": 9,
+    "slug": "barz",
+    "name_fa": "بارز",
+    "name_en": "BARZ",
+    "logo": "/images/brands/barz.png",
+    "cover": "/images/brands/barz-cover.jpg",
+    "description": "بارز (BARZ) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 9,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.319Z"
+   },
+   {
+    "id": 10,
+    "slug": "kavir",
+    "name_fa": "کویر تایر",
+    "name_en": "KAVIR",
+    "logo": "/images/brands/kavir.png",
+    "cover": "/images/brands/kavir-cover.jpg",
+    "description": "کویر تایر (KAVIR) از برندهای معتبر لاستیک با گارانتی اصالت در لیفت تایر.",
+    "sort": 10,
+    "is_active": true,
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.321Z"
+   }
+  ],
+  "featured": [
+   {
+    "id": 11,
+    "slug": "tire-11",
+    "name": "میشلن پیلوت اسپرت ۵",
+    "size": "245/40 R18",
+    "width": 245,
+    "ratio": 40,
+    "rim": 18,
+    "season": "تابستانی",
+    "price": 18700000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 3,
+    "sku": "LT-1011",
+    "rating": 4.7,
+    "rating_count": 65,
+    "sold_count": 437,
+    "badge": null,
+    "country": "فرانسه",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "میشلن پیلوت اسپرت ۵ با سایز 245/40 R18، تابستانی، ساخت فرانسه و گارانتی اصالت لیفت تایر.",
+    "description": "<p>میشلن پیلوت اسپرت ۵ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>245/40 R18</strong> و ساخت فرانسه در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.694Z",
+    "brand": {
+     "id": 1,
+     "name_fa": "میشلن",
+     "name_en": "MICHELIN",
+     "slug": "michelin",
+     "logo": "/images/brands/michelin.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 21,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 22,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 9,
+    "slug": "tire-09",
+    "name": "بارز B250 ایرانی",
+    "size": "205/55 R16",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 3980000,
+    "old_price": 4350000,
+    "discount": 9,
+    "stock": 30,
+    "sku": "LT-1009",
+    "rating": 4.9,
+    "rating_count": 39,
+    "sold_count": 363,
+    "badge": "اقتصادی",
+    "country": "ایران",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "بارز B250 ایرانی با سایز 205/55 R16، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+    "description": "<p>بارز B250 ایرانی یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.622Z",
+    "brand": {
+     "id": 9,
+     "name_fa": "بارز",
+     "name_en": "BARZ",
+     "slug": "barz",
+     "logo": "/images/brands/barz.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 17,
+      "url": "/images/products/tire-passenger-b.png",
+      "alt": null
+     },
+     {
+      "id": 18,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-b.png"
+   },
+   {
+    "id": 4,
+    "slug": "tire-04",
+    "name": "کنتیننتال اکوکانتکت ۶",
+    "size": "215/60 R16",
+    "width": 215,
+    "ratio": 60,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 9900000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 10,
+    "sku": "LT-1004",
+    "rating": 4.6,
+    "rating_count": 64,
+    "sold_count": 178,
+    "badge": null,
+    "country": "آلمان",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کنتیننتال اکوکانتکت ۶ با سایز 215/60 R16، چهارفصل، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کنتیننتال اکوکانتکت ۶ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>215/60 R16</strong> و ساخت آلمان در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.444Z",
+    "brand": {
+     "id": 4,
+     "name_fa": "کنتیننتال",
+     "name_en": "CONTINENTAL",
+     "slug": "continental",
+     "logo": "/images/brands/continental.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 7,
+      "url": "/images/products/tire-passenger-a.png",
+      "alt": null
+     },
+     {
+      "id": 8,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-a.png"
+   },
+   {
+    "id": 3,
+    "slug": "tire-03",
+    "name": "گودیر ایگل F1 اسپرت",
+    "size": "225/45 R17",
+    "width": 225,
+    "ratio": 45,
+    "rim": 17,
+    "season": "تابستانی",
+    "price": 11400000,
+    "old_price": 12800000,
+    "discount": 11,
+    "stock": 6,
+    "sku": "LT-1003",
+    "rating": 4.7,
+    "rating_count": 51,
+    "sold_count": 141,
+    "badge": "اسپرت",
+    "country": "آلمان",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "گودیر ایگل F1 اسپرت با سایز 225/45 R17، تابستانی، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>گودیر ایگل F1 اسپرت یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>225/45 R17</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.410Z",
+    "brand": {
+     "id": 3,
+     "name_fa": "گودیر",
+     "name_en": "GOODYEAR",
+     "slug": "goodyear",
+     "logo": "/images/brands/goodyear.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 5,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 6,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 1,
+    "slug": "tire-01",
+    "name": "میشلن پریماسی ۴",
+    "size": "205/55 R16",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 8750000,
+    "old_price": 9600000,
+    "discount": 9,
+    "stock": 10,
+    "sku": "LT-1001",
+    "rating": 4.9,
+    "rating_count": 25,
+    "sold_count": 69,
+    "badge": "پرفروش",
+    "country": "فرانسه",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "میشلن پریماسی ۴ با سایز 205/55 R16، چهارفصل، ساخت فرانسه و گارانتی اصالت لیفت تایر.",
+    "description": "<p>میشلن پریماسی ۴ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت فرانسه در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.322Z",
+    "brand": {
+     "id": 1,
+     "name_fa": "میشلن",
+     "name_en": "MICHELIN",
+     "slug": "michelin",
+     "logo": "/images/brands/michelin.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 1,
+      "url": "/images/products/tire-passenger-a.png",
+      "alt": null
+     },
+     {
+      "id": 2,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-a.png"
+   },
+   {
+    "id": 12,
+    "slug": "tire-12",
+    "name": "بریجستون دوئلر AT ۶۹۴",
+    "size": "265/65 R17",
+    "width": 265,
+    "ratio": 65,
+    "rim": 17,
+    "season": "آفرود",
+    "price": 14900000,
+    "old_price": 16400000,
+    "discount": 9,
+    "stock": 7,
+    "sku": "LT-1012",
+    "rating": 4.6,
+    "rating_count": 78,
+    "sold_count": 54,
+    "badge": "آفرود",
+    "country": "ژاپن",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "بریجستون دوئلر AT ۶۹۴ با سایز 265/65 R17، آفرود، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+    "description": "<p>بریجستون دوئلر AT ۶۹۴ یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.727Z",
+    "brand": {
+     "id": 2,
+     "name_fa": "بریجستون",
+     "name_en": "BRIDGESTONE",
+     "slug": "bridgestone",
+     "logo": "/images/brands/bridgestone.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 23,
+      "url": "/images/products/tire-suv.png",
+      "alt": null
+     },
+     {
+      "id": 24,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-suv.png"
+   }
+  ],
+  "bestsellers": [
+   {
+    "id": 11,
+    "slug": "tire-11",
+    "name": "میشلن پیلوت اسپرت ۵",
+    "size": "245/40 R18",
+    "width": 245,
+    "ratio": 40,
+    "rim": 18,
+    "season": "تابستانی",
+    "price": 18700000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 3,
+    "sku": "LT-1011",
+    "rating": 4.7,
+    "rating_count": 65,
+    "sold_count": 437,
+    "badge": null,
+    "country": "فرانسه",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "میشلن پیلوت اسپرت ۵ با سایز 245/40 R18، تابستانی، ساخت فرانسه و گارانتی اصالت لیفت تایر.",
+    "description": "<p>میشلن پیلوت اسپرت ۵ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>245/40 R18</strong> و ساخت فرانسه در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.694Z",
+    "brand": {
+     "id": 1,
+     "name_fa": "میشلن",
+     "name_en": "MICHELIN",
+     "slug": "michelin",
+     "logo": "/images/brands/michelin.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 21,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 22,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 10,
+    "slug": "tire-10",
+    "name": "کویر تایر P6000",
+    "size": "185/65 R15",
+    "width": 185,
+    "ratio": 65,
+    "rim": 15,
+    "season": "چهارفصل",
+    "price": 3350000,
+    "old_price": 3790000,
+    "discount": 12,
+    "stock": 40,
+    "sku": "LT-1010",
+    "rating": 4.8,
+    "rating_count": 52,
+    "sold_count": 400,
+    "badge": null,
+    "country": "ایران",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کویر تایر P6000 با سایز 185/65 R15، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کویر تایر P6000 یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>185/65 R15</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.660Z",
+    "brand": {
+     "id": 10,
+     "name_fa": "کویر تایر",
+     "name_en": "KAVIR",
+     "slug": "kavir",
+     "logo": "/images/brands/kavir.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 19,
+      "url": "/images/products/tire-passenger-a.png",
+      "alt": null
+     },
+     {
+      "id": 20,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-a.png"
+   },
+   {
+    "id": 9,
+    "slug": "tire-09",
+    "name": "بارز B250 ایرانی",
+    "size": "205/55 R16",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 3980000,
+    "old_price": 4350000,
+    "discount": 9,
+    "stock": 30,
+    "sku": "LT-1009",
+    "rating": 4.9,
+    "rating_count": 39,
+    "sold_count": 363,
+    "badge": "اقتصادی",
+    "country": "ایران",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "بارز B250 ایرانی با سایز 205/55 R16، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+    "description": "<p>بارز B250 ایرانی یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.622Z",
+    "brand": {
+     "id": 9,
+     "name_fa": "بارز",
+     "name_en": "BARZ",
+     "slug": "barz",
+     "logo": "/images/brands/barz.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 17,
+      "url": "/images/products/tire-passenger-b.png",
+      "alt": null
+     },
+     {
+      "id": 18,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-b.png"
+   },
+   {
+    "id": 20,
+    "slug": "tire-20",
+    "name": "تیوب و نوار لاستیک ۱۵ اینچ",
+    "size": "15 اینچ",
+    "width": 15,
+    "ratio": 0,
+    "rim": 15,
+    "season": "چهارفصل",
+    "price": 690000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 60,
+    "sku": "LT-1020",
+    "rating": 4.6,
+    "rating_count": 92,
+    "sold_count": 350,
+    "badge": null,
+    "country": "ایران",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "تیوب و نوار لاستیک ۱۵ اینچ با سایز 15 اینچ، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+    "description": "<p>تیوب و نوار لاستیک ۱۵ اینچ یکی از انتخاب‌های محبوب در دسته لوازم جانبی است. این محصول با سایز <strong>15 اینچ</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:35.012Z",
+    "brand": {
+     "id": 10,
+     "name_fa": "کویر تایر",
+     "name_en": "KAVIR",
+     "slug": "kavir",
+     "logo": "/images/brands/kavir.png"
+    },
+    "category": {
+     "id": 5,
+     "name": "لوازم جانبی",
+     "slug": "accessories"
+    },
+    "images": [
+     {
+      "id": 39,
+      "url": "/images/products/accessory-tube.png",
+      "alt": null
+     },
+     {
+      "id": 40,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/accessory-tube.png"
+   },
+   {
+    "id": 8,
+    "slug": "tire-08",
+    "name": "یوکوهاما Advan Sport",
+    "size": "225/45 R17",
+    "width": 225,
+    "ratio": 45,
+    "rim": 17,
+    "season": "تابستانی",
+    "price": 11900000,
+    "old_price": 13200000,
+    "discount": 10,
+    "stock": 5,
+    "sku": "LT-1008",
+    "rating": 4.2,
+    "rating_count": 26,
+    "sold_count": 326,
+    "badge": null,
+    "country": "ژاپن",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "یوکوهاما Advan Sport با سایز 225/45 R17، تابستانی، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+    "description": "<p>یوکوهاما Advan Sport یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>225/45 R17</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.588Z",
+    "brand": {
+     "id": 8,
+     "name_fa": "یوکوهاما",
+     "name_en": "YOKOHAMA",
+     "slug": "yokohama",
+     "logo": "/images/brands/yokohama.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 15,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 16,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 19,
+    "slug": "tire-19",
+    "name": "رینگ آلومینیومی اسپرت ۱۶ اینچ",
+    "size": "16 اینچ",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 9850000,
+    "old_price": 11200000,
+    "discount": 12,
+    "stock": 6,
+    "sku": "LT-1019",
+    "rating": 4.7,
+    "rating_count": 79,
+    "sold_count": 313,
+    "badge": null,
+    "country": "تایوان",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "رینگ آلومینیومی اسپرت ۱۶ اینچ با سایز 16 اینچ، چهارفصل، ساخت تایوان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>رینگ آلومینیومی اسپرت ۱۶ اینچ یکی از انتخاب‌های محبوب در دسته رینگ و تیوب است. این رینگ با سایز <strong>16 اینچ</strong> و ساخت تایوان در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.981Z",
+    "brand": {
+     "id": 9,
+     "name_fa": "بارز",
+     "name_en": "BARZ",
+     "slug": "barz",
+     "logo": "/images/brands/barz.png"
+    },
+    "category": {
+     "id": 4,
+     "name": "رینگ و تیوب",
+     "slug": "rim"
+    },
+    "images": [
+     {
+      "id": 37,
+      "url": "/images/products/rim-alloy.png",
+      "alt": null
+     },
+     {
+      "id": 38,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/rim-alloy.png"
+   },
+   {
+    "id": 7,
+    "slug": "tire-07",
+    "name": "کومهو ECSTA HS51",
+    "size": "195/65 R15",
+    "width": 195,
+    "ratio": 65,
+    "rim": 15,
+    "season": "چهارفصل",
+    "price": 5450000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 15,
+    "sku": "LT-1007",
+    "rating": 4.3,
+    "rating_count": 13,
+    "sold_count": 289,
+    "badge": null,
+    "country": "کره جنوبی",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کومهو ECSTA HS51 با سایز 195/65 R15، چهارفصل، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کومهو ECSTA HS51 یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>195/65 R15</strong> و ساخت کره جنوبی در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.555Z",
+    "brand": {
+     "id": 7,
+     "name_fa": "کومهو",
+     "name_en": "KUMHO",
+     "slug": "kumho",
+     "logo": "/images/brands/kumho.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 13,
+      "url": "/images/products/tire-passenger-a.png",
+      "alt": null
+     },
+     {
+      "id": 14,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-a.png"
+   },
+   {
+    "id": 18,
+    "slug": "tire-18",
+    "name": "کنتیننتال وینترکانتکت",
+    "size": "205/55 R16",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "زمستانی",
+    "price": 9500000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 9,
+    "sku": "LT-1018",
+    "rating": 4.8,
+    "rating_count": 66,
+    "sold_count": 276,
+    "badge": null,
+    "country": "آلمان",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کنتیننتال وینترکانتکت با سایز 205/55 R16، زمستانی، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کنتیننتال وینترکانتکت یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.948Z",
+    "brand": {
+     "id": 4,
+     "name_fa": "کنتیننتال",
+     "name_en": "CONTINENTAL",
+     "slug": "continental",
+     "logo": "/images/brands/continental.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 35,
+      "url": "/images/products/tire-winter.png",
+      "alt": null
+     },
+     {
+      "id": 36,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-winter.png"
+   }
+  ],
+  "newest": [
+   {
+    "id": 20,
+    "slug": "tire-20",
+    "name": "تیوب و نوار لاستیک ۱۵ اینچ",
+    "size": "15 اینچ",
+    "width": 15,
+    "ratio": 0,
+    "rim": 15,
+    "season": "چهارفصل",
+    "price": 690000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 60,
+    "sku": "LT-1020",
+    "rating": 4.6,
+    "rating_count": 92,
+    "sold_count": 350,
+    "badge": null,
+    "country": "ایران",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "تیوب و نوار لاستیک ۱۵ اینچ با سایز 15 اینچ، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+    "description": "<p>تیوب و نوار لاستیک ۱۵ اینچ یکی از انتخاب‌های محبوب در دسته لوازم جانبی است. این محصول با سایز <strong>15 اینچ</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:35.012Z",
+    "brand": {
+     "id": 10,
+     "name_fa": "کویر تایر",
+     "name_en": "KAVIR",
+     "slug": "kavir",
+     "logo": "/images/brands/kavir.png"
+    },
+    "category": {
+     "id": 5,
+     "name": "لوازم جانبی",
+     "slug": "accessories"
+    },
+    "images": [
+     {
+      "id": 39,
+      "url": "/images/products/accessory-tube.png",
+      "alt": null
+     },
+     {
+      "id": 40,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/accessory-tube.png"
+   },
+   {
+    "id": 19,
+    "slug": "tire-19",
+    "name": "رینگ آلومینیومی اسپرت ۱۶ اینچ",
+    "size": "16 اینچ",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 9850000,
+    "old_price": 11200000,
+    "discount": 12,
+    "stock": 6,
+    "sku": "LT-1019",
+    "rating": 4.7,
+    "rating_count": 79,
+    "sold_count": 313,
+    "badge": null,
+    "country": "تایوان",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "رینگ آلومینیومی اسپرت ۱۶ اینچ با سایز 16 اینچ، چهارفصل، ساخت تایوان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>رینگ آلومینیومی اسپرت ۱۶ اینچ یکی از انتخاب‌های محبوب در دسته رینگ و تیوب است. این رینگ با سایز <strong>16 اینچ</strong> و ساخت تایوان در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.981Z",
+    "brand": {
+     "id": 9,
+     "name_fa": "بارز",
+     "name_en": "BARZ",
+     "slug": "barz",
+     "logo": "/images/brands/barz.png"
+    },
+    "category": {
+     "id": 4,
+     "name": "رینگ و تیوب",
+     "slug": "rim"
+    },
+    "images": [
+     {
+      "id": 37,
+      "url": "/images/products/rim-alloy.png",
+      "alt": null
+     },
+     {
+      "id": 38,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/rim-alloy.png"
+   },
+   {
+    "id": 18,
+    "slug": "tire-18",
+    "name": "کنتیننتال وینترکانتکت",
+    "size": "205/55 R16",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "زمستانی",
+    "price": 9500000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 9,
+    "sku": "LT-1018",
+    "rating": 4.8,
+    "rating_count": 66,
+    "sold_count": 276,
+    "badge": null,
+    "country": "آلمان",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کنتیننتال وینترکانتکت با سایز 205/55 R16، زمستانی، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کنتیننتال وینترکانتکت یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.948Z",
+    "brand": {
+     "id": 4,
+     "name_fa": "کنتیننتال",
+     "name_en": "CONTINENTAL",
+     "slug": "continental",
+     "logo": "/images/brands/continental.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 35,
+      "url": "/images/products/tire-winter.png",
+      "alt": null
+     },
+     {
+      "id": 36,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-winter.png"
+   },
+   {
+    "id": 17,
+    "slug": "tire-17",
+    "name": "پیرلی اسکورپیون ورد",
+    "size": "255/55 R18",
+    "width": 255,
+    "ratio": 55,
+    "rim": 18,
+    "season": "چهارفصل",
+    "price": 17200000,
+    "old_price": 18900000,
+    "discount": 9,
+    "stock": 4,
+    "sku": "LT-1017",
+    "rating": 4.9,
+    "rating_count": 53,
+    "sold_count": 239,
+    "badge": "لوکس",
+    "country": "ایتالیا",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "پیرلی اسکورپیون ورد با سایز 255/55 R18، چهارفصل، ساخت ایتالیا و گارانتی اصالت لیفت تایر.",
+    "description": "<p>پیرلی اسکورپیون ورد یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>255/55 R18</strong> و ساخت ایتالیا در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.914Z",
+    "brand": {
+     "id": 5,
+     "name_fa": "پیرلی",
+     "name_en": "PIRELLI",
+     "slug": "pirelli",
+     "logo": "/images/brands/pirelli.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 33,
+      "url": "/images/products/tire-suv.png",
+      "alt": null
+     },
+     {
+      "id": 34,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-suv.png"
+   },
+   {
+    "id": 16,
+    "slug": "tire-16",
+    "name": "بارز باری RA08",
+    "size": "195/70 R15",
+    "width": 195,
+    "ratio": 70,
+    "rim": 15,
+    "season": "چهارفصل",
+    "price": 3980000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 22,
+    "sku": "LT-1016",
+    "rating": 4.2,
+    "rating_count": 40,
+    "sold_count": 202,
+    "badge": null,
+    "country": "ایران",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "بارز باری RA08 با سایز 195/70 R15، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+    "description": "<p>بارز باری RA08 یکی از انتخاب‌های محبوب در دسته لاستیک باری است. این لاستیک با سایز <strong>195/70 R15</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.869Z",
+    "brand": {
+     "id": 9,
+     "name_fa": "بارز",
+     "name_en": "BARZ",
+     "slug": "barz",
+     "logo": "/images/brands/barz.png"
+    },
+    "category": {
+     "id": 3,
+     "name": "لاستیک باری",
+     "slug": "truck"
+    },
+    "images": [
+     {
+      "id": 31,
+      "url": "/images/products/tire-truck.png",
+      "alt": null
+     },
+     {
+      "id": 32,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-truck.png"
+   },
+   {
+    "id": 15,
+    "slug": "tire-15",
+    "name": "هانکوک دیناپرو باری",
+    "size": "195/70 R15",
+    "width": 195,
+    "ratio": 70,
+    "rim": 15,
+    "season": "چهارفصل",
+    "price": 6400000,
+    "old_price": 7100000,
+    "discount": 10,
+    "stock": 14,
+    "sku": "LT-1015",
+    "rating": 4.3,
+    "rating_count": 27,
+    "sold_count": 165,
+    "badge": null,
+    "country": "کره جنوبی",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "هانکوک دیناپرو باری با سایز 195/70 R15، چهارفصل، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+    "description": "<p>هانکوک دیناپرو باری یکی از انتخاب‌های محبوب در دسته لاستیک باری است. این لاستیک با سایز <strong>195/70 R15</strong> و ساخت کره جنوبی در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.838Z",
+    "brand": {
+     "id": 6,
+     "name_fa": "هانکوک",
+     "name_en": "HANKOOK",
+     "slug": "hankook",
+     "logo": "/images/brands/hankook.png"
+    },
+    "category": {
+     "id": 3,
+     "name": "لاستیک باری",
+     "slug": "truck"
+    },
+    "images": [
+     {
+      "id": 29,
+      "url": "/images/products/tire-truck.png",
+      "alt": null
+     },
+     {
+      "id": 30,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-truck.png"
+   },
+   {
+    "id": 14,
+    "slug": "tire-14",
+    "name": "کومهو رود ونچر MT",
+    "size": "265/65 R17",
+    "width": 265,
+    "ratio": 65,
+    "rim": 17,
+    "season": "آفرود",
+    "price": 11200000,
+    "old_price": 12500000,
+    "discount": 10,
+    "stock": 5,
+    "sku": "LT-1014",
+    "rating": 4.4,
+    "rating_count": 14,
+    "sold_count": 128,
+    "badge": null,
+    "country": "کره جنوبی",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کومهو رود ونچر MT با سایز 265/65 R17، آفرود، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کومهو رود ونچر MT یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت کره جنوبی در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.804Z",
+    "brand": {
+     "id": 7,
+     "name_fa": "کومهو",
+     "name_en": "KUMHO",
+     "slug": "kumho",
+     "logo": "/images/brands/kumho.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 27,
+      "url": "/images/products/tire-mud.png",
+      "alt": null
+     },
+     {
+      "id": 28,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-mud.png"
+   },
+   {
+    "id": 13,
+    "slug": "tire-13",
+    "name": "گودیر رانگلر AT",
+    "size": "265/65 R17",
+    "width": 265,
+    "ratio": 65,
+    "rim": 17,
+    "season": "آفرود",
+    "price": 13400000,
+    "old_price": null,
+    "discount": 0,
+    "stock": 6,
+    "sku": "LT-1013",
+    "rating": 4.5,
+    "rating_count": 91,
+    "sold_count": 91,
+    "badge": null,
+    "country": "آلمان",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "گودیر رانگلر AT با سایز 265/65 R17، آفرود، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>گودیر رانگلر AT یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.769Z",
+    "brand": {
+     "id": 3,
+     "name_fa": "گودیر",
+     "name_en": "GOODYEAR",
+     "slug": "goodyear",
+     "logo": "/images/brands/goodyear.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 25,
+      "url": "/images/products/tire-mud.png",
+      "alt": null
+     },
+     {
+      "id": 26,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-mud.png"
+   }
+  ],
+  "deals": [
+   {
+    "id": 5,
+    "slug": "tire-05",
+    "name": "پیرلی P Zero",
+    "size": "245/40 R18",
+    "width": 245,
+    "ratio": 40,
+    "rim": 18,
+    "season": "تابستانی",
+    "price": 16800000,
+    "old_price": 18500000,
+    "discount": 9,
+    "stock": 4,
+    "sku": "LT-1005",
+    "rating": 4.5,
+    "rating_count": 77,
+    "sold_count": 215,
+    "badge": "ویژه",
+    "country": "ایتالیا",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "پیرلی P Zero با سایز 245/40 R18، تابستانی، ساخت ایتالیا و گارانتی اصالت لیفت تایر.",
+    "description": "<p>پیرلی P Zero یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>245/40 R18</strong> و ساخت ایتالیا در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.489Z",
+    "brand": {
+     "id": 5,
+     "name_fa": "پیرلی",
+     "name_en": "PIRELLI",
+     "slug": "pirelli",
+     "logo": "/images/brands/pirelli.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 9,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 10,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 17,
+    "slug": "tire-17",
+    "name": "پیرلی اسکورپیون ورد",
+    "size": "255/55 R18",
+    "width": 255,
+    "ratio": 55,
+    "rim": 18,
+    "season": "چهارفصل",
+    "price": 17200000,
+    "old_price": 18900000,
+    "discount": 9,
+    "stock": 4,
+    "sku": "LT-1017",
+    "rating": 4.9,
+    "rating_count": 53,
+    "sold_count": 239,
+    "badge": "لوکس",
+    "country": "ایتالیا",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "پیرلی اسکورپیون ورد با سایز 255/55 R18، چهارفصل، ساخت ایتالیا و گارانتی اصالت لیفت تایر.",
+    "description": "<p>پیرلی اسکورپیون ورد یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>255/55 R18</strong> و ساخت ایتالیا در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.914Z",
+    "brand": {
+     "id": 5,
+     "name_fa": "پیرلی",
+     "name_en": "PIRELLI",
+     "slug": "pirelli",
+     "logo": "/images/brands/pirelli.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 33,
+      "url": "/images/products/tire-suv.png",
+      "alt": null
+     },
+     {
+      "id": 34,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-suv.png"
+   },
+   {
+    "id": 12,
+    "slug": "tire-12",
+    "name": "بریجستون دوئلر AT ۶۹۴",
+    "size": "265/65 R17",
+    "width": 265,
+    "ratio": 65,
+    "rim": 17,
+    "season": "آفرود",
+    "price": 14900000,
+    "old_price": 16400000,
+    "discount": 9,
+    "stock": 7,
+    "sku": "LT-1012",
+    "rating": 4.6,
+    "rating_count": 78,
+    "sold_count": 54,
+    "badge": "آفرود",
+    "country": "ژاپن",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "بریجستون دوئلر AT ۶۹۴ با سایز 265/65 R17، آفرود، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+    "description": "<p>بریجستون دوئلر AT ۶۹۴ یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.727Z",
+    "brand": {
+     "id": 2,
+     "name_fa": "بریجستون",
+     "name_en": "BRIDGESTONE",
+     "slug": "bridgestone",
+     "logo": "/images/brands/bridgestone.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 23,
+      "url": "/images/products/tire-suv.png",
+      "alt": null
+     },
+     {
+      "id": 24,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-suv.png"
+   },
+   {
+    "id": 3,
+    "slug": "tire-03",
+    "name": "گودیر ایگل F1 اسپرت",
+    "size": "225/45 R17",
+    "width": 225,
+    "ratio": 45,
+    "rim": 17,
+    "season": "تابستانی",
+    "price": 11400000,
+    "old_price": 12800000,
+    "discount": 11,
+    "stock": 6,
+    "sku": "LT-1003",
+    "rating": 4.7,
+    "rating_count": 51,
+    "sold_count": 141,
+    "badge": "اسپرت",
+    "country": "آلمان",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "گودیر ایگل F1 اسپرت با سایز 225/45 R17، تابستانی، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>گودیر ایگل F1 اسپرت یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>225/45 R17</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.410Z",
+    "brand": {
+     "id": 3,
+     "name_fa": "گودیر",
+     "name_en": "GOODYEAR",
+     "slug": "goodyear",
+     "logo": "/images/brands/goodyear.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 5,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 6,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 19,
+    "slug": "tire-19",
+    "name": "رینگ آلومینیومی اسپرت ۱۶ اینچ",
+    "size": "16 اینچ",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 9850000,
+    "old_price": 11200000,
+    "discount": 12,
+    "stock": 6,
+    "sku": "LT-1019",
+    "rating": 4.7,
+    "rating_count": 79,
+    "sold_count": 313,
+    "badge": null,
+    "country": "تایوان",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "رینگ آلومینیومی اسپرت ۱۶ اینچ با سایز 16 اینچ، چهارفصل، ساخت تایوان و گارانتی اصالت لیفت تایر.",
+    "description": "<p>رینگ آلومینیومی اسپرت ۱۶ اینچ یکی از انتخاب‌های محبوب در دسته رینگ و تیوب است. این رینگ با سایز <strong>16 اینچ</strong> و ساخت تایوان در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.981Z",
+    "brand": {
+     "id": 9,
+     "name_fa": "بارز",
+     "name_en": "BARZ",
+     "slug": "barz",
+     "logo": "/images/brands/barz.png"
+    },
+    "category": {
+     "id": 4,
+     "name": "رینگ و تیوب",
+     "slug": "rim"
+    },
+    "images": [
+     {
+      "id": 37,
+      "url": "/images/products/rim-alloy.png",
+      "alt": null
+     },
+     {
+      "id": 38,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/rim-alloy.png"
+   },
+   {
+    "id": 14,
+    "slug": "tire-14",
+    "name": "کومهو رود ونچر MT",
+    "size": "265/65 R17",
+    "width": 265,
+    "ratio": 65,
+    "rim": 17,
+    "season": "آفرود",
+    "price": 11200000,
+    "old_price": 12500000,
+    "discount": 10,
+    "stock": 5,
+    "sku": "LT-1014",
+    "rating": 4.4,
+    "rating_count": 14,
+    "sold_count": 128,
+    "badge": null,
+    "country": "کره جنوبی",
+    "made_year": 2023,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "کومهو رود ونچر MT با سایز 265/65 R17، آفرود، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+    "description": "<p>کومهو رود ونچر MT یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت کره جنوبی در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.804Z",
+    "brand": {
+     "id": 7,
+     "name_fa": "کومهو",
+     "name_en": "KUMHO",
+     "slug": "kumho",
+     "logo": "/images/brands/kumho.png"
+    },
+    "category": {
+     "id": 2,
+     "name": "آفرود و شاسی‌بلند",
+     "slug": "offroad"
+    },
+    "images": [
+     {
+      "id": 27,
+      "url": "/images/products/tire-mud.png",
+      "alt": null
+     },
+     {
+      "id": 28,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-mud.png"
+   },
+   {
+    "id": 8,
+    "slug": "tire-08",
+    "name": "یوکوهاما Advan Sport",
+    "size": "225/45 R17",
+    "width": 225,
+    "ratio": 45,
+    "rim": 17,
+    "season": "تابستانی",
+    "price": 11900000,
+    "old_price": 13200000,
+    "discount": 10,
+    "stock": 5,
+    "sku": "LT-1008",
+    "rating": 4.2,
+    "rating_count": 26,
+    "sold_count": 326,
+    "badge": null,
+    "country": "ژاپن",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "یوکوهاما Advan Sport با سایز 225/45 R17، تابستانی، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+    "description": "<p>یوکوهاما Advan Sport یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>225/45 R17</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": false,
+    "created_at": "2026-11-04T15:01:34.588Z",
+    "brand": {
+     "id": 8,
+     "name_fa": "یوکوهاما",
+     "name_en": "YOKOHAMA",
+     "slug": "yokohama",
+     "logo": "/images/brands/yokohama.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 15,
+      "url": "/images/products/tire-sport.png",
+      "alt": null
+     },
+     {
+      "id": 16,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-sport.png"
+   },
+   {
+    "id": 1,
+    "slug": "tire-01",
+    "name": "میشلن پریماسی ۴",
+    "size": "205/55 R16",
+    "width": 205,
+    "ratio": 55,
+    "rim": 16,
+    "season": "چهارفصل",
+    "price": 8750000,
+    "old_price": 9600000,
+    "discount": 9,
+    "stock": 10,
+    "sku": "LT-1001",
+    "rating": 4.9,
+    "rating_count": 25,
+    "sold_count": 69,
+    "badge": "پرفروش",
+    "country": "فرانسه",
+    "made_year": 2024,
+    "warranty": "۱۸ ماه ضمانت اصالت",
+    "tread_depth": "۷.۸ میلی‌متر",
+    "fuel_label": "B",
+    "wet_grip": "A",
+    "noise": "۷۱ دسی‌بل",
+    "weight": "۹.۲ کیلوگرم",
+    "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+    "short_desc": "میشلن پریماسی ۴ با سایز 205/55 R16، چهارفصل، ساخت فرانسه و گارانتی اصالت لیفت تایر.",
+    "description": "<p>میشلن پریماسی ۴ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت فرانسه در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+    "is_featured": true,
+    "created_at": "2026-11-04T15:01:34.322Z",
+    "brand": {
+     "id": 1,
+     "name_fa": "میشلن",
+     "name_en": "MICHELIN",
+     "slug": "michelin",
+     "logo": "/images/brands/michelin.png"
+    },
+    "category": {
+     "id": 1,
+     "name": "لاستیک سواری",
+     "slug": "passenger"
+    },
+    "images": [
+     {
+      "id": 1,
+      "url": "/images/products/tire-passenger-a.png",
+      "alt": null
+     },
+     {
+      "id": 2,
+      "url": "/images/products/tire-detail.png",
+      "alt": null
+     }
+    ],
+    "image": "/images/products/tire-passenger-a.png"
+   }
+  ],
+  "posts": [
+   {
+    "id": 3,
+    "slug": "summer-or-all-season",
+    "title": "تابستانی یا چهارفصل؟ انتخاب درست برای آب‌وهوای ایران",
+    "excerpt": "در بیشتر شهرهای ایران لاستیک چهارفصل انتخاب منطقی است؛ اما برای مسیرهای برفی و کویری چه؟",
+    "content": "<p>انتخاب بین لاستیک تابستانی و چهارفصل به سه عامل بستگی دارد: دمای میانگین شهر شما، میزان بارش برف و سبک رانندگی.</p>\n<h2>لاستیک تابستانی</h2><p>ترکیب لاستیکی سخت‌تر و آج با کانال‌های تخلیه آب زیاد؛ در دمای بالای ۷ درجه بهترین چسبندگی و کمترین فاصله ترمز را می‌دهد. برای شهرهای گرم و رانندگی شهری مناسب است.</p>\n<h2>لاستیک چهارفصل</h2><p>ترکیبی متعادل با آج‌های ریز شیار برای بارش‌های سبک. برای اکثر رانندگان ایرانی که سالی چند بار با باران و یخبندان روبه‌رو می‌شوند، گزینه منطقی و اقتصادی است.</p>\n<h2>لاستیک زمستانی</h2><p>ترکیب نرم و آج عمیق با لایه‌های سیفونی برای برف و یخ. در سفرهای زمستانی به مناطق کوهستانی حتماً از این نوع استفاده کنید.</p>",
+    "cover": "/images/blog/blog-3.jpg",
+    "author": "تیم محتوای لیفت تایر",
+    "tag": "راهنمای خرید",
+    "read_time": 5,
+    "is_published": true,
+    "created_at": "2026-11-04T15:01:35.037Z"
+   },
+   {
+    "id": 2,
+    "slug": "how-to-read-tire-size",
+    "title": "خواندن سایز لاستیک در ۳ دقیقه",
+    "excerpt": "۲۰۵/۵۵ R16 یعنی چه؟ راهنمای کامل اعداد روی دیواره لاستیک، شاخص بار و شاخص سرعت.",
+    "content": "<p>روی دیواره هر لاستیک مجموعه‌ای از اعداد و حروف حک شده است. با دانستن معنی آن‌ها می‌توانید دقیقاً همان لاستیکی را بخرید که خودروساز برای خودروی شما در نظر گرفته است.</p>\n<h2>عدد اول: عرض مقطع</h2><p>در سایز 205/55 R16 عدد ۲۰۵ عرض مقطع لاستیک بر حسب میلی‌متر است.</p>\n<h2>عدد دوم: نسبت منظر</h2><p>عدد ۵۵ نشان می‌دهد ارتفاع دیواره ۵۵ درصد عرض مقطع است (حدود ۱۱۲ میلی‌متر). عدد کمتر یعنی لاستیک پهن‌تر و اسپرت‌تر.</p>\n<h2>R و قطر رینگ</h2><p>حرف R ساختار رادیال و عدد ۱۶ قطر رینگ بر حسب اینچ است.</p>\n<h2>شاخص بار و سرعت</h2><p>مثلاً ۹۴V یعنی حداکثر بار ۶۷۰ کیلوگرم برای هر لاستیک و حداکثر سرعت ۲۴۰ کیلومتر بر ساعت.</p>",
+    "cover": "/images/blog/blog-2.jpg",
+    "author": "تیم محتوای لیفت تایر",
+    "tag": "آموزش",
+    "read_time": 4,
+    "is_published": true,
+    "created_at": "2026-11-04T15:01:35.036Z"
+   },
+   {
+    "id": 1,
+    "slug": "when-to-change-tires",
+    "title": "چه زمانی لاستیک را عوض کنیم؟",
+    "excerpt": "عمق آج، ترک‌های جانبی و تاریخ تولید؛ سه نشانه‌ای که می‌گوید وقت تعویض لاستیک رسیده است.",
+    "content": "<p>لاستیک تنها نقطه تماس خودرو با جاده است؛ بنابراین سلامت آن مستقیماً روی ایمنی شما اثر می‌گذارد. بسیاری از رانندگان تنها زمانی به فکر تعویض لاستیک می‌افتند که باد لاستیک خوابیده یا فرمان کشیده شود، در حالی که نشانه‌های زودتر و ظریف‌تری هم وجود دارد.</p>\n<h2>۱. عمق آج کمتر از ۱.۶ میلی‌متر</h2><p>حد قانونی عمق آج ۱.۶ میلی‌متر است، اما کارشناسان توصیه می‌کنند در عمق ۳ میلی‌متر برنامه تعویض را شروع کنید. با یک سکه می‌توانید عمق آج را تخمین بزنید: اگر لبه سکه روی زبانه‌های آج شناور باشد، زمان تعویض فرا رسیده است.</p>\n<h2>۲. ترک‌های ریز و خشکی دیواره</h2><p>قرار گرفتن طولانی در آفتاب و استفاده از مواد شوینده نامناسب باعث خشکی و ترک دیواره لاستیک می‌شود. ترک‌های ریز سطحی خطر جدی نیستند اما اگر ترک عمیق دیدید، لاستیک باید فوراً تعویض شود.</p>\n<h2>۳. تاریخ تولید بالای ۵ سال</h2><p>حتی لاستیک کم‌کارکرد هم با گذشت زمان سخت و بی‌کشش می‌شود. تاریخ تولید روی دیواره لاستیک (چهار رقم هفته و سال) را بررسی کنید؛ لاستیک بالای پنج سال حتی با آج سالم توصیه نمی‌شود.</p>\n<h2>۴. لرزش و صدای غیرعادی</h2><p>لرزش فرمان در سرعت‌های بالا یا صدای زوزه ممکن است نشانه نامیزانی، تاب برداشتن رینگ یا سایش نامتقارن باشد. در لیفت تایر این موارد در سرویس نصب رایگان بررسی می‌شود.</p>",
+    "cover": "/images/blog/blog-1.jpg",
+    "author": "تیم محتوای لیفت تایر",
+    "tag": "نگهداری",
+    "read_time": 6,
+    "is_published": true,
+    "created_at": "2026-11-04T15:01:35.034Z"
+   }
+  ]
+ },
+ "products": [
+  {
+   "id": 20,
+   "slug": "tire-20",
+   "name": "تیوب و نوار لاستیک ۱۵ اینچ",
+   "size": "15 اینچ",
+   "width": 15,
+   "ratio": 0,
+   "rim": 15,
+   "season": "چهارفصل",
+   "price": 690000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 60,
+   "sku": "LT-1020",
+   "rating": 4.6,
+   "rating_count": 92,
+   "sold_count": 350,
+   "badge": null,
+   "country": "ایران",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "تیوب و نوار لاستیک ۱۵ اینچ با سایز 15 اینچ، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+   "description": "<p>تیوب و نوار لاستیک ۱۵ اینچ یکی از انتخاب‌های محبوب در دسته لوازم جانبی است. این محصول با سایز <strong>15 اینچ</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:35.012Z",
+   "brand": {
+    "id": 10,
+    "name_fa": "کویر تایر",
+    "name_en": "KAVIR",
+    "slug": "kavir",
+    "logo": "/images/brands/kavir.png"
+   },
+   "category": {
+    "id": 5,
+    "name": "لوازم جانبی",
+    "slug": "accessories"
+   },
+   "images": [
+    {
+     "id": 39,
+     "url": "/images/products/accessory-tube.png",
+     "alt": null
+    },
+    {
+     "id": 40,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/accessory-tube.png"
+  },
+  {
+   "id": 19,
+   "slug": "tire-19",
+   "name": "رینگ آلومینیومی اسپرت ۱۶ اینچ",
+   "size": "16 اینچ",
+   "width": 205,
+   "ratio": 55,
+   "rim": 16,
+   "season": "چهارفصل",
+   "price": 9850000,
+   "old_price": 11200000,
+   "discount": 12,
+   "stock": 6,
+   "sku": "LT-1019",
+   "rating": 4.7,
+   "rating_count": 79,
+   "sold_count": 313,
+   "badge": null,
+   "country": "تایوان",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "رینگ آلومینیومی اسپرت ۱۶ اینچ با سایز 16 اینچ، چهارفصل، ساخت تایوان و گارانتی اصالت لیفت تایر.",
+   "description": "<p>رینگ آلومینیومی اسپرت ۱۶ اینچ یکی از انتخاب‌های محبوب در دسته رینگ و تیوب است. این رینگ با سایز <strong>16 اینچ</strong> و ساخت تایوان در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.981Z",
+   "brand": {
+    "id": 9,
+    "name_fa": "بارز",
+    "name_en": "BARZ",
+    "slug": "barz",
+    "logo": "/images/brands/barz.png"
+   },
+   "category": {
+    "id": 4,
+    "name": "رینگ و تیوب",
+    "slug": "rim"
+   },
+   "images": [
+    {
+     "id": 37,
+     "url": "/images/products/rim-alloy.png",
+     "alt": null
+    },
+    {
+     "id": 38,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/rim-alloy.png"
+  },
+  {
+   "id": 18,
+   "slug": "tire-18",
+   "name": "کنتیننتال وینترکانتکت",
+   "size": "205/55 R16",
+   "width": 205,
+   "ratio": 55,
+   "rim": 16,
+   "season": "زمستانی",
+   "price": 9500000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 9,
+   "sku": "LT-1018",
+   "rating": 4.8,
+   "rating_count": 66,
+   "sold_count": 276,
+   "badge": null,
+   "country": "آلمان",
+   "made_year": 2023,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "کنتیننتال وینترکانتکت با سایز 205/55 R16، زمستانی، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+   "description": "<p>کنتیننتال وینترکانتکت یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.948Z",
+   "brand": {
+    "id": 4,
+    "name_fa": "کنتیننتال",
+    "name_en": "CONTINENTAL",
+    "slug": "continental",
+    "logo": "/images/brands/continental.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 35,
+     "url": "/images/products/tire-winter.png",
+     "alt": null
+    },
+    {
+     "id": 36,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-winter.png"
+  },
+  {
+   "id": 17,
+   "slug": "tire-17",
+   "name": "پیرلی اسکورپیون ورد",
+   "size": "255/55 R18",
+   "width": 255,
+   "ratio": 55,
+   "rim": 18,
+   "season": "چهارفصل",
+   "price": 17200000,
+   "old_price": 18900000,
+   "discount": 9,
+   "stock": 4,
+   "sku": "LT-1017",
+   "rating": 4.9,
+   "rating_count": 53,
+   "sold_count": 239,
+   "badge": "لوکس",
+   "country": "ایتالیا",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "پیرلی اسکورپیون ورد با سایز 255/55 R18، چهارفصل، ساخت ایتالیا و گارانتی اصالت لیفت تایر.",
+   "description": "<p>پیرلی اسکورپیون ورد یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>255/55 R18</strong> و ساخت ایتالیا در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.914Z",
+   "brand": {
+    "id": 5,
+    "name_fa": "پیرلی",
+    "name_en": "PIRELLI",
+    "slug": "pirelli",
+    "logo": "/images/brands/pirelli.png"
+   },
+   "category": {
+    "id": 2,
+    "name": "آفرود و شاسی‌بلند",
+    "slug": "offroad"
+   },
+   "images": [
+    {
+     "id": 33,
+     "url": "/images/products/tire-suv.png",
+     "alt": null
+    },
+    {
+     "id": 34,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-suv.png"
+  },
+  {
+   "id": 16,
+   "slug": "tire-16",
+   "name": "بارز باری RA08",
+   "size": "195/70 R15",
+   "width": 195,
+   "ratio": 70,
+   "rim": 15,
+   "season": "چهارفصل",
+   "price": 3980000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 22,
+   "sku": "LT-1016",
+   "rating": 4.2,
+   "rating_count": 40,
+   "sold_count": 202,
+   "badge": null,
+   "country": "ایران",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "بارز باری RA08 با سایز 195/70 R15، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+   "description": "<p>بارز باری RA08 یکی از انتخاب‌های محبوب در دسته لاستیک باری است. این لاستیک با سایز <strong>195/70 R15</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.869Z",
+   "brand": {
+    "id": 9,
+    "name_fa": "بارز",
+    "name_en": "BARZ",
+    "slug": "barz",
+    "logo": "/images/brands/barz.png"
+   },
+   "category": {
+    "id": 3,
+    "name": "لاستیک باری",
+    "slug": "truck"
+   },
+   "images": [
+    {
+     "id": 31,
+     "url": "/images/products/tire-truck.png",
+     "alt": null
+    },
+    {
+     "id": 32,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-truck.png"
+  },
+  {
+   "id": 15,
+   "slug": "tire-15",
+   "name": "هانکوک دیناپرو باری",
+   "size": "195/70 R15",
+   "width": 195,
+   "ratio": 70,
+   "rim": 15,
+   "season": "چهارفصل",
+   "price": 6400000,
+   "old_price": 7100000,
+   "discount": 10,
+   "stock": 14,
+   "sku": "LT-1015",
+   "rating": 4.3,
+   "rating_count": 27,
+   "sold_count": 165,
+   "badge": null,
+   "country": "کره جنوبی",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "هانکوک دیناپرو باری با سایز 195/70 R15، چهارفصل، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+   "description": "<p>هانکوک دیناپرو باری یکی از انتخاب‌های محبوب در دسته لاستیک باری است. این لاستیک با سایز <strong>195/70 R15</strong> و ساخت کره جنوبی در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.838Z",
+   "brand": {
+    "id": 6,
+    "name_fa": "هانکوک",
+    "name_en": "HANKOOK",
+    "slug": "hankook",
+    "logo": "/images/brands/hankook.png"
+   },
+   "category": {
+    "id": 3,
+    "name": "لاستیک باری",
+    "slug": "truck"
+   },
+   "images": [
+    {
+     "id": 29,
+     "url": "/images/products/tire-truck.png",
+     "alt": null
+    },
+    {
+     "id": 30,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-truck.png"
+  },
+  {
+   "id": 14,
+   "slug": "tire-14",
+   "name": "کومهو رود ونچر MT",
+   "size": "265/65 R17",
+   "width": 265,
+   "ratio": 65,
+   "rim": 17,
+   "season": "آفرود",
+   "price": 11200000,
+   "old_price": 12500000,
+   "discount": 10,
+   "stock": 5,
+   "sku": "LT-1014",
+   "rating": 4.4,
+   "rating_count": 14,
+   "sold_count": 128,
+   "badge": null,
+   "country": "کره جنوبی",
+   "made_year": 2023,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "کومهو رود ونچر MT با سایز 265/65 R17، آفرود، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+   "description": "<p>کومهو رود ونچر MT یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت کره جنوبی در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.804Z",
+   "brand": {
+    "id": 7,
+    "name_fa": "کومهو",
+    "name_en": "KUMHO",
+    "slug": "kumho",
+    "logo": "/images/brands/kumho.png"
+   },
+   "category": {
+    "id": 2,
+    "name": "آفرود و شاسی‌بلند",
+    "slug": "offroad"
+   },
+   "images": [
+    {
+     "id": 27,
+     "url": "/images/products/tire-mud.png",
+     "alt": null
+    },
+    {
+     "id": 28,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-mud.png"
+  },
+  {
+   "id": 13,
+   "slug": "tire-13",
+   "name": "گودیر رانگلر AT",
+   "size": "265/65 R17",
+   "width": 265,
+   "ratio": 65,
+   "rim": 17,
+   "season": "آفرود",
+   "price": 13400000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 6,
+   "sku": "LT-1013",
+   "rating": 4.5,
+   "rating_count": 91,
+   "sold_count": 91,
+   "badge": null,
+   "country": "آلمان",
+   "made_year": 2023,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "گودیر رانگلر AT با سایز 265/65 R17، آفرود، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+   "description": "<p>گودیر رانگلر AT یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.769Z",
+   "brand": {
+    "id": 3,
+    "name_fa": "گودیر",
+    "name_en": "GOODYEAR",
+    "slug": "goodyear",
+    "logo": "/images/brands/goodyear.png"
+   },
+   "category": {
+    "id": 2,
+    "name": "آفرود و شاسی‌بلند",
+    "slug": "offroad"
+   },
+   "images": [
+    {
+     "id": 25,
+     "url": "/images/products/tire-mud.png",
+     "alt": null
+    },
+    {
+     "id": 26,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-mud.png"
+  },
+  {
+   "id": 12,
+   "slug": "tire-12",
+   "name": "بریجستون دوئلر AT ۶۹۴",
+   "size": "265/65 R17",
+   "width": 265,
+   "ratio": 65,
+   "rim": 17,
+   "season": "آفرود",
+   "price": 14900000,
+   "old_price": 16400000,
+   "discount": 9,
+   "stock": 7,
+   "sku": "LT-1012",
+   "rating": 4.6,
+   "rating_count": 78,
+   "sold_count": 54,
+   "badge": "آفرود",
+   "country": "ژاپن",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "بریجستون دوئلر AT ۶۹۴ با سایز 265/65 R17، آفرود، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+   "description": "<p>بریجستون دوئلر AT ۶۹۴ یکی از انتخاب‌های محبوب در دسته آفرود و شاسی‌بلند است. این لاستیک با سایز <strong>265/65 R17</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": true,
+   "created_at": "2026-11-04T15:01:34.727Z",
+   "brand": {
+    "id": 2,
+    "name_fa": "بریجستون",
+    "name_en": "BRIDGESTONE",
+    "slug": "bridgestone",
+    "logo": "/images/brands/bridgestone.png"
+   },
+   "category": {
+    "id": 2,
+    "name": "آفرود و شاسی‌بلند",
+    "slug": "offroad"
+   },
+   "images": [
+    {
+     "id": 23,
+     "url": "/images/products/tire-suv.png",
+     "alt": null
+    },
+    {
+     "id": 24,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-suv.png"
+  },
+  {
+   "id": 11,
+   "slug": "tire-11",
+   "name": "میشلن پیلوت اسپرت ۵",
+   "size": "245/40 R18",
+   "width": 245,
+   "ratio": 40,
+   "rim": 18,
+   "season": "تابستانی",
+   "price": 18700000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 3,
+   "sku": "LT-1011",
+   "rating": 4.7,
+   "rating_count": 65,
+   "sold_count": 437,
+   "badge": null,
+   "country": "فرانسه",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "میشلن پیلوت اسپرت ۵ با سایز 245/40 R18، تابستانی، ساخت فرانسه و گارانتی اصالت لیفت تایر.",
+   "description": "<p>میشلن پیلوت اسپرت ۵ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>245/40 R18</strong> و ساخت فرانسه در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": true,
+   "created_at": "2026-11-04T15:01:34.694Z",
+   "brand": {
+    "id": 1,
+    "name_fa": "میشلن",
+    "name_en": "MICHELIN",
+    "slug": "michelin",
+    "logo": "/images/brands/michelin.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 21,
+     "url": "/images/products/tire-sport.png",
+     "alt": null
+    },
+    {
+     "id": 22,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-sport.png"
+  },
+  {
+   "id": 10,
+   "slug": "tire-10",
+   "name": "کویر تایر P6000",
+   "size": "185/65 R15",
+   "width": 185,
+   "ratio": 65,
+   "rim": 15,
+   "season": "چهارفصل",
+   "price": 3350000,
+   "old_price": 3790000,
+   "discount": 12,
+   "stock": 40,
+   "sku": "LT-1010",
+   "rating": 4.8,
+   "rating_count": 52,
+   "sold_count": 400,
+   "badge": null,
+   "country": "ایران",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "کویر تایر P6000 با سایز 185/65 R15، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+   "description": "<p>کویر تایر P6000 یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>185/65 R15</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.660Z",
+   "brand": {
+    "id": 10,
+    "name_fa": "کویر تایر",
+    "name_en": "KAVIR",
+    "slug": "kavir",
+    "logo": "/images/brands/kavir.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 19,
+     "url": "/images/products/tire-passenger-a.png",
+     "alt": null
+    },
+    {
+     "id": 20,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-a.png"
+  },
+  {
+   "id": 9,
+   "slug": "tire-09",
+   "name": "بارز B250 ایرانی",
+   "size": "205/55 R16",
+   "width": 205,
+   "ratio": 55,
+   "rim": 16,
+   "season": "چهارفصل",
+   "price": 3980000,
+   "old_price": 4350000,
+   "discount": 9,
+   "stock": 30,
+   "sku": "LT-1009",
+   "rating": 4.9,
+   "rating_count": 39,
+   "sold_count": 363,
+   "badge": "اقتصادی",
+   "country": "ایران",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "بارز B250 ایرانی با سایز 205/55 R16، چهارفصل، ساخت ایران و گارانتی اصالت لیفت تایر.",
+   "description": "<p>بارز B250 ایرانی یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت ایران در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": true,
+   "created_at": "2026-11-04T15:01:34.622Z",
+   "brand": {
+    "id": 9,
+    "name_fa": "بارز",
+    "name_en": "BARZ",
+    "slug": "barz",
+    "logo": "/images/brands/barz.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 17,
+     "url": "/images/products/tire-passenger-b.png",
+     "alt": null
+    },
+    {
+     "id": 18,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-b.png"
+  },
+  {
+   "id": 8,
+   "slug": "tire-08",
+   "name": "یوکوهاما Advan Sport",
+   "size": "225/45 R17",
+   "width": 225,
+   "ratio": 45,
+   "rim": 17,
+   "season": "تابستانی",
+   "price": 11900000,
+   "old_price": 13200000,
+   "discount": 10,
+   "stock": 5,
+   "sku": "LT-1008",
+   "rating": 4.2,
+   "rating_count": 26,
+   "sold_count": 326,
+   "badge": null,
+   "country": "ژاپن",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "یوکوهاما Advan Sport با سایز 225/45 R17، تابستانی، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+   "description": "<p>یوکوهاما Advan Sport یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>225/45 R17</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.588Z",
+   "brand": {
+    "id": 8,
+    "name_fa": "یوکوهاما",
+    "name_en": "YOKOHAMA",
+    "slug": "yokohama",
+    "logo": "/images/brands/yokohama.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 15,
+     "url": "/images/products/tire-sport.png",
+     "alt": null
+    },
+    {
+     "id": 16,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-sport.png"
+  },
+  {
+   "id": 7,
+   "slug": "tire-07",
+   "name": "کومهو ECSTA HS51",
+   "size": "195/65 R15",
+   "width": 195,
+   "ratio": 65,
+   "rim": 15,
+   "season": "چهارفصل",
+   "price": 5450000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 15,
+   "sku": "LT-1007",
+   "rating": 4.3,
+   "rating_count": 13,
+   "sold_count": 289,
+   "badge": null,
+   "country": "کره جنوبی",
+   "made_year": 2023,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "کومهو ECSTA HS51 با سایز 195/65 R15، چهارفصل، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+   "description": "<p>کومهو ECSTA HS51 یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>195/65 R15</strong> و ساخت کره جنوبی در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.555Z",
+   "brand": {
+    "id": 7,
+    "name_fa": "کومهو",
+    "name_en": "KUMHO",
+    "slug": "kumho",
+    "logo": "/images/brands/kumho.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 13,
+     "url": "/images/products/tire-passenger-a.png",
+     "alt": null
+    },
+    {
+     "id": 14,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-a.png"
+  },
+  {
+   "id": 6,
+   "slug": "tire-06",
+   "name": "هانکوک کینرژی اکو",
+   "size": "185/65 R15",
+   "width": 185,
+   "ratio": 65,
+   "rim": 15,
+   "season": "چهارفصل",
+   "price": 5250000,
+   "old_price": 5900000,
+   "discount": 11,
+   "stock": 18,
+   "sku": "LT-1006",
+   "rating": 4.4,
+   "rating_count": 90,
+   "sold_count": 252,
+   "badge": null,
+   "country": "کره جنوبی",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "هانکوک کینرژی اکو با سایز 185/65 R15، چهارفصل، ساخت کره جنوبی و گارانتی اصالت لیفت تایر.",
+   "description": "<p>هانکوک کینرژی اکو یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>185/65 R15</strong> و ساخت کره جنوبی در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.524Z",
+   "brand": {
+    "id": 6,
+    "name_fa": "هانکوک",
+    "name_en": "HANKOOK",
+    "slug": "hankook",
+    "logo": "/images/brands/hankook.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 11,
+     "url": "/images/products/tire-passenger-b.png",
+     "alt": null
+    },
+    {
+     "id": 12,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-b.png"
+  },
+  {
+   "id": 5,
+   "slug": "tire-05",
+   "name": "پیرلی P Zero",
+   "size": "245/40 R18",
+   "width": 245,
+   "ratio": 40,
+   "rim": 18,
+   "season": "تابستانی",
+   "price": 16800000,
+   "old_price": 18500000,
+   "discount": 9,
+   "stock": 4,
+   "sku": "LT-1005",
+   "rating": 4.5,
+   "rating_count": 77,
+   "sold_count": 215,
+   "badge": "ویژه",
+   "country": "ایتالیا",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "پیرلی P Zero با سایز 245/40 R18، تابستانی، ساخت ایتالیا و گارانتی اصالت لیفت تایر.",
+   "description": "<p>پیرلی P Zero یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>245/40 R18</strong> و ساخت ایتالیا در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.489Z",
+   "brand": {
+    "id": 5,
+    "name_fa": "پیرلی",
+    "name_en": "PIRELLI",
+    "slug": "pirelli",
+    "logo": "/images/brands/pirelli.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 9,
+     "url": "/images/products/tire-sport.png",
+     "alt": null
+    },
+    {
+     "id": 10,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-sport.png"
+  },
+  {
+   "id": 4,
+   "slug": "tire-04",
+   "name": "کنتیننتال اکوکانتکت ۶",
+   "size": "215/60 R16",
+   "width": 215,
+   "ratio": 60,
+   "rim": 16,
+   "season": "چهارفصل",
+   "price": 9900000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 10,
+   "sku": "LT-1004",
+   "rating": 4.6,
+   "rating_count": 64,
+   "sold_count": 178,
+   "badge": null,
+   "country": "آلمان",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "کنتیننتال اکوکانتکت ۶ با سایز 215/60 R16، چهارفصل، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+   "description": "<p>کنتیننتال اکوکانتکت ۶ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>215/60 R16</strong> و ساخت آلمان در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": true,
+   "created_at": "2026-11-04T15:01:34.444Z",
+   "brand": {
+    "id": 4,
+    "name_fa": "کنتیننتال",
+    "name_en": "CONTINENTAL",
+    "slug": "continental",
+    "logo": "/images/brands/continental.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 7,
+     "url": "/images/products/tire-passenger-a.png",
+     "alt": null
+    },
+    {
+     "id": 8,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-a.png"
+  },
+  {
+   "id": 3,
+   "slug": "tire-03",
+   "name": "گودیر ایگل F1 اسپرت",
+   "size": "225/45 R17",
+   "width": 225,
+   "ratio": 45,
+   "rim": 17,
+   "season": "تابستانی",
+   "price": 11400000,
+   "old_price": 12800000,
+   "discount": 11,
+   "stock": 6,
+   "sku": "LT-1003",
+   "rating": 4.7,
+   "rating_count": 51,
+   "sold_count": 141,
+   "badge": "اسپرت",
+   "country": "آلمان",
+   "made_year": 2023,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "گودیر ایگل F1 اسپرت با سایز 225/45 R17، تابستانی، ساخت آلمان و گارانتی اصالت لیفت تایر.",
+   "description": "<p>گودیر ایگل F1 اسپرت یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>225/45 R17</strong> و ساخت آلمان در سال 2023، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": true,
+   "created_at": "2026-11-04T15:01:34.410Z",
+   "brand": {
+    "id": 3,
+    "name_fa": "گودیر",
+    "name_en": "GOODYEAR",
+    "slug": "goodyear",
+    "logo": "/images/brands/goodyear.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 5,
+     "url": "/images/products/tire-sport.png",
+     "alt": null
+    },
+    {
+     "id": 6,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-sport.png"
+  },
+  {
+   "id": 2,
+   "slug": "tire-02",
+   "name": "بریجستون تورانزا T005",
+   "size": "205/55 R16",
+   "width": 205,
+   "ratio": 55,
+   "rim": 16,
+   "season": "چهارفصل",
+   "price": 8200000,
+   "old_price": null,
+   "discount": 0,
+   "stock": 8,
+   "sku": "LT-1002",
+   "rating": 4.8,
+   "rating_count": 38,
+   "sold_count": 104,
+   "badge": null,
+   "country": "ژاپن",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "بریجستون تورانزا T005 با سایز 205/55 R16، چهارفصل، ساخت ژاپن و گارانتی اصالت لیفت تایر.",
+   "description": "<p>بریجستون تورانزا T005 یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت ژاپن در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": false,
+   "created_at": "2026-11-04T15:01:34.379Z",
+   "brand": {
+    "id": 2,
+    "name_fa": "بریجستون",
+    "name_en": "BRIDGESTONE",
+    "slug": "bridgestone",
+    "logo": "/images/brands/bridgestone.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 3,
+     "url": "/images/products/tire-passenger-b.png",
+     "alt": null
+    },
+    {
+     "id": 4,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-b.png"
+  },
+  {
+   "id": 1,
+   "slug": "tire-01",
+   "name": "میشلن پریماسی ۴",
+   "size": "205/55 R16",
+   "width": 205,
+   "ratio": 55,
+   "rim": 16,
+   "season": "چهارفصل",
+   "price": 8750000,
+   "old_price": 9600000,
+   "discount": 9,
+   "stock": 10,
+   "sku": "LT-1001",
+   "rating": 4.9,
+   "rating_count": 25,
+   "sold_count": 69,
+   "badge": "پرفروش",
+   "country": "فرانسه",
+   "made_year": 2024,
+   "warranty": "۱۸ ماه ضمانت اصالت",
+   "tread_depth": "۷.۸ میلی‌متر",
+   "fuel_label": "B",
+   "wet_grip": "A",
+   "noise": "۷۱ دسی‌بل",
+   "weight": "۹.۲ کیلوگرم",
+   "compatible_cars": "سمند، پژو ۲۰۶، دنا، تیبا، کوییک، ساینا",
+   "short_desc": "میشلن پریماسی ۴ با سایز 205/55 R16، چهارفصل، ساخت فرانسه و گارانتی اصالت لیفت تایر.",
+   "description": "<p>میشلن پریماسی ۴ یکی از انتخاب‌های محبوب در دسته لاستیک سواری است. این لاستیک با سایز <strong>205/55 R16</strong> و ساخت فرانسه در سال 2024، تعادل خوبی بین دوام، چسبندگی و راحتی سواری ارائه می‌دهد.</p>\n<p>تمام محصولات لیفت تایر با ضمانت اصالت و تاریخ تولید ارائه می‌شوند. برای اطمینان از انتخاب درست، کارشناسان ما آماده مشاوره رایگان هستند.</p>",
+   "is_featured": true,
+   "created_at": "2026-11-04T15:01:34.322Z",
+   "brand": {
+    "id": 1,
+    "name_fa": "میشلن",
+    "name_en": "MICHELIN",
+    "slug": "michelin",
+    "logo": "/images/brands/michelin.png"
+   },
+   "category": {
+    "id": 1,
+    "name": "لاستیک سواری",
+    "slug": "passenger"
+   },
+   "images": [
+    {
+     "id": 1,
+     "url": "/images/products/tire-passenger-a.png",
+     "alt": null
+    },
+    {
+     "id": 2,
+     "url": "/images/products/tire-detail.png",
+     "alt": null
+    }
+   ],
+   "image": "/images/products/tire-passenger-a.png"
+  }
+ ],
+ "posts": [
+  {
+   "id": 3,
+   "slug": "summer-or-all-season",
+   "title": "تابستانی یا چهارفصل؟ انتخاب درست برای آب‌وهوای ایران",
+   "excerpt": "در بیشتر شهرهای ایران لاستیک چهارفصل انتخاب منطقی است؛ اما برای مسیرهای برفی و کویری چه؟",
+   "content": "<p>انتخاب بین لاستیک تابستانی و چهارفصل به سه عامل بستگی دارد: دمای میانگین شهر شما، میزان بارش برف و سبک رانندگی.</p>\n<h2>لاستیک تابستانی</h2><p>ترکیب لاستیکی سخت‌تر و آج با کانال‌های تخلیه آب زیاد؛ در دمای بالای ۷ درجه بهترین چسبندگی و کمترین فاصله ترمز را می‌دهد. برای شهرهای گرم و رانندگی شهری مناسب است.</p>\n<h2>لاستیک چهارفصل</h2><p>ترکیبی متعادل با آج‌های ریز شیار برای بارش‌های سبک. برای اکثر رانندگان ایرانی که سالی چند بار با باران و یخبندان روبه‌رو می‌شوند، گزینه منطقی و اقتصادی است.</p>\n<h2>لاستیک زمستانی</h2><p>ترکیب نرم و آج عمیق با لایه‌های سیفونی برای برف و یخ. در سفرهای زمستانی به مناطق کوهستانی حتماً از این نوع استفاده کنید.</p>",
+   "cover": "/images/blog/blog-3.jpg",
+   "author": "تیم محتوای لیفت تایر",
+   "tag": "راهنمای خرید",
+   "read_time": 5,
+   "is_published": true,
+   "created_at": "2026-11-04T15:01:35.037Z"
+  },
+  {
+   "id": 2,
+   "slug": "how-to-read-tire-size",
+   "title": "خواندن سایز لاستیک در ۳ دقیقه",
+   "excerpt": "۲۰۵/۵۵ R16 یعنی چه؟ راهنمای کامل اعداد روی دیواره لاستیک، شاخص بار و شاخص سرعت.",
+   "content": "<p>روی دیواره هر لاستیک مجموعه‌ای از اعداد و حروف حک شده است. با دانستن معنی آن‌ها می‌توانید دقیقاً همان لاستیکی را بخرید که خودروساز برای خودروی شما در نظر گرفته است.</p>\n<h2>عدد اول: عرض مقطع</h2><p>در سایز 205/55 R16 عدد ۲۰۵ عرض مقطع لاستیک بر حسب میلی‌متر است.</p>\n<h2>عدد دوم: نسبت منظر</h2><p>عدد ۵۵ نشان می‌دهد ارتفاع دیواره ۵۵ درصد عرض مقطع است (حدود ۱۱۲ میلی‌متر). عدد کمتر یعنی لاستیک پهن‌تر و اسپرت‌تر.</p>\n<h2>R و قطر رینگ</h2><p>حرف R ساختار رادیال و عدد ۱۶ قطر رینگ بر حسب اینچ است.</p>\n<h2>شاخص بار و سرعت</h2><p>مثلاً ۹۴V یعنی حداکثر بار ۶۷۰ کیلوگرم برای هر لاستیک و حداکثر سرعت ۲۴۰ کیلومتر بر ساعت.</p>",
+   "cover": "/images/blog/blog-2.jpg",
+   "author": "تیم محتوای لیفت تایر",
+   "tag": "آموزش",
+   "read_time": 4,
+   "is_published": true,
+   "created_at": "2026-11-04T15:01:35.036Z"
+  },
+  {
+   "id": 1,
+   "slug": "when-to-change-tires",
+   "title": "چه زمانی لاستیک را عوض کنیم؟",
+   "excerpt": "عمق آج، ترک‌های جانبی و تاریخ تولید؛ سه نشانه‌ای که می‌گوید وقت تعویض لاستیک رسیده است.",
+   "content": "<p>لاستیک تنها نقطه تماس خودرو با جاده است؛ بنابراین سلامت آن مستقیماً روی ایمنی شما اثر می‌گذارد. بسیاری از رانندگان تنها زمانی به فکر تعویض لاستیک می‌افتند که باد لاستیک خوابیده یا فرمان کشیده شود، در حالی که نشانه‌های زودتر و ظریف‌تری هم وجود دارد.</p>\n<h2>۱. عمق آج کمتر از ۱.۶ میلی‌متر</h2><p>حد قانونی عمق آج ۱.۶ میلی‌متر است، اما کارشناسان توصیه می‌کنند در عمق ۳ میلی‌متر برنامه تعویض را شروع کنید. با یک سکه می‌توانید عمق آج را تخمین بزنید: اگر لبه سکه روی زبانه‌های آج شناور باشد، زمان تعویض فرا رسیده است.</p>\n<h2>۲. ترک‌های ریز و خشکی دیواره</h2><p>قرار گرفتن طولانی در آفتاب و استفاده از مواد شوینده نامناسب باعث خشکی و ترک دیواره لاستیک می‌شود. ترک‌های ریز سطحی خطر جدی نیستند اما اگر ترک عمیق دیدید، لاستیک باید فوراً تعویض شود.</p>\n<h2>۳. تاریخ تولید بالای ۵ سال</h2><p>حتی لاستیک کم‌کارکرد هم با گذشت زمان سخت و بی‌کشش می‌شود. تاریخ تولید روی دیواره لاستیک (چهار رقم هفته و سال) را بررسی کنید؛ لاستیک بالای پنج سال حتی با آج سالم توصیه نمی‌شود.</p>\n<h2>۴. لرزش و صدای غیرعادی</h2><p>لرزش فرمان در سرعت‌های بالا یا صدای زوزه ممکن است نشانه نامیزانی، تاب برداشتن رینگ یا سایش نامتقارن باشد. در لیفت تایر این موارد در سرویس نصب رایگان بررسی می‌شود.</p>",
+   "cover": "/images/blog/blog-1.jpg",
+   "author": "تیم محتوای لیفت تایر",
+   "tag": "نگهداری",
+   "read_time": 6,
+   "is_published": true,
+   "created_at": "2026-11-04T15:01:35.034Z"
+  }
+ ]
+}

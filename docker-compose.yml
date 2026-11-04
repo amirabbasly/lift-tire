@@ -1,0 +1,83 @@
+name: lifttire
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: lifttire_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lifttire}
+      POSTGRES_USER: ${POSTGRES_USER:-lifttire}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lifttire_pass}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lifttire} -d ${POSTGRES_DB:-lifttire}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [lifttire]
+
+  api:
+    build:
+      context: ./backend
+    container_name: lifttire_api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lifttire}:${POSTGRES_PASSWORD:-lifttire_pass}@postgres:5432/${POSTGRES_DB:-lifttire}
+      USE_PGLITE: "false"
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@lifttire.ir}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Lift@12345}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - uploads:/app/uploads
+    ports:
+      - "127.0.0.1:${API_PORT:-4000}:4000"
+    networks: [lifttire]
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        API_INTERNAL_URL: http://api:4000
+        NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-}
+    container_name: lifttire_web
+    restart: unless-stopped
+    depends_on: [api]
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_INTERNAL_URL: http://api:4000
+      NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-}
+    ports:
+      - "127.0.0.1:${WEB_PORT:-3000}:3000"
+    networks: [lifttire]
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: lifttire_nginx
+    restart: unless-stopped
+    depends_on: [web, api]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d:ro
+      - ./nginx/certbot/conf:/etc/letsencrypt:ro
+      - ./nginx/certbot/www:/var/www/certbot:ro
+      - uploads:/var/www/uploads:ro
+    networks: [lifttire]
+
+volumes:
+  pgdata:
+  uploads:
+
+networks:
+  lifttire:
+    driver: bridge

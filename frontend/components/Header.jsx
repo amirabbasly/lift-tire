@@ -1,0 +1,203 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
+import Logo from './Logo';
+import { useAuth, useCart } from './Providers';
+import { IconSearch, IconCart, IconUser, IconMenu, IconX, IconPhone, IconChevron } from './Icons';
+import { NAV, MOBILE_NAV } from '@/lib/constants';
+import { assetUrl, faNum } from '@/lib/format';
+
+export default function Header({ settings, brands = [], categories = [] }) {
+  const [open, setOpen] = useState(false);
+  const [mobileSearch, setMobileSearch] = useState(false);
+  const [q, setQ] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+  const { count, setOpen: setCartOpen } = useCart();
+  const { customer, ready } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => { setOpen(false); setMobileSearch(false); }, [pathname]);
+
+  const submitSearch = (e) => {
+    e.preventDefault();
+    const term = q.trim();
+    router.push(term ? `/products?q=${encodeURIComponent(term)}` : '/products');
+    setMobileSearch(false);
+  };
+
+  const featured = brands.filter((b) => b.is_featured).slice(0, 7);
+
+  return (
+    <header className={`sticky top-0 z-50 border-b border-black/[.06] bg-white/95 backdrop-blur transition-shadow ${scrolled ? 'shadow-[0_6px_24px_-16px_rgba(17,20,23,.4)]' : ''}`}>
+      {/* ردیف اصلی */}
+      <div className="container-x flex h-[64px] items-center gap-3 md:h-[76px]">
+        {/* موبایل: منو */}
+        <button onClick={() => setOpen(true)} aria-label="منو" className="rounded-xl p-2 text-graphite-900 hover:bg-surface lg:hidden">
+          <IconMenu width={23} height={23} />
+        </button>
+
+        {/* دسکتاپ: لوگو راست */}
+        <div className="hidden lg:block"><Logo size="md" /></div>
+
+        {/* موبایل: لوگو وسط */}
+        <div className="flex flex-1 justify-center lg:hidden"><Logo size="sm" tagline={false} /></div>
+
+        {/* جست‌وجوی دسکتاپ */}
+        <form onSubmit={submitSearch} className="relative mx-2 hidden max-w-[520px] flex-1 items-center lg:flex">
+          <IconSearch width={18} height={18} className="pointer-events-none absolute right-4 text-muted" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="جست‌وجوی لاستیک، سایز یا برند…"
+            aria-label="جست‌وجو"
+            className="h-11 w-full rounded-xl border border-black/10 bg-surface pr-11 pl-28 text-sm outline-none transition focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10"
+          />
+          <button type="submit" className="absolute left-1.5 rounded-lg bg-graphite-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-accent">
+            جست‌وجو
+          </button>
+        </form>
+
+        {/* اکشن‌ها */}
+        <div className="flex items-center gap-1 md:gap-2">
+          <button onClick={() => setMobileSearch((v) => !v)} aria-label="جست‌وجو" className="rounded-xl p-2 text-graphite-900 hover:bg-surface lg:hidden">
+            <IconSearch width={21} height={21} />
+          </button>
+
+          <Link href="/account" className="hidden items-center gap-2 rounded-xl px-3 py-2 text-graphite-900 transition hover:bg-surface md:flex">
+            <IconUser width={22} height={22} />
+            <span className="flex flex-col leading-tight">
+              <span className="text-[10px] text-muted">{ready && customer ? 'خوش آمدید' : 'ورود / ثبت‌نام'}</span>
+              <span className="text-[12px] font-bold">{ready && customer ? customer.name || 'حساب من' : 'حساب کاربری'}</span>
+            </span>
+          </Link>
+
+          <a href={`tel:${settings?.phone?.replace(/[^\d+]/g, '') || '02191001234'}`} className="hidden items-center gap-2 rounded-xl px-3 py-2 text-graphite-900 transition hover:bg-surface xl:flex">
+            <IconPhone width={20} height={20} className="text-accent" />
+            <span className="flex flex-col leading-tight">
+              <span className="text-[10px] text-muted">پشتیبانی تلفنی</span>
+              <span className="num text-[13px] font-bold" dir="ltr">{faNum(settings?.phone || '۰۲۱-۹۱۰۰۱۲۳۴')}</span>
+            </span>
+          </a>
+
+          <button onClick={() => setCartOpen(true)} aria-label="سبد خرید" className="relative rounded-xl p-2.5 text-graphite-900 transition hover:bg-surface">
+            <IconCart width={23} height={23} />
+            {count > 0 && (
+              <span className="num absolute -top-0.5 -left-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-white">
+                {faNum(count)}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* جست‌وجوی موبایل */}
+      <AnimatePresence>
+        {mobileSearch && (
+          <motion.form
+            onSubmit={submitSearch}
+            initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+            className="container-x overflow-hidden pb-3 lg:hidden"
+          >
+            <div className="relative">
+              <IconSearch width={18} height={18} className="pointer-events-none absolute right-3.5 top-3 text-muted" />
+              <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="جست‌وجوی لاستیک، سایز یا برند…" className="field pr-10" />
+            </div>
+          </motion.form>
+        )}
+      </AnimatePresence>
+
+      {/* منوی دسکتاپ */}
+      <nav className="hidden border-t border-black/[.05] lg:block">
+        <div className="container-x flex h-11 items-center justify-between gap-4">
+          <ul className="flex items-center gap-1">
+            {NAV.map((n) => (
+              <li key={n.href}>
+                <Link
+                  href={n.href}
+                  className={`rounded-lg px-3 py-1.5 text-[13px] font-bold transition ${
+                    pathname === n.href ? 'bg-accent-soft text-accent-dark' : 'text-graphite-800 hover:bg-surface hover:text-accent-dark'
+                  }`}
+                >
+                  {n.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="flex items-center gap-1">
+            <span className="text-[11px] font-bold text-muted">برندهای ویژه:</span>
+            {featured.map((b) => (
+              <Link key={b.id} href={`/products?brand=${b.slug}`} className="group flex items-center gap-1.5 rounded-lg px-2 py-1 transition hover:bg-surface" title={b.name_fa}>
+                <img src={assetUrl(b.logo)} alt={b.name_fa} className="h-5 w-auto opacity-75 transition group-hover:opacity-100" loading="lazy" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* کشوی موبایل */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div className="fixed inset-0 z-[80] bg-graphite-900/50 backdrop-blur-sm lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
+            <motion.div
+              className="fixed inset-y-0 right-0 z-[81] flex w-[86%] max-w-[340px] flex-col bg-graphite-900 text-white lg:hidden"
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              role="dialog" aria-label="منو"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+                <Logo variant="dark" size="sm" tagline={false} />
+                <button onClick={() => setOpen(false)} aria-label="بستن" className="rounded-lg p-1.5 text-white/70 hover:bg-white/10">
+                  <IconX width={20} height={20} />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-4 gap-2 border-b border-white/10 px-4 py-4">
+                {MOBILE_NAV.map((n) => (
+                  <Link key={n.href} href={n.href} className="flex flex-col items-center gap-1.5 rounded-xl p-2 transition hover:bg-white/5">
+                    <img src={n.icon} alt="" className="h-9 w-9 object-contain" />
+                    <span className="text-[10px] font-bold text-white/80">{n.label}</span>
+                  </Link>
+                ))}
+              </div>
+
+              <nav className="flex-1 overflow-y-auto px-3 py-3">
+                <p className="px-2 pb-2 text-[11px] font-bold text-white/40">دسترسی سریع</p>
+                {NAV.map((n) => (
+                  <Link key={n.href} href={n.href} className="flex items-center justify-between rounded-lg px-2.5 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/5 hover:text-accent">
+                    {n.label}
+                    <IconChevron width={15} height={15} className="text-white/30" />
+                  </Link>
+                ))}
+                <p className="px-2 pb-2 pt-3 text-[11px] font-bold text-white/40">دسته‌بندی‌ها</p>
+                {categories.map((c) => (
+                  <Link key={c.id} href={`/category/${c.slug}`} className="flex items-center justify-between rounded-lg px-2.5 py-2.5 text-sm text-white/75 hover:bg-white/5 hover:text-accent">
+                    {c.name}
+                    <span className="num text-[10px] text-white/30">{faNum(c.product_count || 0)}</span>
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="border-t border-white/10 p-4">
+                <a href={`tel:${settings?.phone?.replace(/[^\d+]/g, '') || '02191001234'}`} className="btn-accent w-full">
+                  <IconPhone width={18} height={18} /> مشاوره تلفنی رایگان
+                </a>
+                <p className="mt-2 text-center text-[11px] text-white/40">شنبه تا پنجشنبه ۹ تا ۱۹</p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
