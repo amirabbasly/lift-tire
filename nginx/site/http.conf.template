@@ -1,0 +1,26 @@
+# ═══════════════════════════════════════════════════════════════
+#  Lift Tire — حالت HTTP (زمانی که گواهی SSL هنوز نصب نشده)
+#  سایت روی http کامل کار می‌کند؛ هیچ ریدایرکتی به https انجام نمی‌شود
+#  تا با Cloudflare Flexible حلقهٔ ریدایرکت ایجاد نشود.
+# ═══════════════════════════════════════════════════════════════
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name __DOMAIN__ www.__DOMAIN__ _;
+
+    # مسیر تأیید certbot (HTTP-01) — باید همیشه باز باشد
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        default_type text/plain;
+        try_files $uri =404;
+    }
+
+    # سلامت سرویس
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+
+    include /opt/nginx-sites/locations.conf;
+}

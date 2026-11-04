@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════
 #  Lift Tire — اسکریپت دیپلوی
-#  استفاده:  ./deploy.sh install | update | backup | restart | status | logs | seed
+#  استفاده:  ./deploy.sh install | update | backup | restart | status | logs | seed | ssl | doctor | clean
 # ══════════════════════════════════════════════════════════════
 set -euo pipefail
 
@@ -66,13 +66,14 @@ do_install() {
   else
     warn "seed قبلاً اجرا شده یا با خطا مواجه شد — برای بازسازی: ./deploy.sh seed --force"
   fi
-  if do_ssl_check; then
-    $COMPOSE up -d nginx
+  info "بالا آوردن nginx (حالت خودکار: با گواهی → HTTPS، بدون گواهی → HTTP)…"
+  $COMPOSE up -d nginx
+  sleep 2
+  if do_ssl_check >/dev/null 2>&1; then
+    info "nginx با HTTPS بالا آمد."
   else
-    warn "nginx بالا نیامد (چون گواهی SSL هنوز نیست)."
-    warn "بعد از درست‌کردن DNS اجرا کنید: ./scripts/ssl-certbot.sh"
-    warn "اگر دامنه پشت Cloudflare است: ./scripts/install-origin-cert.sh <cert> <key>"
-    warn "سپس: ./deploy.sh restart"
+    info "nginx در حالت HTTP بالا آمد — سایت همین حالا در دسترس است."
+    info "برای فعال‌کردن HTTPS: ./scripts/ssl-certbot.sh"
   fi
   info "نصب کامل شد 🎉"
   do_status
@@ -91,11 +92,11 @@ do_update() {
   $COMPOSE build
   info "ری‌استارت سرویس‌ها…"
   $COMPOSE up -d --remove-orphans postgres api web
-  if do_ssl_check; then
-    $COMPOSE up -d nginx
+  $COMPOSE up -d nginx
+  if do_ssl_check >/dev/null 2>&1; then
+    info "nginx در حالت HTTPS."
   else
-    warn "گواهی SSL موجود نیست — nginx بالا نیامد."
-    warn "برای راه‌اندازی سریع: ./scripts/cf-flexible.sh enable  |  گواهی Origin: ./scripts/install-origin-cert.sh <cert> <key>"
+    info "nginx در حالت HTTP (بدون گواهی) — برای HTTPS: ./scripts/ssl-certbot.sh"
   fi
   sleep 4
   info "بروزرسانی انجام شد ✅"
@@ -125,12 +126,9 @@ do_backup() {
 do_restart() {
   need_root_hint
   render_nginx_conf
-  if do_ssl_check; then
-    $COMPOSE restart
-  else
-    warn "گواهی SSL موجود نیست — nginx ری‌استارت نشد. اجرا کنید: ./scripts/ssl-certbot.sh"
-    $COMPOSE up -d postgres api web
-  fi
+  $COMPOSE up -d postgres api web
+  # nginx با ری‌استارت، حالت خودکار (http/https) را دوباره تشخیص می‌دهد
+  $COMPOSE up -d --force-recreate nginx
   info "سرویس‌ها ری‌استارت شدند."
   do_status
 }
@@ -236,10 +234,27 @@ do_status() {
   need_root_hint
   $COMPOSE ps
   echo
-  if curl -fsS http://127.0.0.1:${API_PORT:-4000}/api/health >/dev/null 2>&1; then
-    info "API سالم است: $(curl -fsS http://127.0.0.1:${API_PORT:-4000}/api/health)"
+  if curl -fsS "http://127.0.0.1:${API_PORT:-4000}/api/health" >/dev/null 2>&1; then
+    info "API سالم است: $(curl -fsS "http://127.0.0.1:${API_PORT:-4000}/api/health")"
   else
     warn "API از هاست پاسخ نداد (ممکن است پورت به 127.0.0.1 محدود شده باشد)."
+  fi
+
+  # حالت nginx: HTTP یا HTTPS
+  resolve_domain
+  HTTP_CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 http://127.0.0.1/healthz 2>/dev/null || true)"
+  echo ""
+  if [ -f "nginx/certbot/conf/live/${DOMAIN}/fullchain.pem" ]; then
+    info "nginx: حالت HTTPS — گواهی ${DOMAIN} موجود است."
+    HTTPS_CODE="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 5 "https://127.0.0.1/healthz" 2>/dev/null || true)"
+    echo "   http  : ${HTTP_CODE:-000} (باید 301 باشد)"
+    echo "   https : ${HTTPS_CODE:-000} (باید 200 باشد)"
+    echo "   آدرس  : https://${DOMAIN}"
+  else
+    warn "nginx: حالت HTTP — گواهی SSL نصب نشده (سایت روی http کار می‌کند)."
+    echo "   http  : ${HTTP_CODE:-000} (باید 200 باشد)"
+    echo "   آدرس  : http://${DOMAIN}"
+    echo "   برای فعال‌سازی HTTPS: ./deploy.sh ssl"
   fi
 }
 
@@ -254,10 +269,34 @@ resolve_domain() {
 
 render_nginx_conf() {
   resolve_domain
-  if [ -f nginx/conf/lifttire.conf.template ]; then
-    sed "s|__DOMAIN__|${DOMAIN}|g" nginx/conf/lifttire.conf.template > nginx/conf/lifttire.conf
-    info "کانفیگ nginx برای دامنه ${DOMAIN} ساخته شد."
+  mkdir -p nginx/site
+  local made=0
+  for f in http https; do
+    if [ -f "nginx/site/$f.conf.template" ]; then
+      sed "s|__DOMAIN__|${DOMAIN}|g" "nginx/site/$f.conf.template" > "nginx/site/$f.conf"
+      made=1
+    fi
+  done
+  [ "$made" -eq 1 ] && info "کانفیگ nginx برای دامنه ${DOMAIN} ساخته شد (http + https)."
+}
+
+do_ssl() {
+  need_root_hint
+  render_nginx_conf
+  if ! bash ./scripts/ssl-certbot.sh "${@:2}"; then
+    error "گرفتن گواهی انجام نشد. سایت همچنان روی HTTP بالاست."
+    exit 1
   fi
+  # در حالت تست (--dry-run) گواهی صادر نمی‌شود؛ nginx را دست نمی‌زنیم
+  case " ${*:2} " in
+    *" --dry-run "*|*" --staging "*" --dry-run "*)
+      info "تست انجام شد؛ برای صدور واقعی: ./deploy.sh ssl"
+      return 0 ;;
+  esac
+  info "ری‌استارت nginx برای فعال‌سازی HTTPS…"
+  $COMPOSE up -d --force-recreate nginx
+  sleep 2
+  do_status
 }
 
 do_seed() {
@@ -271,7 +310,7 @@ do_ssl_check() {
     info "گواهی SSL موجود است."
     return 0
   fi
-  warn "گواهی SSL یافت نشد — nginx تا زمان اجرای scripts/ssl-certbot.sh بالا نمی‌آید."
+  warn "گواهی SSL یافت نشد — nginx در حالت HTTP کار می‌کند (سایت بالا است)."
   return 1
 }
 
@@ -283,10 +322,11 @@ case "${1:-}" in
   status)  do_status ;;
   logs)    do_logs "$@" ;;
   seed)    do_seed "$@" ;;
+  ssl)     do_ssl "$@" ;;
   doctor)  do_doctor ;;
   clean)   do_clean "$@" ;;
   *)
-    echo "استفاده: $0 {install|update|backup|restart|status|logs|seed|doctor|clean}"
+    echo "استفاده: $0 {install|update|backup|restart|status|logs|seed|ssl|doctor|clean}"
     echo "  install  نصب اولیه (بیلد + دیتابیس + seed + nginx)"
     echo "  update   دریافت کد جدید و بیلد مجدد با بکاپ خودکار"
     echo "  backup   بکاپ دیتابیس و تصاویر آپلودی"
@@ -294,6 +334,7 @@ case "${1:-}" in
     echo "  status   وضعیت سرویس‌ها و سلامت API"
     echo "  logs     مشاهده لاگ‌ها (اختیاری: نام سرویس)"
     echo "  seed     اجرای داده دمو (اختیاری: --force)"
+    echo "  ssl      گرفتن گواهی Let's Encrypt با certbot و سوییچ nginx به HTTPS"
     echo "  doctor   بررسی کامل سلامت نصب (Docker، DNS، SSL، کانتینرها، پاسخ‌ها)"
     echo "  clean    پاک‌سازی کامل کانتینرها (--yes برای بدون سؤال، --volumes برای حذف داده)"
     exit 1

@@ -1,211 +1,228 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════
-#  دریافت/تمدید گواهی SSL رایگان Let's Encrypt
-#  روش: webroot + یک nginx موقت روی پورت ۸۰ (نیازی به آزادکردن دستی پورت نیست)
+#  گرفتن گواهי SSL رایگان Let's Encrypt با certbot — روش webroot
+#  • نیازی به API Token یا دسترسی Zone در Cloudflare نیست
+#  • nginx در حالت HTTP بالاست و مسیر ACME را سرو می‌کند
+#  • بعد از صدور، nginx خودکار به حالت HTTPS سوییچ می‌شود
 #
 #  استفاده:
-#    ./scripts/ssl-certbot.sh              # گرفتن گواهی
-#    ./scripts/ssl-certbot.sh --dry-run    # تست بدون مصرف سهمیه Let's Encrypt
-#    DOMAIN=example.com ./scripts/ssl-certbot.sh
+#    ./scripts/ssl-certbot.sh              # گرفتن/تمدید
+#    ./scripts/ssl-certbot.sh --dry-run    # تست بدون مصرف سهمیه
+#    ./scripts/ssl-certbot.sh --staging    # محیط تست Let's Encrypt
+#    ./scripts/ssl-certbot.sh --force      # عبور از هشدار Cloudflare
+#    ./scripts/ssl-certbot.sh --no-wait    # بدون انتظار برای DNS
 # ══════════════════════════════════════════════════════════════
-set -euo pipefail
+set -uo pipefail
 
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$APP_DIR"
 
-red()   { printf '\033[31m%s\033[0m\n' "$*"; }
-green() { printf '\033[32m%s\033[0m\n' "$*"; }
-yellow(){ printf '\033[33m%s\033[0m\n' "$*"; }
-bold()  { printf '\033[1m%s\033[0m\n' "$*"; }
+red()    { printf '\033[31m%s\033[0m\n' "$*"; }
+green()  { printf '\033[32m%s\033[0m\n' "$*"; }
+yellow() { printf '\033[33m%s\033[0m\n' "$*"; }
+bold()   { printf '\033[1m%s\033[0m\n' "$*"; }
 
-# آیا IP داده‌شده متعلق به Cloudflare است؟ (برای تشخیص حالت پروکسی)
+DRY=0; STAGING=0; FORCE=0; NOWAIT=0
+for a in "$@"; do
+  case "$a" in
+    --dry-run) DRY=1 ;;
+    --staging) STAGING=1 ;;
+    --force)   FORCE=1 ;;
+    --no-wait) NOWAIT=1 ;;
+  esac
+done
+
 is_cf_ip() {
   local ip="$1" a b
   IFS=. read -r a b _ <<< "$ip"
   case "$a" in
-    104) [ "$b" -ge 16 ] 2>/dev/null && [ "$b" -le 31 ] 2>/dev/null ;;
-    172) [ "$b" -ge 64 ] 2>/dev/null && [ "$b" -le 71 ] 2>/dev/null ;;
-    108) [ "$b" -eq 162 ] 2>/dev/null ;;
-    162) [ "$b" -ge 158 ] 2>/dev/null && [ "$b" -le 159 ] 2>/dev/null ;;
-    173) [ "$b" -eq 245 ] 2>/dev/null ;;
-    103) [ "$b" -eq 21 ] 2>/dev/null || [ "$b" -eq 22 ] 2>/dev/null || [ "$b" -eq 31 ] 2>/dev/null ;;
-    141) [ "$b" -eq 101 ] 2>/dev/null ;;
-    190) [ "$b" -eq 93 ] 2>/dev/null ;;
-    188) [ "$b" -eq 114 ] 2>/dev/null ;;
-    197) [ "$b" -eq 234 ] 2>/dev/null ;;
-    198) [ "$b" -eq 41 ] 2>/dev/null ;;
+    104) [ "${b:-0}" -ge 16 ] 2>/dev/null && [ "${b:-0}" -le 31 ] 2>/dev/null ;;
+    172) [ "${b:-0}" -ge 64 ] 2>/dev/null && [ "${b:-0}" -le 71 ] 2>/dev/null ;;
+    108) [ "${b:-0}" -eq 162 ] 2>/dev/null ;;
+    162) [ "${b:-0}" -ge 158 ] 2>/dev/null && [ "${b:-0}" -le 159 ] 2>/dev/null ;;
+    173) [ "${b:-0}" -eq 245 ] 2>/dev/null ;;
+    103) [ "${b:-0}" -eq 21 ] 2>/dev/null || [ "${b:-0}" -eq 22 ] 2>/dev/null || [ "${b:-0}" -eq 31 ] 2>/dev/null ;;
+    141) [ "${b:-0}" -eq 101 ] 2>/dev/null ;;
+    190) [ "${b:-0}" -eq 93 ] 2>/dev/null ;;
+    188) [ "${b:-0}" -eq 114 ] 2>/dev/null ;;
+    197) [ "${b:-0}" -eq 234 ] 2>/dev/null ;;
+    198) [ "${b:-0}" -eq 41 ] 2>/dev/null ;;
     *) return 1 ;;
   esac
 }
 
-# ── خواندن دامنه/ایمیل از .env ────────────────────────────────
+# ── تنظیمات ──────────────────────────────────────────────────
 if [ -f .env ]; then
-  if [ -z "${DOMAIN:-}" ]; then
-    DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2 | tr -d '"'"'"' ' || true)"
-  fi
-  if [ -z "${EMAIL:-}" ]; then
-    EMAIL="$(grep -E '^ADMIN_EMAIL=' .env | head -1 | cut -d= -f2 | tr -d '"'"'"' ' || true)"
-  fi
+  [ -z "${DOMAIN:-}" ] && DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
+  [ -z "${EMAIL:-}" ]  && EMAIL="$(grep -E '^ADMIN_EMAIL=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
 fi
 DOMAIN="${DOMAIN:-lift-tire.com}"
 EMAIL="${EMAIL:-admin@lift-tire.com}"
+
 CONF="$APP_DIR/nginx/certbot/conf"
 WWW="$APP_DIR/nginx/certbot/www"
-ACME_NAME="lifttire-acme"
-EXTRA_ARGS="${*:-}"
+CHALLENGE="$WWW/.well-known/acme-challenge"
 
-mkdir -p "$CONF" "$WWW/.well-known/acme-challenge"
+mkdir -p "$CONF" "$WWW" "$CHALLENGE"
 
-# ── اگر گواهی از قبل هست ──────────────────────────────────────
-if [ -f "$CONF/live/$DOMAIN/fullchain.pem" ] && [[ "$EXTRA_ARGS" != *"--force-renewal"* ]]; then
+# ── گواهی از قبل موجود است؟ ──────────────────────────────────
+if [ -f "$CONF/live/$DOMAIN/fullchain.pem" ] && [ "$DRY" -eq 0 ]; then
   green "✅ گواهی برای $DOMAIN از قبل موجود است."
-  echo "   برای تمدید اجباری: ./scripts/ssl-certbot.sh --force-renewal"
-  docker compose up -d nginx >/dev/null 2>&1 && green "   nginx بالا آمد." || true
+  echo "   تمدید اجباری: ./scripts/ssl-certbot.sh --dry-run  →  سپس حذف پوشه live و اجرای مجدد"
   exit 0
 fi
 
-# ── پیش‌بررسی شبکه و DNS ──────────────────────────────────────
-bold "▸ پیش‌بررسی DNS و پورت ۸۰ (دامنه: $DOMAIN)"
+# ── ۱) nginx باید در حالت HTTP بالا باشد ─────────────────────
+bold "▸ بالا آوردن nginx در حالت HTTP…"
+docker compose up -d nginx >/dev/null 2>&1 || { red "✗ بالا آوردن nginx ناموفق بود. اجرا کنید: ./deploy.sh install"; exit 1; }
+
+for i in $(seq 1 20); do
+  if [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 3 http://127.0.0.1/healthz 2>/dev/null)" = "200" ]; then
+    green "   ✓ nginx روی پورت ۸۰ پاسخ می‌دهد."
+    break
+  fi
+  [ "$i" -eq 20 ] && { red "✗ nginx روی پورت ۸۰ پاسخ نداد."; echo "   docker compose logs --tail=30 nginx"; exit 1; }
+  sleep 1
+done
+
+# ── ۲) تست واقعی مسیر ACME از بیرون (بدون هیچ API Token) ────
+PROBE="probe-$(date +%s)-$RANDOM"
+printf 'lifttire-%s\n' "$PROBE" > "$CHALLENGE/$PROBE"
+EXPECT="lifttire-$PROBE"
+cleanup_probe() { rm -f "$CHALLENGE/$PROBE"; }
+trap cleanup_probe EXIT
+
+check_reachable() {
+  local got
+  got="$(curl -s --max-time 8 "http://$DOMAIN/.well-known/acme-challenge/$PROBE" 2>/dev/null | tr -d '\r\n' || true)"
+  [ "$got" = "$EXPECT" ]
+}
 
 SERVER_IP="$(curl -4 -fsS --max-time 6 https://api.ipify.org 2>/dev/null || true)"
 DNS_MAIN="$(getent ahostsv4 "$DOMAIN" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' || true)"
 DNS_WWW="$(getent ahostsv4 "www.$DOMAIN" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' || true)"
 
-echo "   IP این سرور        : ${SERVER_IP:-نامشخص}"
-echo "   $DOMAIN  →  ${DNS_MAIN:-نامشخص}"
-echo "   www.$DOMAIN  →  ${DNS_WWW:-نامشخص}"
+bold "▸ بررسی دسترسی عمومی به مسیر تأیید (${DOMAIN})"
+echo "   IP این سرور : ${SERVER_IP:-نامشخص}"
+echo "   رکورد A     : ${DNS_MAIN:-نامشخص}"
+echo "   رکورد www   : ${DNS_WWW:-نامشخص}"
 
-# ── تشخیص Cloudflare ─────────────────────────────────────────
-ALL_IPS="$(printf '%s %s\n' "$DNS_MAIN" "$DNS_WWW" | tr ' ' '\n' | grep -v '^$' | sort -u | tr '\n' ' ')"
-CF_HIT=0
-for ip in $ALL_IPS; do
-  if is_cf_ip "$ip"; then CF_HIT=1; fi
-done
+CF=0
+for ip in $DNS_MAIN $DNS_WWW; do is_cf_ip "$ip" && CF=1; done
 
-if [ "$CF_HIT" -eq 1 ]; then
-  cat <<EOF
+OK=0
+if check_reachable; then
+  green "   ✓ مسیر تأیید از اینترنت قابل خواندن است — certbot بدون مشکل کار می‌کند."
+  OK=1
+else
+  echo "   … مسیر تأیید از بیرون خوانده نشد؛ بررسی مجدد…"
+fi
 
-$(yellow "این دامنه پشت Cloudflare است (IPهای ${ALL_IPS}متعلق به Cloudflare هستند).")
-$(yellow "در این حالت certbot نمی‌تواند HTTP-01 را رد کند؛ دو راه دارید:")
+# ── ۳) اگر در دسترس نیست: راهنما و انتظار ───────────────────
+if [ "$OK" -eq 0 ]; then
+  if [ "$CF" -eq 1 ]; then
+    cat <<EOF
 
-$(bold "راه ۱ (پیشنهادی) — گواهی Origin از خود Cloudflare (رایگان، ۱۵ ساله):")
-   1) پنل Cloudflare → SSL/TLS → Origin Server → Create Certificate
-      Hostnames:  $DOMAIN  و  *.$DOMAIN        Validity: 15 years
-   2) دو فایل را روی سرور ذخیره کنید (مثلاً /root/origin-cert.pem و /root/origin-key.pem)
-   3) نصب:
-        ./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
-   4) در پنل Cloudflare: SSL/TLS → Overview → حالت  Full (strict)
-   5) در رکوردهای DNS، A دامنه اصلی و www باید به IP همین سرور اشاره کنند (${SERVER_IP:-IP_سرور}) و پروکسی می‌تواند روشن بماند.
+$(yellow "دامنه پشت Cloudflare است و پروکسی اجازهٔ رسیدن به مسیر تأیید را نمی‌دهد.")
+$(yellow "بدون هیچ توکن/Zone هم می‌شود certbot گرفت؛ فقط باید پروکسی موقتاً خاموش شود:")
 
-$(bold "راه ۲ — موقتاً پروکسی را خاموش کنید و certbot بگیرید:")
-   1) پنل Cloudflare → DNS → برای رکوردهای @ و www گزینه Proxy status را روی  DNS only (ابر خاکستری) بگذارید
-   2) مقدار A باید IP همین سرور باشد: ${SERVER_IP:-IP_سرور}
-   3) ./scripts/ssl-certbot.sh
-   4) بعد از گرفتن گواهی، پروکسی را روشن کنید و SSL mode را  Full (strict)  بگذارید
+  ۱) پنل Cloudflare → DNS → رکورد  @  و  www
+     Proxy status را روی  **DNS only**  (ابر خاکستری) بگذارید
+     مقدار A باید ${SERVER_IP:-IP سرور} باشد (رکوردهای AAAA/پارکینگ را حذف کنید)
+  ۲) همین اسکریپت را دوباره اجرا کنید:  ./scripts/ssl-certbot.sh
+  ۳) بعد از گرفتن گواهی، پروکسی را روشن کنید و SSL mode را  Full (strict)  کنید
 
-$(yellow "توجه: اگر SSL mode روی Flexible باشد، سایت وارد حلقهٔ ریدایرکت می‌شود.")
-
+$(bold "در این مدت سایت از کار نمی‌افتد؛ روی HTTP بالاست.")
 EOF
-  exit 2
-fi
+  else
+    cat <<EOF
 
-DNS_OK=1
-if [ -n "$SERVER_IP" ]; then
-  if [ -z "$DNS_MAIN" ] || [[ " $DNS_MAIN " != *" $SERVER_IP "* ]]; then
-    red "   ✗ رکورد A دامنه اصلی به این سرور اشاره نمی‌کند."
-    DNS_OK=0
-  fi
-  if [ -z "$DNS_WWW" ] || [[ " $DNS_WWW " != *" $SERVER_IP "* ]]; then
-    red "   ✗ رکورد A ساب‌دامنه www به این سرور اشاره نمی‌کند."
-    DNS_OK=0
-  fi
-fi
-
-if [ "$DNS_OK" -eq 0 ]; then
-  cat <<EOF
-
-$(yellow "پیش از گرفتن گواهی، DNS را درست کنید:")
-   1) در پنل دامنه، رکورد A برای @  (دامنه اصلی)  →  ${SERVER_IP:-IP_سرور}
-   2) رکورد A برای www                            →  ${SERVER_IP:-IP_سرور}
-   3) اگر رکورد AAAA (IPv6) وجود دارد و به این سرور اشاره نمی‌کند، آن را حذف کنید.
-   4) رکورد CNAME یا Forward روی www را حذف کنید.
-   5) انتشار DNS را بررسی کنید:  dig +short $DOMAIN   و   dig +short www.$DOMAIN
-
-$(yellow "فایروال سرور و پنل ارائه‌دهنده هم باید پورت‌های ۸۰ و ۴۴۳ را باز داشته باشند:")
-   ufw allow 80/tcp && ufw allow 443/tcp && ufw status
-
-پس از اصلاح DNS (تا چند دقیقه تا ۲۴ ساعت) دوباره اجرا کنید:
-   ./scripts/ssl-certbot.sh
-
+$(yellow "مسیر تأیید از اینترنت قابل خواندن نیست. موارد زیر را چک کنید:")
+   • رکورد A دامنه و www باید به ${SERVER_IP:-IP سرور} اشاره کند (بدون پروکسی/CDN)
+   • فایروال سرور:   ufw allow 80/tcp && ufw allow 443/tcp
+   • فایروال پنل ارائه‌دهنده (Hetzner/Arvan/…): پورت ۸۰ باز باشد
+   • رکورد AAAA یا CNAME اضافی روی دامنه وجود نداشته باشد
+   • تست دستی:  curl -v http://$DOMAIN/.well-known/acme-challenge/$PROBE
 EOF
-  exit 1
+  fi
+
+  if [ "$FORCE" -eq 1 ]; then
+    yellow "→ با --force، بدون تأیید دسترسی ادامه می‌دهیم."
+  elif [ "$NOWAIT" -eq 1 ]; then
+    red "✗ با --no-wait از انتظار صرف‌نظر شد. بعد از اصلاح، دوباره اجرا کنید."
+    exit 2
+  else
+    echo ""
+    echo "   هر ۵ ثانیه دوباره بررسی می‌کنم (تا ۴ دقیقه). برای انصراف: Ctrl+C"
+    waited=0
+    while [ "$waited" -lt 240 ]; do
+      sleep 5; waited=$((waited + 5))
+      if check_reachable; then
+        green "   ✓ حالا مسیر تأیید در دسترس است (${waited}s)."
+        OK=1
+        break
+      fi
+      printf '   … %ss\n' "$waited"
+    done
+    if [ "$OK" -eq 0 ]; then
+      red "✗ مسیر تأیید باز نشد. DNS/فایروال را درست کنید و دوباره اجرا کنید."
+      exit 2
+    fi
+  fi
 fi
 
-green "   ✓ DNS درست است."
+# ── ۴) صدور گواهی ───────────────────────────────────────────
+bold "▸ درخواست گواهی از Let's Encrypt برای $DOMAIN و www.$DOMAIN …"
+ARGS=(certonly --webroot -w /var/www/certbot --preferred-challenges http
+      -d "$DOMAIN" -d "www.$DOMAIN"
+      --email "$EMAIL" --agree-tos --no-eff-email --keep-until-expiring)
+[ "$DRY" -eq 1 ] && ARGS+=(--dry-run)
+[ "$STAGING" -eq 1 ] && ARGS+=(--staging)
 
-# ── آماده‌سازی: توقف nginx اصلی (چون هنوز گواهی ندارد) ────────
-docker rm -f "$ACME_NAME" >/dev/null 2>&1 || true
-docker compose stop nginx >/dev/null 2>&1 || true
-
-cleanup() { docker rm -f "$ACME_NAME" >/dev/null 2>&1 || true; }
-trap cleanup EXIT
-
-bold "▸ بالا آوردن nginx موقت روی پورت ۸۰…"
-docker run -d --rm --name "$ACME_NAME" \
-  -p 80:80 \
-  -v "$APP_DIR/nginx/acme/bootstrap.conf:/etc/nginx/conf.d/default.conf:ro" \
-  -v "$WWW:/var/www/certbot:ro" \
-  nginx:1.27-alpine >/dev/null
-
-# تست محلی مسیر ACME
-echo "ok" > "$WWW/.well-known/acme-challenge/health.txt"
-sleep 2
-CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "http://127.0.0.1/.well-known/acme-challenge/health.txt" || true)"
-if [ "$CODE" != "200" ]; then
-  red "✗ nginx موقت روی پورت ۸۰ پاسخ نداد (کد: ${CODE:-none})."
-  echo "   بررسی کنید چیزی دیگر روی پورت ۸۰ گوش می‌دهد:  ss -lntp | grep ':80'"
-  exit 1
-fi
-green "   ✓ پورت ۸۰ آماده است."
-rm -f "$WWW/.well-known/acme-challenge/health.txt"
-
-# ── درخواست گواهی ────────────────────────────────────────────
-bold "▸ درخواست گواهی برای $DOMAIN و www.$DOMAIN …"
-set +e
 docker run --rm \
   -v "$CONF:/etc/letsencrypt" \
   -v "$WWW:/var/www/certbot" \
-  certbot/certbot certonly --webroot -w /var/www/certbot \
-  --preferred-challenges http \
-  -d "$DOMAIN" -d "www.$DOMAIN" \
-  --email "$EMAIL" --agree-tos --no-eff-email \
-  --keep-until-expiring $EXTRA_ARGS
+  certbot/certbot "${ARGS[@]}"
 STATUS=$?
-set -e
 
-cleanup
+cleanup_probe
 trap - EXIT
 
+if [ "$DRY" -eq 1 ]; then
+  [ $STATUS -eq 0 ] && green "✅ تست (dry-run) موفق بود — اجرای واقعی: ./scripts/ssl-certbot.sh" || red "✗ تست ناموفق بود."
+  exit $STATUS
+fi
+
 if [ $STATUS -ne 0 ]; then
-  red "✗ دریافت گواهی ناموفق بود."
-  cat <<EOF
-
-$(yellow "کارهایی که معمولاً مشکل را حل می‌کند:")
-   • اطمینان از اینکه $DOMAIN و www.$DOMAIN هر دو به IP این سرور اشاره می‌کنند
-   • باز بودن پورت ۸۰ از اینترنت (فایروال سرور + فایروال پنل ابری)
-   • حذف رکوردهای AAAA اشتباه یا CNAME روی www
-   • اگر پشت CDN/پروکسی (Cloudflare) هستید، موقتاً آن را خاموش (DNS only) کنید
-   • تست دستی:  curl -I http://$DOMAIN/.well-known/acme-challenge/test
-
-EOF
+  red "✗ صدور گواهی ناموفق بود."
+  echo "   اگر پیام «too many certificates» بود، یک ساعت صبر کنید یا --staging تست کنید."
+  echo "   راهنمای کامل: docs/DEPLOY-ubuntu.md بخش ۱۹ و ۲۰"
   exit 1
 fi
 
-green "✅ گواهی با موفقیت نصب شد."
-docker compose up -d nginx >/dev/null 2>&1 || true
-green "   nginx با HTTPS بالا آمد:  https://$DOMAIN"
+green "✅ گواهی با موفقیت صادر شد."
+
+# ── ۵) سوییچ خودکار nginx به HTTPS ──────────────────────────
+bold "▸ سوییچ nginx به حالت HTTPS…"
+docker compose up -d --force-recreate nginx >/dev/null 2>&1
+sleep 3
+
+CODE="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 8 -H "Host: $DOMAIN" https://127.0.0.1/ 2>/dev/null || true)"
+if [ "$CODE" = "200" ] || [ "$CODE" = "301" ] || [ "$CODE" = "308" ]; then
+  green "   ✓ nginx در حالت HTTPS کار می‌کند (کد $CODE)."
+else
+  yellow "   ⚠ پاسخ محلی HTTPS: ${CODE:-none} — لاگ را ببینید: docker compose logs --tail=40 nginx"
+fi
+rm -f "$CONF/live/$DOMAIN/README" 2>/dev/null || true
 
 cat <<EOF
+
+$(bold "مرحله بعد:")
+   • در Cloudflare: SSL/TLS → Overview →  Full (strict)
+   • رکوردها می‌توانند دوباره Proxied (ابر نارنجی) باشند
+
+$(bold "بررسی:")
+   curl -I https://$DOMAIN
 
 $(bold "تمدید خودکار (crontab -e):")
 0 4 * * * cd $APP_DIR && docker run --rm -v $CONF:/etc/letsencrypt -v $WWW:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload

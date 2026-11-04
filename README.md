@@ -101,8 +101,10 @@ lift-tire/
 │   ├── lib/{api,adminApi,format,constants,demo}.js
 │   ├── public/images/…        # تصاویر تولیدشده
 │   └── Dockerfile             # چندمرحله‌ای (standalone)
-├── nginx/conf/lifttire.conf   # reverse proxy + gzip + کش
-├── scripts/{ssl-certbot.sh, dump-demo.mjs, make-*.py}
+├── nginx/
+│   ├── site/{http.conf,https.conf,locations.conf}.template   # قالب‌های reverse proxy
+│   └── entrypoint-mode.sh     # انتخاب خودکار HTTP/HTTPS در استارت
+├── scripts/{ssl-certbot.sh, install-origin-cert.sh, dump-demo.mjs, make-*.py}
 ├── docker-compose.yml
 ├── deploy.sh
 ├── .env.example
@@ -302,25 +304,23 @@ sed -i "s|CHANGE_ME_DB_PASSWORD|$(openssl rand -hex 16)|g" .env
 nano .env   # مقادیر ADMIN_PASSWORD و ... را بررسی کنید
 ```
 
-**گرفتن گواهی SSL (قبل از بالا آوردن nginx):**
+**نصب کامل (بدون نیاز به SSL — سایت روی HTTP هم بالا می‌آید):**
 
 ```bash
-chmod +x scripts/ssl-certbot.sh deploy.sh
-# راه سوم (بدون certbot): گواهی Origin از Cloudflare:
-#   ./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
-# اگر دامنه پشت Cloudflare است (روش پیشنهادی — بدون خاموش‌کردن پروکسی):
-#   CLOUDFLARE_API_TOKEN=... را در .env بگذارید، سپس:
-#   ./scripts/cf-certbot-dns.sh
-DOMAIN=lift-tire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
-```
-
-**نصب کامل:**
-
-```bash
+chmod +x deploy.sh scripts/*.sh nginx/entrypoint-mode.sh
 ./deploy.sh install
 ```
 
-این دستور: ایمیج‌ها را بیلد می‌کند، PostgreSQL را بالا می‌آورد، اسکیما و داده دمو را اعمال می‌کند، API و وب و Nginx را اجرا می‌کند.
+این دستور: ایمیج‌ها را بیلد می‌کند، PostgreSQL را بالا می‌آورد، اسکیما و داده دمو را اعمال می‌کند و API + وب + Nginx را اجرا می‌کند.
+nginx اگر گواهی نباشد در **حالت HTTP** بالا می‌آید؛ اگر گواهی باشد در **حالت HTTPS**.
+
+**گرفتن گواهی SSL با certbot (بدون API Token / بدون دسترسی Zone):**
+
+```bash
+./deploy.sh ssl            # = ./scripts/ssl-certbot.sh + ری‌استارت خودکار nginx
+```
+
+بعد از صدور گواهی، nginx خودش به HTTPS سوییچ می‌شود؛ در Cloudflare فقط SSL mode را روی **Full (strict)** بگذارید.
 
 **بررسی:**
 
@@ -350,7 +350,8 @@ cd /var/www/lift-tire.com
 
 ## SSL و دامنه
 
-- گواهی با `scripts/ssl-certbot.sh` (Let's Encrypt، حالت standalone) گرفته می‌شود.
+- گواهی با `scripts/ssl-certbot.sh` (Let's Encrypt، روش **webroot** روی nginx در حال اجرا) گرفته می‌شود — بدون API Token و بدون دسترسی Zone.
+- بدون گواهی هم سایت روی **HTTP** بالا است (`nginx/site/http.conf`)؛ به‌محض وجود گواهی، `entrypoint-mode.sh` خودکار `https.conf` را فعال می‌کند.
 - مسیر گواهی در کانتینر: `/etc/letsencrypt/live/lift-tire.com/` (روی هاست: `nginx/certbot/conf/…`).
 - **تمدید خودکار** را با cron اضافه کنید:
 
@@ -453,7 +454,7 @@ POST /upload (multipart: files[])
 | --- | --- |
 | `JWT_SECRET is required` | در `.env` مقدار JWT_SECRET تنظیم نشده است |
 | تصاویر آپلودی ۴۰۴ می‌دهند | volume `uploads` بین `api` و `nginx` مشترک است؛ `docker compose up -d` را دوباره اجرا کنید |
-| nginx بالا نمی‌آید | گواهی SSL وجود ندارد → `./scripts/ssl-certbot.sh` |
+| nginx بالا نمی‌آید | با `docker compose logs nginx` ببینید؛ بدون گواهی باید حالت HTTP فعال شود (`NGINX_MODE=http`) |
 | صفحه سفید در فرانت | `API_INTERNAL_URL` باید از داخل کانتینر `web` قابل دسترس باشد (`http://api:4000`) |
 | خطای دیتابیس در پروداکشن | `USE_PGLITE=false` و `DATABASE_URL` را بررسی کنید |
 | پورت ۸۰ اشغال است | `sudo ss -lptn 'sport = :80'` و سرویس متضاد (مثلاً apache) را متوقف کنید |

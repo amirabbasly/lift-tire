@@ -2,9 +2,13 @@
 # ══════════════════════════════════════════════════════════════
 #  نصب گواهی Cloudflare Origin Certificate روی nginx
 #
-#  چرا؟ وقتی دامنه پشت Cloudflare (ابر نارنجی) است، certbot
-#  نمی‌تواند HTTP-01 را رد کند. Cloudflare یک گواهی رایگان ۱۵ ساله
-#  می‌دهد که مستقیم روی سرور نصب می‌شود.
+#  چرا؟ وقتی دامنه پشت Cloudflare (ابر نارنجی) است و نمی‌خواهید
+#  پروکسی را خاموش کنید، certbot نمی‌تواند HTTP-01 را رد کند.
+#  Cloudflare یک گواهی رایگان ۱۵ ساله می‌دهد (بدون API Token و
+#  فقط از داشبورد) که مستقیم روی سرور نصب می‌شود.
+#
+#  نکته: nginx خودش تشخیص می‌دهد گواهی هست یا نه؛ بدون گواهی هم
+#  سایت روی HTTP بالا می‌ماند.
 #
 #  استفاده:
 #    ./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
@@ -45,10 +49,13 @@ if command -v openssl >/dev/null 2>&1; then
   echo "   $ENDS"
 fi
 
-echo "▸ بالا آوردن nginx…"
-docker compose up -d nginx
-sleep 2
+echo "▸ ری‌استارت nginx (حالت HTTPS خودکار فعال می‌شود)…"
+docker compose up -d --force-recreate nginx
+sleep 3
 docker compose ps nginx || true
+
+CODE="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 8 -H "Host: $DOMAIN" https://127.0.0.1/ 2>/dev/null || true)"
+echo "   پاسخ HTTPS محلی: ${CODE:-none}"
 
 cat <<EOF
 

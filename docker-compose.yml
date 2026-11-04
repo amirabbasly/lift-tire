@@ -98,8 +98,14 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      # auto: اگر گواهی SSL موجود باشد HTTPS، وگرنه سایت روی HTTP بالا می‌آید
+      NGINX_MODE: ${NGINX_MODE:-auto}
     volumes:
-      - ./nginx/conf:/etc/nginx/conf.d:ro
+      # قالب‌های آمادهٔ nginx (http.conf / https.conf / locations.conf)
+      - ./nginx/site:/opt/nginx-sites:ro
+      # انتخاب خودکار حالت در زمان استارت کانتینر
+      - ./nginx/entrypoint-mode.sh:/docker-entrypoint.d/40-lifttire-mode.sh:ro
       - ./nginx/certbot/conf:/etc/letsencrypt:ro
       - ./nginx/certbot/www:/var/www/certbot:ro
       - uploads:/var/www/uploads:ro

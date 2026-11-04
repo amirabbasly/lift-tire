@@ -33,5 +33,7 @@ Thumbs.db
 
 # backups / certs
 backups/
-nginx/certbot/
-nginx/conf/ssl/
+nginx/certbot/conf/*
+nginx/certbot/www/*
+!nginx/certbot/conf/.gitkeep
+!nginx/certbot/www/.gitkeep
