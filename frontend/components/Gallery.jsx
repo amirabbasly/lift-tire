@@ -34,7 +34,7 @@ export default function Gallery({ images = [], alt = '' }) {
           className="h-full w-full object-contain p-4 transition-transform duration-200 will-change-transform"
           style={{ transform: zoom ? 'scale(1.9)' : 'scale(1)', transformOrigin: `${pos.x}% ${pos.y}%` }}
         />
-        <span className="pointer-events-none absolute bottom-2 left-2 rounded-lg bg-graphite-900/70 px-2 py-1 text-[10px] text-white/80">
+        <span className="pointer-events-none absolute bottom-2 left-2 hidden rounded-lg bg-graphite-900/70 px-2 py-1 text-[10px] text-white/80 lg:block">
           برای بزرگ‌نمایی نشانگر را روی تصویر ببرید
         </span>
         {list.length > 1 && (

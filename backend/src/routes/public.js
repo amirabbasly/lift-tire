@@ -198,7 +198,8 @@ router.get('/home', async (_req, res) => {
     many('SELECT * FROM banners WHERE is_active = true ORDER BY sort, id'),
     many(`SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id AND p.is_active = true) AS product_count
           FROM categories c WHERE c.is_active = true AND c.parent_id IS NULL ORDER BY c.sort, c.id`),
-    many('SELECT * FROM brands WHERE is_active = true ORDER BY sort, id'),
+    many(`SELECT b.*, (SELECT COUNT(*) FROM products p WHERE p.brand_id = b.id AND p.is_active = true) AS product_count
+          FROM brands b WHERE b.is_active = true ORDER BY b.sort, b.id`),
     many(`${PRODUCT_SELECT} WHERE p.is_active = true AND p.is_featured = true ORDER BY p.sold_count DESC LIMIT 8`),
     many(`${PRODUCT_SELECT} WHERE p.is_active = true ORDER BY p.sold_count DESC LIMIT 8`),
     many(`${PRODUCT_SELECT} WHERE p.is_active = true ORDER BY p.created_at DESC LIMIT 8`),
@@ -216,7 +217,7 @@ router.get('/home', async (_req, res) => {
       category: banners.filter((b) => b.placement === 'category'),
     },
     categories: cats,
-    brands,
+    brands: brands.map((b) => ({ ...b, product_count: Number(b.product_count || 0) })),
     featured: await attachMedia(featured.map(shapeProduct)),
     bestsellers: await attachMedia(bestsellers.map(shapeProduct)),
     newest: await attachMedia(newest.map(shapeProduct)),

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useCart, useToast } from './Providers';
 import Stars from './Stars';
-import { assetUrl, discountPercent, faNum, toman } from '@/lib/format';
+import { assetUrl, discountPercent, faNum, formatNumber, toman } from '@/lib/format';
 import { IconCart, IconHeart } from './Icons';
 
 export default function ProductCard({ product, layout = 'grid', showCountdown = false, index = 0 }) {
@@ -77,28 +77,31 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
           {product.season && <span className="text-[10px] text-muted">{product.season}</span>}
         </div>
 
-        <div className="mt-auto flex items-end justify-between gap-2 pt-2.5">
+        <div className="mt-auto flex items-end justify-between gap-1.5 pt-2.5">
           <div className="min-w-0">
             {product.old_price ? (
-              <span className="num block text-[10.5px] text-muted line-through" dir="ltr">{faNum(Number(product.old_price).toLocaleString('en-US'))}</span>
+              <span className="num block text-[10px] text-muted line-through sm:text-[10.5px]">
+                <bdi dir="ltr">{formatNumber(product.old_price)}</bdi>
+              </span>
             ) : (
-              <span className="block h-[14px]" />
+              <span className="block h-[13px]" />
             )}
-            <span className="num text-[14px] font-extrabold text-graphite-900">
-              {toman(product.price)}
+            <span className="num flex items-baseline gap-1 whitespace-nowrap text-[13px] font-extrabold leading-5 text-graphite-900 sm:text-[14px]">
+              <bdi dir="ltr">{formatNumber(product.price)}</bdi>
+              <span className="text-[9.5px] font-bold text-muted sm:text-[11px]">تومان</span>
             </span>
           </div>
           <button
             onClick={quickAdd}
             disabled={out}
             aria-label={`افزودن ${product.name} به سبد`}
-            className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl border transition ${
+            className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl border transition sm:h-9 sm:w-9 ${
               out
                 ? 'cursor-not-allowed border-black/10 text-muted/40'
                 : 'border-accent/30 bg-accent-soft text-accent-dark hover:bg-accent hover:text-white hover:shadow-glow'
             }`}
           >
-            <IconCart width={17} height={17} />
+            <IconCart width={16} height={16} />
           </button>
         </div>
       </div>

@@ -151,7 +151,7 @@ export default function AccountClient() {
 
               {mode === 'login' && (
                 <div className="mt-3 rounded-xl bg-surface p-3 text-[11px] text-steel-500">
-                  حساب نمایشی: <span className="num font-bold" dir="ltr">09121234567</span> / رمز: <span className="num font-bold" dir="ltr">test1234</span>
+                  <span>حساب نمایشی</span><span className="mx-1.5 opacity-40">|</span><span className="num font-bold" dir="ltr">09121234567</span><span className="mx-1.5 opacity-40">/</span><span className="num font-bold" dir="ltr">test1234</span>
                 </div>
               )}
             </form>

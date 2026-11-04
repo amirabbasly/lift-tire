@@ -33,14 +33,14 @@ export default function BrandMarquee({ brands = [], thin = false }) {
           <Link
             key={`${b.id}-${i}`}
             href={`/products?brand=${b.slug}`}
-            className="group flex w-[176px] shrink-0 items-center gap-3 rounded-2xl border border-black/[.06] bg-white px-4 py-3 transition hover:border-accent/40 hover:shadow-card"
+            className="group flex w-[210px] shrink-0 items-center gap-3 rounded-2xl border border-black/[.06] bg-white px-3 py-3 transition hover:border-accent/40 hover:shadow-card"
           >
-            <span className="grid h-10 w-14 shrink-0 place-items-center">
-              <img src={assetUrl(b.logo)} alt={b.name_fa} className="max-h-8 max-w-full object-contain grayscale transition group-hover:grayscale-0" loading="lazy" />
+            <span className="grid h-11 w-[74px] shrink-0 place-items-center">
+              <img src={assetUrl(b.logo)} alt={b.name_fa} className="max-h-9 max-w-[70px] object-contain transition group-hover:scale-105" loading="lazy" />
             </span>
             <span className="min-w-0">
-              <span className="block truncate text-[12px] font-extrabold text-graphite-900">{b.name_fa}</span>
-              <span className="num block text-[10px] tracking-[.12em] text-muted">{faNum(b.product_count || 0)} محصول</span>
+              <span className="block truncate text-[12.5px] font-extrabold text-graphite-900">{b.name_fa}</span>
+              <span className="num block whitespace-nowrap text-[10px] text-muted">{faNum(b.product_count || 0)} محصول</span>
             </span>
           </Link>
         ))}
