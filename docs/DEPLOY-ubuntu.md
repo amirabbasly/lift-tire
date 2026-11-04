@@ -2,6 +2,16 @@
 
 این راهنما از صفر تا آنلاین‌شدن سایت را پوشش می‌دهد؛ فرض بر این است که یک VPS تازه با **Ubuntu 24.04 LTS** خریده‌اید و دامنه `lift-tire.com` را در اختیار دارید.
 
+> ⚡ **خلاصهٔ سه‌دستوری:**
+>
+> ```bash
+> ./deploy.sh install    # سایت همین حالا روی http://IP باز می‌شود (بدون گواهی)
+> ./deploy.sh ssl        # certbot روی همان nginx، بدون API Token و بدون دسترسی Zone
+> ./deploy.sh status     # وضعیت + حالت HTTP/HTTPS
+> ```
+>
+> nginx هرگز به‌خاطر نبودن گواهی کرش/ری‌استارت نمی‌شود.
+
 ---
 
 ## ۰) چک‌لیست قبل از شروع
@@ -564,7 +574,7 @@ Nginx http://127.0.0.1/  → 200
 
 اگر دامنه پشت **Cloudflare** است:
 
-1. پنل Cloudflare → DNS → رکوردهای `@` و `www` → **Proxy status = DNS only** (ابر خاکستری)، مقدار A = `${SERVER_IP}` (IP سرور: `curl -4 -s https://api.ipify.org`)
+1. پنل Cloudflare → DNS → رکوردهای `@` و `www` → **Proxy status = DNS only** (ابر خاکستری)، مقدار A = IP سرور (`curl -4 -s https://api.ipify.org`)
 2. `./deploy.sh ssl` (اسکریپت خودش بررسی می‌کند و تا ۴ دقیقه صبر می‌کند تا DNS اعمال شود)
 3. بعد از موفقیت: پروکسی را روشن کنید و SSL/TLS → **Full (strict)**
 

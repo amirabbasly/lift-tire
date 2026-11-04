@@ -66,9 +66,16 @@ CHALLENGE="$WWW/.well-known/acme-challenge"
 mkdir -p "$CONF" "$WWW" "$CHALLENGE"
 
 # ── گواهی از قبل موجود است؟ ──────────────────────────────────
-if [ -f "$CONF/live/$DOMAIN/fullchain.pem" ] && [ "$DRY" -eq 0 ]; then
-  green "✅ گواهی برای $DOMAIN از قبل موجود است."
-  echo "   تمدید اجباری: ./scripts/ssl-certbot.sh --dry-run  →  سپس حذف پوشه live و اجرای مجدد"
+if [ -f "$CONF/live/$DOMAIN/fullchain.pem" ] && [ "$DRY" -eq 0 ] && [ "$STAGING" -eq 0 ]; then
+  end="$(openssl x509 -in "$CONF/live/$DOMAIN/fullchain.pem" -noout -enddate 2>/dev/null | cut -d= -f2 || true)"
+  green "✅ گواهی برای $DOMAIN از قبل موجود است${end:+ (انقضا: $end)}."
+  echo "   • تمدید (crontab):  cd $APP_DIR && docker run --rm -v $CONF:/etc/letsencrypt -v $WWW:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload"
+  echo "   • صدور مجدد از صفر:  rm -rf nginx/certbot/conf/live/$DOMAIN && ./scripts/ssl-certbot.sh"
+  # مطمئن شو nginx در حالت HTTPS است
+  if ! docker compose logs --tail=30 nginx 2>/dev/null | grep -q "حالت فعال: HTTPS"; then
+    yellow "   nginx هنوز در حالت HTTP است → ری‌استارت می‌کنم…"
+    docker compose up -d --force-recreate nginx >/dev/null 2>&1 || true
+  fi
   exit 0
 fi
 
