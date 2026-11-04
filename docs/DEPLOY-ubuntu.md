@@ -441,3 +441,41 @@ docker compose ps
 ### پورت‌ها
 
 Cloudflare در حالت Proxy فقط پورت‌های ۸۰ و ۴۴۳ (و چند پورت خاص) را فوروارد می‌کند؛ لازم نیست پورت ۳۰۰۰ یا ۴۰۰۰ را به اینترنت باز کنید — همان `127.0.0.1` در compose درست است.
+
+### اگر خطای 521 یا 522 گرفتید
+
+| کد | معنی | علت در این پروژه |
+| --- | --- | --- |
+| **521** | Cloudflare به origin وصل نمی‌شود | `nginx` بالا نیست (چون گواهی نصب نشده) یا پورت ۴۴۳/۸۰ بسته است |
+| **522** | تایم‌اوت اتصال به origin | فایروال سرور یا پنل ارائه‌دهنده پورت‌ها را بسته |
+| **526** | گواهی origin نامعتبر | gواهی Origin نصب نشده/منقضی است |
+
+سریع‌ترین راه دیدن وضعیت:
+
+```bash
+docker compose ps
+curl -I http://127.0.0.1          # از داخل سرور (بدون Cloudflare)
+ss -lntp | grep -E ':80|:443'
+```
+
+اگر `nginx` خاموش است، یعنی گواهی نصب نشده. دو انتخاب دارید:
+
+**الف) نصب Origin Certificate (امن، پیشنهادی)** → بخش بالا.
+
+**ب) راه‌اندازی فوری با حالت Flexible:**
+
+```bash
+./scripts/cf-flexible.sh enable
+# در Cloudflare: SSL/TLS → Overview → Flexible
+curl -I https://lift-tire.com     # باید 200 بدهد
+```
+
+`cf-flexible.sh enable` کانفیگ HTTP-only را فعال می‌کند (بدون ریدایرکت به HTTPS تا حلقهٔ ریدایرکت نشود) و nginx را بالا می‌آورد. بعد از نصب Origin Certificate:
+
+```bash
+./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
+# Cloudflare → Full (strict)
+./scripts/cf-flexible.sh disable
+```
+
+> ⚠️ حالت Flexible فقط برای راه‌اندازی موقت است؛ در آن مسیر Cloudflare↔سرور رمزنگاری نشده است.
