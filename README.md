@@ -306,8 +306,11 @@ nano .env   # مقادیر ADMIN_PASSWORD و ... را بررسی کنید
 
 ```bash
 chmod +x scripts/ssl-certbot.sh deploy.sh
-# اگر دامنه پشت Cloudflare (ابر نارنجی) است، به‌جای certbot از گواهی Origin استفاده کنید:
+# راه سوم (بدون certbot): گواهی Origin از Cloudflare:
 #   ./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
+# اگر دامنه پشت Cloudflare است (روش پیشنهادی — بدون خاموش‌کردن پروکسی):
+#   CLOUDFLARE_API_TOKEN=... را در .env بگذارید، سپس:
+#   ./scripts/cf-certbot-dns.sh
 DOMAIN=lift-tire.com EMAIL=you@example.com ./scripts/ssl-certbot.sh
 ```
 

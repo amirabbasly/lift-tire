@@ -479,3 +479,166 @@ curl -I https://lift-tire.com     # باید 200 بدهد
 ```
 
 > ⚠️ حالت Flexible فقط برای راه‌اندازی موقت است؛ در آن مسیر Cloudflare↔سرور رمزنگاری نشده است.
+
+---
+
+## ۲۱) 🚀 رانبوک کامل: از صفر تا سایت ۱۰۰٪ بالا (دامنه پشت Cloudflare)
+
+این مسیر دقیقاً برای حالتی است که دامنه روی **Cloudflare** است و می‌خواهید گواهی را با **certbot** بگیرید.
+
+> خلاصهٔ منطق: چون Cloudflare پروکسی است، روش HTTP-01 کار نمی‌کند؛ پس از **DNS-01** استفاده می‌کنیم که فقط به یک API Token نیاز دارد و پروکسی هم می‌تواند روشن بماند.
+
+### گام ۰ — پاک‌سازی و به‌روزرسانی کد
+
+```bash
+cd /var/www/lift-tire.com/lift-tire
+git pull
+
+./deploy.sh clean --yes     # توقف/حذف کانتینرها + حذف ایمیج‌های بی‌استفاده (داده‌ها می‌مانند)
+```
+
+اگر می‌خواهید کاملاً از صفر (دیتابیس هم پاک) باشد:
+
+```bash
+./deploy.sh clean --yes --volumes
+```
+
+### گام ۱ — تنظیم `.env`
+
+```bash
+cp .env.example .env       # اگر .env ندارید
+nano .env
+```
+
+حداقل این‌ها را پر کنید:
+
+```env
+DOMAIN=lift-tire.com
+NEXT_PUBLIC_SITE_URL=https://lift-tire.com
+JWT_SECRET=<خروجی openssl rand -hex 32>
+POSTGRES_PASSWORD=<رمز قوی تصادفی>
+ADMIN_EMAIL=admin@lift-tire.com
+ADMIN_PASSWORD=<رمز دلخواه مدیر>
+CLOUDFLARE_API_TOKEN=<توکن مرحله ۲>
+```
+
+تولید سریع مقادیر:
+
+```bash
+sed -i "s|CHANGE_ME_TO_A_LONG_RANDOM_SECRET|$(openssl rand -hex 32)|" .env
+sed -i "s|CHANGE_ME_DB_PASSWORD|$(openssl rand -hex 16)|g" .env
+```
+
+### گام ۲ — ساخت API Token در Cloudflare
+
+1. وارد داشبورد Cloudflare شوید → آیکون پروفایل → **My Profile → API Tokens → Create Token**
+2. قالب **Edit zone DNS** را انتخاب کنید
+3. Permissions: `Zone → DNS → Edit`
+4. Zone Resources: `Include → Specific zone → lift-tire.com`
+5. Create Token و توکن را کپی کنید (فقط یک‌بار نشان داده می‌شود)
+6. در `.env`: `CLOUDFLARE_API_TOKEN=توکن`
+
+### گام ۳ — صدور گواهی با certbot (DNS-01)
+
+```bash
+./scripts/cf-certbot-dns.sh --dry-run     # تست بدون مصرف سهمیه
+./scripts/cf-certbot-dns.sh               # صدور واقعی
+```
+
+خروجی موفق شبیه این است:
+
+```
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/lift-tire.com/fullchain.pem
+```
+
+فایل‌ها روی هاست در این مسیر قرار می‌گیرند:
+
+```
+nginx/certbot/conf/live/lift-tire.com/fullchain.pem
+nginx/certbot/conf/live/lift-tire.com/privkey.pem
+```
+
+### گام ۴ — بیلد و بالا آوردن سرویس‌ها
+
+```bash
+./deploy.sh install
+```
+
+خروجی مورد انتظار: `PostgreSQL آماده است` → `seed اعمال شد` → `nginx` بالا آمد → جدول وضعیت با ۴ کانتینر `Up`.
+
+اگر قبلاً نصب کرده‌اید:
+
+```bash
+./deploy.sh update
+```
+
+### گام ۵ — تنظیم Cloudflare
+
+| تنظیم | مقدار |
+| --- | --- |
+| SSL/TLS → Overview | **Full (strict)** |
+| SSL/TLS → Edge Certificates → Always Use HTTPS | **On** |
+| Records → A `@` و `www` | IP سرور (`curl -4 -s https://api.ipify.org`) |
+| Proxy status | 🟠 Proxied (می‌تواند روشن بماند) |
+
+### گام ۶ — بررسی نهایی
+
+```bash
+./deploy.sh doctor
+```
+
+انتظار:
+
+```
+API  127.0.0.1:4000/api/health → 200
+Web  127.0.0.1:3000/            → 200
+Nginx http://127.0.0.1/         → 301
+Nginx https://127.0.0.1/ (Host: lift-tire.com) → 200
+```
+
+و از بیرون:
+
+```bash
+curl -I https://lift-tire.com
+curl -s https://lift-tire.com/api/health
+```
+
+### گام ۷ — تمدید خودکار
+
+```cron
+0 4 * * * cd /var/www/lift-tire.com/lift-tire && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/cloudflare.ini:/root/.secrets/cloudflare.ini:ro certbot/dns-cloudflare renew --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/cloudflare.ini --quiet && docker compose exec -T nginx nginx -s reload
+```
+
+### روش جایگزین: certbot با HTTP-01 (بدون توکن کلادفلر)
+
+1. Cloudflare → DNS → برای `@` و `www` گزینهٔ **Proxy status = DNS only** (ابر خاکستری)
+2. مطمئن شوید پورت ۸۰ باز است: `ufw allow 80/tcp`
+3. `./scripts/ssl-certbot.sh` (اسکریپت خودش DNS را چک می‌کند و گواهی می‌گیرد)
+4. پروکسی را دوباره روشن کنید و SSL mode را **Full (strict)** بگذارید
+
+### چیت‌شیت داکر این پروژه
+
+| کار | دستور |
+| --- | --- |
+| وضعیت | `docker compose ps` |
+| لاگ زنده | `docker compose logs -f web` |
+| ری‌استارت همه | `./deploy.sh restart` |
+| توقف بدون حذف | `docker compose stop` |
+| حذف کانتینرها (داده می‌ماند) | `./deploy.sh clean --yes` |
+| حذف کامل با داده | `./deploy.sh clean --yes --volumes` |
+| ورود به دیتابیس | `docker compose exec db psql -U lifttire -d lifttire` |
+| فضای مصرفی | `docker system df` |
+| بکاپ | `./deploy.sh backup` |
+
+اجزای پروژه:
+
+| نام | نوع | نقش |
+| --- | --- | --- |
+| `lifttire_db` | کانتینر | PostgreSQL 16 (volume `lifttire_pgdata`) |
+| `lifttire_api` | کانتینر | Express API روی ۴۰۰۰ (فقط 127.0.0.1) |
+| `lifttire_web` | کانتینر | Next.js روی ۳۰۰۰ (فقط 127.0.0.1) |
+| `lifttire_nginx` | کانتینر | reverse proxy روی ۸۰/۴۴۳ |
+| `lifttire_pgdata` | volume | داده‌های دیتابیس |
+| `lifttire_uploads` | volume | تصاویر آپلودشده |
+| `lifttire` | network | شبکهٔ داخلی سرویس‌ها |

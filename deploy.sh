@@ -135,6 +135,103 @@ do_restart() {
   do_status
 }
 
+# ── بررسی کامل سلامت نصب ────────────────────────────────────
+do_doctor() {
+  need_root_hint
+  resolve_domain
+  echo ""
+  echo "══════════ 🩺 بررسی سلامت لیفت تایر ($DOMAIN) ══════════"
+
+  echo ""
+  echo "▸ داکر"
+  docker --version 2>/dev/null || error "docker در دسترس نیست"
+  docker compose version 2>/dev/null || error "docker compose در دسترس نیست"
+  docker info >/dev/null 2>&1 && echo "   ✓ daemon داکر فعال است" || echo "   ✗ daemon داکر فعال نیست (systemctl start docker)"
+
+  echo ""
+  echo "▸ فایل .env"
+  if [ ! -f .env ]; then
+    echo "   ✗ فایل .env وجود ندارد — اجرا کنید: cp .env.example .env"
+  fi
+  for k in DOMAIN JWT_SECRET POSTGRES_PASSWORD ADMIN_EMAIL NEXT_PUBLIC_SITE_URL; do
+    if grep -qE "^$k=" .env 2>/dev/null; then
+      v="$(grep -E "^$k=" .env | head -1 | cut -d= -f2-)"
+      case "$k" in
+        JWT_SECRET|POSTGRES_PASSWORD) echo "   ✓ $k = ($(printf '%s' "$v" | wc -c) کاراکتر)" ;;
+        *) echo "   ✓ $k = $v" ;;
+      esac
+    else
+      echo "   ✗ $k تعریف نشده"
+    fi
+  done
+
+  echo ""
+  echo "▸ پورت‌های ۸۰ و ۴۴۳"
+  if command -v ss >/dev/null 2>&1; then
+    ss -lntp 2>/dev/null | grep -E ':80\s|:443\s' || echo "   ⚠ هیچ سرویسی روی ۸۰/۴۴۳ گوش نمی‌دهد (nginx بالا نیست؟)"
+  fi
+
+  echo ""
+  echo "▸ DNS"
+  SERVER_IP="$(curl -4 -fsS --max-time 6 https://api.ipify.org 2>/dev/null || true)"
+  echo "   IP سرور: ${SERVER_IP:-نامشخص}"
+  for d in "$DOMAIN" "www.$DOMAIN"; do
+    ips="$(getent ahostsv4 "$d" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' || true)"
+    echo "   $d → ${ips:-نامشخص}"
+    case " $ips " in
+      *" 104.21."*|*" 172.67."*|*" 172.64."*) echo "     ↳ پشت Cloudflare (روش DNS-01 یا Origin Certificate مناسب است)" ;;
+      *"${SERVER_IP:-__none__}"*) echo "     ↳ مستقیم به این سرور ✓" ;;
+    esac
+  done
+
+  echo ""
+  echo "▸ گواهی SSL"
+  CERT="nginx/certbot/conf/live/$DOMAIN/fullchain.pem"
+  if [ -f "$CERT" ]; then
+    if command -v openssl >/dev/null 2>&1; then
+      echo "   ✓ موجود — $(openssl x509 -in "$CERT" -noout -enddate 2>/dev/null | cut -d= -f2)"
+    else
+      echo "   ✓ موجود"
+    fi
+  else
+    echo "   ✗ نصب نشده"
+  fi
+
+  echo ""
+  echo "▸ کانتینرها"
+  $COMPOSE ps 2>/dev/null || true
+
+  echo ""
+  echo "▸ پاسخ سرویس‌ها (از داخل سرور)"
+  code() { local o; o="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$@" 2>/dev/null || true)"; echo "${o:-000}"; }
+  echo "   API  127.0.0.1:${API_PORT:-4000}/api/health → $(code "http://127.0.0.1:${API_PORT:-4000}/api/health")"
+  echo "   Web  127.0.0.1:${WEB_PORT:-3000}/            → $(code "http://127.0.0.1:${WEB_PORT:-3000}/")"
+  echo "   Nginx http://127.0.0.1/                      → $(code "http://127.0.0.1/")"
+  echo "   Nginx https://127.0.0.1/ (Host: $DOMAIN)      → $(code -k -H "Host: $DOMAIN" "https://127.0.0.1/")"
+
+  echo ""
+  echo "═══════════════════════════════════════════════════════"
+  echo "راهنمای رفع: کد ۵۲۱/۵۲۶ در Cloudflare ← docs/DEPLOY-ubuntu.md بخش ۲۰"
+  echo ""
+}
+
+# ── پاک‌سازی کامل داکر و شروع تمیز ─────────────────────────
+do_clean() {
+  need_root_hint
+  warn "همهٔ کانتینرها و شبکهٔ پروژه حذف می‌شوند (داده‌ها در volume باقی می‌مانند)."
+  if [ "${2:-}" != "--yes" ]; then
+    read -rp "مطمئنید؟ (yes/NO): " ans
+    [ "$ans" = "yes" ] || { info "لغو شد."; exit 0; }
+  fi
+  $COMPOSE down --remove-orphans || true
+  docker image prune -f >/dev/null 2>&1 || true
+  if [ "${2:-}" = "--volumes" ] || [ "${3:-}" = "--volumes" ]; then
+    warn "حذف volumeها (دیتابیس و آپلودها)…"
+    $COMPOSE down -v --remove-orphans || true
+  fi
+  info "پاک‌سازی انجام شد. برای نصب مجدد: ./deploy.sh install"
+}
+
 do_status() {
   need_root_hint
   $COMPOSE ps
@@ -186,8 +283,10 @@ case "${1:-}" in
   status)  do_status ;;
   logs)    do_logs "$@" ;;
   seed)    do_seed "$@" ;;
+  doctor)  do_doctor ;;
+  clean)   do_clean "$@" ;;
   *)
-    echo "استفاده: $0 {install|update|backup|restart|status|logs|seed}"
+    echo "استفاده: $0 {install|update|backup|restart|status|logs|seed|doctor|clean}"
     echo "  install  نصب اولیه (بیلد + دیتابیس + seed + nginx)"
     echo "  update   دریافت کد جدید و بیلد مجدد با بکاپ خودکار"
     echo "  backup   بکاپ دیتابیس و تصاویر آپلودی"
@@ -195,6 +294,8 @@ case "${1:-}" in
     echo "  status   وضعیت سرویس‌ها و سلامت API"
     echo "  logs     مشاهده لاگ‌ها (اختیاری: نام سرویس)"
     echo "  seed     اجرای داده دمو (اختیاری: --force)"
+    echo "  doctor   بررسی کامل سلامت نصب (Docker، DNS، SSL، کانتینرها، پاسخ‌ها)"
+    echo "  clean    پاک‌سازی کامل کانتینرها (--yes برای بدون سؤال، --volumes برای حذف داده)"
     exit 1
     ;;
 esac
