@@ -631,6 +631,29 @@ curl -s https://lift-tire.com/healthz
 | تعویض دستی حالت | `NGINX_MODE=http docker compose up -d --force-recreate nginx` |
 | ری‌استارت امن | `./deploy.sh restart` |
 
+### اگر nginx اصلاً بالا نیامد (خطای پورت)
+
+پرتکرارترین دلیل «سایت روی HTTP هم بالا نمی‌آید» این است که پورت ۸۰ یا ۴۴۳ توسط سرویس دیگری گرفته شده است:
+
+```bash
+sudo ss -lntp | grep -E ':80|:443'
+```
+
+- اگر `nginx` یا `apache2` خودِ سیستم است → `systemctl disable --now nginx apache2`
+- اگر کانتینر قدیمی است → `docker ps -a | grep -E ':80'` و سپس `./deploy.sh clean --yes`
+
+`./deploy.sh restart` این حالت را تشخیص می‌دهد و پیام فارسی می‌دهد.
+
+### اگر nginx بالا است ولی صفحه ۵۰۲ می‌دهد
+
+یعنی nginx سالم است و `web`/`api` جواب نمی‌دهند:
+
+```bash
+docker compose ps
+docker compose logs --tail=50 web
+docker compose logs --tail=50 api
+```
+
 فایل‌ها:
 
 | مسیر (روی هاست) | نقش |
