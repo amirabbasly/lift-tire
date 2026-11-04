@@ -1,10 +1,24 @@
+# ═══════════════════════════════════════════════════════════════
+#  Lift Tire — لیفت تایر
+#  سرویس‌ها: postgres → api → web → nginx
+#  اجرا: ./deploy.sh install   |   وضعیت: ./deploy.sh doctor
+# ═══════════════════════════════════════════════════════════════
 name: lifttire
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-restart: &default-restart unless-stopped
 
 services:
   postgres:
     image: postgres:16-alpine
     container_name: lifttire_db
-    restart: unless-stopped
+    restart: *default-restart
+    logging: *default-logging
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-lifttire}
       POSTGRES_USER: ${POSTGRES_USER:-lifttire}
@@ -22,7 +36,8 @@ services:
     build:
       context: ./backend
     container_name: lifttire_api
-    restart: unless-stopped
+    restart: *default-restart
+    logging: *default-logging
     depends_on:
       postgres:
         condition: service_healthy
@@ -49,14 +64,23 @@ services:
         NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-}
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://lift-tire.com}
     container_name: lifttire_web
-    restart: unless-stopped
-    depends_on: [api]
+    restart: *default-restart
+    logging: *default-logging
+    depends_on:
+      api:
+        condition: service_started
     environment:
       NODE_ENV: production
       PORT: 3000
       API_INTERNAL_URL: http://api:4000
       NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE:-}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://lift-tire.com}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     ports:
       - "127.0.0.1:${WEB_PORT:-3000}:3000"
     networks: [lifttire]
@@ -64,8 +88,13 @@ services:
   nginx:
     image: nginx:1.27-alpine
     container_name: lifttire_nginx
-    restart: unless-stopped
-    depends_on: [web, api]
+    restart: *default-restart
+    logging: *default-logging
+    depends_on:
+      web:
+        condition: service_started
+      api:
+        condition: service_started
     ports:
       - "80:80"
       - "443:443"
@@ -74,6 +103,12 @@ services:
       - ./nginx/certbot/conf:/etc/letsencrypt:ro
       - ./nginx/certbot/www:/var/www/certbot:ro
       - uploads:/var/www/uploads:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/healthz | grep -q ok || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks: [lifttire]
 
 volumes:
