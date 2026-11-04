@@ -101,6 +101,8 @@ services:
     environment:
       # auto: اگر گواهی SSL موجود باشد HTTPS، وگرنه سایت روی HTTP بالا می‌آید
       NGINX_MODE: ${NGINX_MODE:-auto}
+      # برای رندر قالب کانفیگ در صورت نبود فایل آماده
+      DOMAIN: ${DOMAIN:-lift-tire.com}
     volumes:
       # قالب‌های آمادهٔ nginx (http.conf / https.conf / locations.conf)
       - ./nginx/site:/opt/nginx-sites:ro
@@ -110,11 +112,12 @@ services:
       - ./nginx/certbot/www:/var/www/certbot:ro
       - uploads:/var/www/uploads:ro
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/healthz | grep -q ok || exit 1"]
+      # در حالت HTTP کد ۲۰۰ و در حالت HTTPS ریدایرکت ۳۰۱ هم قبول است
+      test: ["CMD-SHELL", 'wget -q -S -O /dev/null --max-redirect=0 http://127.0.0.1/healthz 2>&1 | grep -qE "HTTP/1\.[01] (200|301|308)" || exit 1']
       interval: 30s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 15s
     networks: [lifttire]
 
 volumes:
