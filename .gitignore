@@ -31,6 +31,10 @@ Thumbs.db
 .vscode/
 *.swp
 
+# کانفیگ‌های رندرشدهٔ nginx (از *.template با DOMAIN ساخته می‌شوند)
+nginx/site/http.conf
+nginx/site/https.conf
+
 # backups / certs
 backups/
 nginx/certbot/conf/*
