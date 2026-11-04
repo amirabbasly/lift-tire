@@ -42,11 +42,38 @@ wait_db() {
   for i in $(seq 1 40); do
     if $COMPOSE exec -T postgres pg_isready -U "${POSTGRES_USER:-lifttire}" -d "${POSTGRES_DB:-lifttire}" >/dev/null 2>&1; then
       info "PostgreSQL آماده است."
-      return 0
+      verify_db_credentials
+      return $?
     fi
     sleep 2
   done
   error "PostgreSQL بالا نیامد."
+  exit 1
+}
+
+# رمز داخل volume با رمز .env یکی است؟ (منبع شمارهٔ یک کرش‌لوپ API)
+verify_db_credentials() {
+  local u="${POSTGRES_USER:-lifttire}" d="${POSTGRES_DB:-lifttire}"
+  local pw="${POSTGRES_PASSWORD:-lifttire_pass}"
+  if $COMPOSE exec -T -e PGPASSWORD="$pw" postgres \
+       psql -U "$u" -d "$d" -c 'SELECT 1' >/dev/null 2>&1; then
+    return 0
+  fi
+
+  error "رمز دیتابیس با داده‌های volume هم‌خوان نیست."
+  echo "   یعنی فایل .env (رمز جدید) با volume قدیمی lifttire_pgdata (رمز قدیم) جور نیست."
+  echo "   بدون این، کانتینر api مدام ری‌استارت می‌شود و سایت ۵۰۲ می‌دهد."
+  echo ""
+  echo "   راه‌حل ۱ (پیشنهادی، داده دمو بازسازی می‌شود):"
+  echo "      ./deploy.sh clean --yes --volumes"
+  echo "      ./deploy.sh install"
+  echo ""
+  echo "   راه‌حل ۲ (داده‌ها می‌مانند — رمز دیتابیس را با .env هم‌خوان کنید):"
+  echo "      docker compose exec postgres psql -U $u -d $d -c \"ALTER USER $u WITH PASSWORD '\$POSTGRES_PASSWORD';\""
+  echo ""
+  echo "   راه‌حل ۳ (رمز فعلی volume را می‌دانید → همان را در .env بگذارید):"
+  echo "      nano .env   # POSTGRES_PASSWORD=...  و در DATABASE_URL هم همان رمز"
+  echo ""
   exit 1
 }
 
@@ -61,6 +88,7 @@ do_install() {
   wait_db
   $COMPOSE up -d api web
   sleep 4
+  check_api_alive || true
   if $COMPOSE exec -T api node src/seed.js >/dev/null 2>&1; then
     info "داده اولیه (seed) اعمال شد."
   else
@@ -200,6 +228,14 @@ do_doctor() {
   $COMPOSE ps 2>/dev/null || true
 
   echo ""
+  echo "▸ سلامت API (دلیل واقعی خطا)"
+  if [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 4 "http://127.0.0.1:${API_PORT:-4000}/api/health" 2>/dev/null)" != "200" ]; then
+    check_api_alive 2>&1 | head -20
+  else
+    echo "   ✓ API پاسخ ۲۰۰ می‌دهد"
+  fi
+
+  echo ""
   echo "▸ پاسخ سرویس‌ها (از داخل سرور)"
   code() { local o; o="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$@" 2>/dev/null || true)"; echo "${o:-000}"; }
   echo "   API  127.0.0.1:${API_PORT:-4000}/api/health → $(code "http://127.0.0.1:${API_PORT:-4000}/api/health")"
@@ -244,7 +280,15 @@ do_status() {
   if curl -fsS "http://127.0.0.1:${API_PORT:-4000}/api/health" >/dev/null 2>&1; then
     info "API سالم است: $(curl -fsS "http://127.0.0.1:${API_PORT:-4000}/api/health")"
   else
-    warn "API از هاست پاسخ نداد (ممکن است پورت به 127.0.0.1 محدود شده باشد)."
+    API_STATE="$(docker inspect -f '{{.State.Status}}' lifttire_api 2>/dev/null || echo missing)"
+    if [ "$API_STATE" = "restarting" ] || [ "$API_STATE" = "exited" ]; then
+      error "API در حال کرش‌کردن است (وضعیت: $API_STATE) — سایت ۵۰۲ می‌دهد."
+      echo "   لاگ خطا:"
+      docker compose logs --tail=20 api 2>&1 | sed 's/^/     /'
+      echo "   بررسی کامل:  ./deploy.sh doctor     (دلیل را به فارسی می‌گوید)"
+    else
+      warn "API از هاست پاسخ نداد (وضعیت کانتینر: $API_STATE)."
+    fi
   fi
 
   # حالت nginx: HTTP یا HTTPS
@@ -276,6 +320,55 @@ do_status() {
 do_logs() { $COMPOSE logs -f --tail=120 "${2:-}"; }
 
 # بالا آوردن nginx با پیام خطای فارسی و تشخیص اشغال‌بودن پورت‌ها
+# تشخیص کرش‌لوپ API و گفتن دلیل واقعی به فارسی
+check_api_alive() {
+  local state
+  state="$(docker inspect -f '{{.State.Status}}' lifttire_api 2>/dev/null || echo missing)"
+  if [ "$state" = "running" ] && docker inspect -f '{{.State.Health.Status}}' lifttire_api 2>/dev/null | grep -q healthy; then
+    return 0
+  fi
+  if [ "$state" = "running" ]; then
+    # تازه بالا آمده؛ چند ثانیه صبر کن
+    for _ in $(seq 1 10); do
+      sleep 2
+      if [ "$(docker inspect -f '{{.State.Status}}' lifttire_api 2>/dev/null)" = "running" ] \
+         && [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 3 "http://127.0.0.1:${API_PORT:-4000}/api/health" 2>/dev/null)" = "200" ]; then
+        return 0
+      fi
+    done
+  fi
+
+  error "API سالم نیست (وضعیت: $state) — دلیل واقعی:"
+  echo "──────────────────────────────────────────────"
+  $COMPOSE logs --tail=30 api 2>&1 | sed 's/^/  /'
+  echo "──────────────────────────────────────────────"
+
+  local logs
+  logs="$($COMPOSE logs --tail=80 api 2>&1 || true)"
+
+  if echo "$logs" | grep -qiE "password authentication failed|role .* does not exist"; then
+    warn "دیتابیس رمز/کاربر را قبول نمی‌کند."
+    echo "   علت رایج: volume قدیمی «lifttire_pgdata» با رمز قبلی ساخته شده است."
+    echo "   راه‌حل سریع (داده دمو بازسازی می‌شود):"
+    echo "      ./deploy.sh clean --yes --volumes && ./deploy.sh install"
+    echo "   یا رمز فعلی volume را در .env بگذارید (فقط اگر آن را می‌دانید)."
+  elif echo "$logs" | grep -qiE "EADDRINUSE|address already in use"; then
+    warn "پورت ۴۰۰۰ از قبل اشغال است."
+    echo "   ss -lntp | grep :4000"
+  elif echo "$logs" | grep -qiE "ECONNREFUSED|getaddrinfo|ENOTFOUND"; then
+    warn "API نمی‌تواند به دیتابیس/سرویس دیگر وصل شود."
+    echo "   docker compose ps        # آیا lifttire_db سالم است؟"
+    echo "   docker compose logs --tail=30 postgres"
+  elif echo "$logs" | grep -qiE "Cannot find module|ERR_MODULE_NOT_FOUND"; then
+    warn "ماژول لازم در ایمیج نیست — ایمیج را بدون کش بسازید:"
+    echo "   docker compose build --no-cache api && docker compose up -d api"
+  else
+    warn "پیام خطای بالا را ببینید. لاگ کامل:  docker compose logs -f api"
+  fi
+  return 1
+}
+
+# چه سرویسی روی ۸۰/۴۴۳ است
 start_nginx() {
   local args="${1:-}"
   # shellcheck disable=SC2086

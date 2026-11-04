@@ -47,8 +47,10 @@ app.use((err, _req, res, _next) => {
 
 async function start() {
   await db.init();
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ Lift Tire API روی پورت ${PORT} فعال شد (${db.isPglite() ? 'PGlite' : 'PostgreSQL'})`);
+  // روی PM2 فقط لوکال‌هاست؛ داخل داکر HOST=0.0.0.0 لازم است
+  const HOST = process.env.HOST || '0.0.0.0';
+  app.listen(PORT, HOST, () => {
+    console.log(`✅ Lift Tire API روی http://${HOST}:${PORT} فعال شد (${db.isPglite() ? 'PGlite' : 'PostgreSQL'})`);
     console.log(`   uploads → ${UPLOAD_DIR}`);
   });
 }

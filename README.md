@@ -13,7 +13,16 @@
 
 > 📘 **راهنمای گام‌به‌گام نصب روی سرور تازه Ubuntu 24.04:** [`docs/DEPLOY-ubuntu.md`](docs/DEPLOY-ubuntu.md)
 
+**روش ۱ — PM2 (پیشنهادی، سبک‌تر):**
+
+```bash
+sudo ./scripts/deploy-pm2.sh install   # api + web با PM2، nginx روی سرور، روی HTTP
+sudo ./scripts/deploy-pm2.sh ssl       # certbot → HTTPS
 ```
+
+**روش ۲ — داکر:**
+
+```bash
 ./deploy.sh install     # سایت روی HTTP بالا می‌آید (بدون نیاز به گواهی)
 ./deploy.sh ssl         # certbot سایت را به HTTPS می‌برد — بدون API Token / بدون Zone
 ```
@@ -108,10 +117,12 @@ lift-tire/
 │   ├── lib/{api,adminApi,format,constants,demo}.js
 │   ├── public/images/…        # تصاویر تولیدشده
 │   └── Dockerfile             # چندمرحله‌ای (standalone)
+├── ecosystem.config.cjs       # PM2: lifttire-api + lifttire-web
 ├── nginx/
-│   ├── site/{http.conf,https.conf,locations.conf}.template   # قالب‌های reverse proxy
-│   └── entrypoint-mode.sh     # انتخاب خودکار HTTP/HTTPS در استارت
-├── scripts/{ssl-certbot.sh, install-origin-cert.sh, dump-demo.mjs, make-*.py}
+│   ├── site/{http.conf,https.conf,locations.conf}.template   # داکر: reverse proxy
+│   ├── host/{http.conf,https.conf,locations.conf}.template   # PM2: nginx روی سرور
+│   └── entrypoint-mode.sh     # انتخاب خودکار HTTP/HTTPS در استارت (داکر)
+├── scripts/{deploy-pm2.sh, ssl-certbot.sh, install-origin-cert.sh, dump-demo.mjs, make-*.py}
 ├── docker-compose.yml
 ├── deploy.sh
 ├── .env.example
@@ -357,9 +368,10 @@ cd /var/www/lift-tire.com
 
 ## SSL و دامنه
 
-- گواهی با `scripts/ssl-certbot.sh` (Let's Encrypt، روش **webroot** روی nginx در حال اجرا) گرفته می‌شود — بدون API Token و بدون دسترسی Zone.
-- بدون گواهی هم سایت روی **HTTP** بالا است (`nginx/site/http.conf`)؛ به‌محض وجود گواهی، `entrypoint-mode.sh` خودکار `https.conf` را فعال می‌کند.
-- مسیر گواهی در کانتینر: `/etc/letsencrypt/live/lift-tire.com/` (روی هاست: `nginx/certbot/conf/…`).
+- گواهی با certbot و روش **webroot** گرفته می‌شود — بدون API Token و بدون دسترسی Zone.
+  - PM2: `sudo ./scripts/deploy-pm2.sh ssl` (گواهی در `/etc/letsencrypt/live/lift-tire.com/`)
+  - داکر: `./deploy.sh ssl` (گواهی در `nginx/certbot/conf/live/lift-tire.com/`)
+- بدون گواهی هم سایت روی **HTTP** بالا است: در PM2 با `nginx/host/http.conf`، در داکر با `nginx/site/http.conf`. به‌محض وجود گواهی، حالت HTTPS خودکار فعال می‌شود.
 - **تمدید خودکار** را با cron اضافه کنید:
 
 ```bash

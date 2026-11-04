@@ -1,0 +1,25 @@
+# ═══════════════════════════════════════════════════════════════
+#  Lift Tire — حالت HTTP روی سرور (PM2) — بدون گواهی SSL
+#  مسیر نصب:  /etc/nginx/sites-available/lift-tire.conf
+#  سایت کامل روی http کار می‌کند؛ هیچ ریدایرکتی به https نیست.
+# ═══════════════════════════════════════════════════════════════
+server {
+    listen 80;
+    listen [::]:80;
+    server_name __DOMAIN__ www.__DOMAIN__;
+
+    # مسیر تأیید certbot (HTTP-01) — باید همیشه باز باشد
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        default_type text/plain;
+        try_files $uri =404;
+    }
+
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+
+    include /etc/nginx/lifttire/locations.conf;
+}

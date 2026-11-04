@@ -664,3 +664,120 @@ docker compose logs --tail=50 api
 | `nginx/entrypoint-mode.sh` | تشخیص خودکار حالت در استارت |
 
 `deploy.sh` هنگام `install`/`update`/`restart` هر دو فایل را از قالب (`*.template`) با `DOMAIN` می‌سازد.
+
+---
+
+## ۲۳) 🟢 اجرا با PM2 (بدون داکر برای api/web)
+
+اگر می‌خواهید سایت با **PM2** بالا بیاید (نه کانتینر)، این مسیر کامل است.
+
+### معماری
+
+```
+کاربر → nginx (روی سرور، 80/443) → 127.0.0.1:3000  Next.js  (PM2: lifttire-web)
+                                   → 127.0.0.1:4000  Express  (PM2: lifttire-api)
+                                                  ↓
+                                     PGlite (فایل) یا PostgreSQL روی 127.0.0.1
+```
+
+مزیت: بدون بیلد ایمیج، مصرف رم کمتر، لاگ‌ها مستقیم با `pm2 logs`.
+
+### گام ۱ — ابزارها
+
+```bash
+apt update
+apt install -y nginx certbot python3-certbot-nginx git curl
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+apt install -y nodejs
+npm install -g pm2
+node -v && nginx -v && pm2 -v
+```
+
+### گام ۲ — کد و `.env`
+
+```bash
+cd /var/www/lift-tire.com/lift-tire
+git pull
+cp .env.example .env
+nano .env
+```
+
+حداقل مقادیر (بقیه پیش‌فرض درست است):
+
+```env
+DOMAIN=lift-tire.com
+NEXT_PUBLIC_SITE_URL=https://lift-tire.com
+JWT_SECRET=<openssl rand -hex 32>
+ADMIN_EMAIL=admin@lift-tire.com
+ADMIN_PASSWORD=<رمز دلخواه>
+USE_PGLITE=true
+API_INTERNAL_URL=http://127.0.0.1:4000
+UPLOAD_DIR=./backend/uploads
+```
+
+> برای PostgreSQL روی خود سرور: `USE_PGLITE=false` و `DATABASE_URL=postgresql://lifttire:رمز@127.0.0.1:5432/lifttire`. اسکریپت خودش نقش و دیتابیس را می‌سازد.
+
+### گام ۳ — نصب
+
+```bash
+chmod +x scripts/deploy-pm2.sh
+sudo ./scripts/deploy-pm2.sh install
+```
+
+این دستور به‌ترتیب: وابستگی‌ها را نصب، Next.js را بیلد (standalone)، `public` و `_next/static` را داخل خروجی کپی، دیتابیس را آماده، PM2 را استارت، nginx را روی پورت ۸۰ بنویسد و seed را اجرا می‌کند.
+
+### گام ۴ — استارت خودکار بعد از ری‌بوت
+
+```bash
+pm2 startup systemd -u root --hp /root     # خط چاپ‌شده را کپی و اجرا کنید
+pm2 save
+```
+
+### گام ۵ — گواهی SSL با certbot (بدون API Token)
+
+```bash
+sudo ./scripts/deploy-pm2.sh ssl
+```
+
+چه می‌کند: nginx را روی حالت HTTP با مسیر ACME تنظیم می‌کند، یک فایل تست می‌گذارد و از اینترنت می‌خواندش، با `certbot certonly --webroot` گواهی می‌گیرد، nginx را به HTTPS سوییچ می‌کند و cron تمدید را در `/etc/cron.d/lifttire-certbot` می‌نویسد.
+
+> اگر پشت Cloudflare هستید: رکوردهای `@` و `www` را موقتاً **DNS only** کنید، بعد از گرفتن گواهی پروکسی را روشن و SSL mode را **Full (strict)** کنید.
+
+### دستورهای روزمره
+
+```bash
+sudo ./scripts/deploy-pm2.sh status      # وضعیت PM2 + کد پاسخ‌ها
+sudo ./scripts/deploy-pm2.sh doctor      # بررسی کامل سلامت
+sudo ./scripts/deploy-pm2.sh logs        # لاگ زنده
+sudo ./scripts/deploy-pm2.sh logs lifttire-api
+sudo ./scripts/deploy-pm2.sh restart
+sudo ./scripts/deploy-pm2.sh update      # git pull + بیلد + ری‌استارت
+sudo ./scripts/deploy-pm2.sh nginx http  # بازگشت اجباری به HTTP
+sudo ./scripts/deploy-pm2.sh nginx https # سوییچ به HTTPS (اگر گواهی هست)
+```
+
+### فایل‌های مربوطه
+
+| مسیر | نقش |
+| --- | --- |
+| `ecosystem.config.cjs` | تعریف دو اپ PM2 (`lifttire-api`, `lifttire-web`) |
+| `scripts/deploy-pm2.sh` | نصب/بروزرسانی/SSL/وضعیت |
+| `nginx/host/http.conf.template` | کانفیگ nginx حالت HTTP |
+| `nginx/host/https.conf.template` | کانفیگ nginx حالت HTTPS |
+| `nginx/host/locations.conf` | پروکسی مشترک به ۱۲۷.۰.۰.۱ |
+| `/etc/nginx/sites-available/lift-tire.conf` | خروجی رندرشده روی سرور |
+| `/etc/nginx/lifttire/locations.conf` | کپی قواعد مشترک |
+| `/etc/cron.d/lifttire-certbot` | تمدید خودکار گواهی |
+
+### عیب‌یابی PM2
+
+| نشانه | علت | راه‌حل |
+| --- | --- | --- |
+| `pm2 list` → `errored` | پورت اشغال یا خطای دیتابیس | `pm2 logs lifttire-api --nostream --lines 40` |
+| صفحه ۵۰۲ | PM2 بالا نیست | `pm2 list` سپس `pm2 start ecosystem.config.cjs` |
+| صفحه ۴۰۴ روی همه مسیرها | `public`/`.next/static` کپی نشده | `sudo ./scripts/deploy-pm2.sh update` |
+| `nginx: [emerg] bind() to 0.0.0.0:80 failed` | nginx/apache دیگر یا کانتینر قدیمی | `./deploy.sh clean --yes` و `systemctl stop apache2` |
+| بعد از ری‌بوت سایت پایین است | `pm2 startup` اجرا نشده | گام ۴ را انجام دهید |
+| `EACCES` روی `/var/www/...` | مالکیت پوشه | `chown -R root:root /var/www/lift-tire.com` (فقط ریشه لازم است) |
+
+> **هر دو روش با هم نه!** اگر PM2 را بالا آورده‌اید، کانتینرهای `api` و `web` را خاموش کنید: `docker compose stop api web`. وگرنه هر دو روی ۳۰۰۰/۴۰۰۰ رقابت می‌کنند (خطای `EADDRINUSE`).
