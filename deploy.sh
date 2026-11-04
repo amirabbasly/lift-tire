@@ -192,7 +192,7 @@ do_doctor() {
       echo "   ✓ موجود"
     fi
   else
-    echo "   ✗ نصب نشده"
+    echo "   ✗ نصب نشده → سایت در حالت HTTP کار می‌کند؛ برای HTTPS: ./deploy.sh ssl"
   fi
 
   echo ""
@@ -204,8 +204,15 @@ do_doctor() {
   code() { local o; o="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$@" 2>/dev/null || true)"; echo "${o:-000}"; }
   echo "   API  127.0.0.1:${API_PORT:-4000}/api/health → $(code "http://127.0.0.1:${API_PORT:-4000}/api/health")"
   echo "   Web  127.0.0.1:${WEB_PORT:-3000}/            → $(code "http://127.0.0.1:${WEB_PORT:-3000}/")"
-  echo "   Nginx http://127.0.0.1/                      → $(code "http://127.0.0.1/")"
-  echo "   Nginx https://127.0.0.1/ (Host: $DOMAIN)      → $(code -k -H "Host: $DOMAIN" "https://127.0.0.1/")"
+  H_CODE="$(code "http://127.0.0.1/")"
+  echo "   Nginx http://127.0.0.1/                      → $H_CODE"
+  if [ -f "$CERT" ]; then
+    S_CODE="$(code -k -H "Host: $DOMAIN" "https://127.0.0.1/")"
+    echo "   Nginx https://127.0.0.1/ (Host: $DOMAIN)      → $S_CODE"
+    [ "$S_CODE" = "200" ] || echo "      ⚠ HTTPS جواب نداد — لاگ: docker compose logs --tail=30 nginx"
+  else
+    echo "   حالت فعال: HTTP (بدون گواهی) — برای HTTPS: ./deploy.sh ssl"
+  fi
 
   echo ""
   echo "═══════════════════════════════════════════════════════"
