@@ -83,14 +83,21 @@ fi
 bold "▸ بالا آوردن nginx در حالت HTTP…"
 docker compose up -d nginx >/dev/null 2>&1 || { red "✗ بالا آوردن nginx ناموفق بود. اجرا کنید: ./deploy.sh install"; exit 1; }
 
+# در حالت HTTP کد ۲۰۰ و در حالت HTTPS (۸۰→۴۴۳) کد ۳۰۱ برمی‌گردد؛ هر دو یعنی nginx زنده است
+alive=0
 for i in $(seq 1 20); do
-  if [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 3 http://127.0.0.1/healthz 2>/dev/null)" = "200" ]; then
-    green "   ✓ nginx روی پورت ۸۰ پاسخ می‌دهد."
-    break
-  fi
-  [ "$i" -eq 20 ] && { red "✗ nginx روی پورت ۸۰ پاسخ نداد."; echo "   docker compose logs --tail=30 nginx"; exit 1; }
+  hc="$(curl -s -o /dev/null -w '%{http_code}' --max-time 3 http://127.0.0.1/healthz 2>/dev/null || true)"
+  case "$hc" in
+    200|301|308) green "   ✓ nginx روی پورت ۸۰ پاسخ می‌دهد (کد $hc)."; alive=1; break ;;
+  esac
   sleep 1
 done
+if [ "$alive" -eq 0 ]; then
+  red "✗ nginx روی پورت ۸۰ پاسخ نداد."
+  echo "   docker compose logs --tail=30 nginx"
+  echo "   اگر پورت ۸۰ اشغال است:  sudo ss -lntp | grep ':80'"
+  exit 1
+fi
 
 # ── ۲) تست واقعی مسیر ACME از بیرون (بدون هیچ API Token) ────
 PROBE="probe-$(date +%s)-$RANDOM"

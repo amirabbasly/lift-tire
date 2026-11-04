@@ -12,6 +12,15 @@
 >
 > nginx هرگز به‌خاطر نبودن گواهی کرش/ری‌استارت نمی‌شود.
 
+**اگر عجله دارید:**
+
+| مشکل | بخش |
+| --- | --- |
+| سایت بالا نمی‌آید / nginx ری‌استارت می‌شود | ۱۹ و ۲۲ |
+| certbot خطا می‌دهد | ۱۹ |
+| دامنه پشت Cloudflare است | ۲۰ و ۲۱ (گام ۳) |
+| از صفر و بدون دانش قبلی | ۲۱ (رانبوک کامل) |
+
 ---
 
 ## ۰) چک‌لیست قبل از شروع
@@ -226,11 +235,21 @@ live/lift-tire.com/privkey.pem
 
 ## ۱۰) بررسی نهایی
 
+**قبل از SSL** (سایت روی HTTP):
+
 ```bash
 ./deploy.sh status
-curl -I https://lift-tire.com
-curl -s https://lift-tire.com/api/health
-curl -s https://lift-tire.com/api/products?limit=1
+curl -I http://lift-tire.com
+curl -s http://lift-tire.com/api/health
+```
+
+**بعد از `./deploy.sh ssl`:**
+
+```bash
+curl -I  https://lift-tire.com
+curl -s  https://lift-tire.com/api/health
+curl -s  https://lift-tire.com/api/products?limit=1
+curl -I  http://www.lift-tire.com          # باید 301 به https://lift-tire.com باشد
 ```
 
 انتظار می‌رود:
