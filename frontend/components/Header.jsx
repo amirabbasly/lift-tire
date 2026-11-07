@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import Logo from './Logo';
+import MobileDrawer from './MobileDrawer';
 import { useAuth, useCart } from './Providers';
-import { IconSearch, IconCart, IconUser, IconMenu, IconX, IconPhone, IconChevron } from './Icons';
-import { NAV, MOBILE_NAV } from '@/lib/constants';
+import { IconSearch, IconCart, IconUser, IconMenu, IconPhone } from './Icons';
+import { NAV } from '@/lib/constants';
 import { assetUrl, faNum } from '@/lib/format';
 
 export default function Header({ settings, brands = [], categories = [] }) {
@@ -145,59 +146,12 @@ export default function Header({ settings, brands = [], categories = [] }) {
         </div>
       </nav>
 
-      {/* کشوی موبایل */}
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div className="fixed inset-0 z-[80] bg-graphite-900/50 backdrop-blur-sm lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(false)} />
-            <motion.div
-              className="fixed inset-y-0 right-0 z-[81] flex w-[86%] max-w-[340px] flex-col bg-graphite-900 text-white lg:hidden"
-              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              role="dialog" aria-label="منو"
-            >
-              <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-                <Logo variant="dark" size="sm" tagline={false} />
-                <button onClick={() => setOpen(false)} aria-label="بستن" className="rounded-lg p-1.5 text-white/70 hover:bg-white/10">
-                  <IconX width={20} height={20} />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-4 gap-2 border-b border-white/10 px-4 py-4">
-                {MOBILE_NAV.map((n) => (
-                  <Link key={n.href} href={n.href} className="flex flex-col items-center gap-1.5 rounded-xl p-2 transition hover:bg-white/5">
-                    <img src={n.icon} alt="" className="h-9 w-9 object-contain" />
-                    <span className="text-[10px] font-bold text-white/80">{n.label}</span>
-                  </Link>
-                ))}
-              </div>
-
-              <nav className="flex-1 overflow-y-auto px-3 py-3">
-                <p className="px-2 pb-2 text-[11px] font-bold text-white/40">دسترسی سریع</p>
-                {NAV.map((n) => (
-                  <Link key={n.href} href={n.href} className="flex items-center justify-between rounded-lg px-2.5 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/5 hover:text-accent">
-                    {n.label}
-                    <IconChevron width={15} height={15} className="text-white/30" />
-                  </Link>
-                ))}
-                <p className="px-2 pb-2 pt-3 text-[11px] font-bold text-white/40">دسته‌بندی‌ها</p>
-                {categories.map((c) => (
-                  <Link key={c.id} href={`/category/${c.slug}`} className="flex items-center justify-between rounded-lg px-2.5 py-2.5 text-sm text-white/75 hover:bg-white/5 hover:text-accent">
-                    {c.name}
-                    <span className="num text-[10px] text-white/30">{faNum(c.product_count || 0)}</span>
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="border-t border-white/10 p-4">
-                <a href={`tel:${settings?.phone?.replace(/[^\d+]/g, '') || '02191001234'}`} className="btn-accent w-full">
-                  <IconPhone width={18} height={18} /> مشاوره تلفنی رایگان
-                </a>
-                <p className="mt-2 text-center text-[11px] text-white/40">شنبه تا پنجشنبه ۹ تا ۱۹</p>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      <MobileDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        settings={settings}
+        categories={categories}
+      />
     </header>
   );
 }

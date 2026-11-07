@@ -2,14 +2,21 @@ import './globals.css';
 import localFont from 'next/font/local';
 import { Providers } from '@/components/Providers';
 
+// فونت وزیر (Vazir) — چهار وزن، شامل حروف فارسی و لاتین
+// فایل variable رسمی وزیر فقط حروف فارسی دارد، پس از نسخه‌های استاتیک استفاده می‌کنیم.
 const vazir = localFont({
   src: [
-    { path: './fonts/vazirmatn-arabic-wght-normal.woff2', weight: '100 900', style: 'normal' },
-    { path: './fonts/vazirmatn-latin-wght-normal.woff2', weight: '100 900', style: 'normal' },
+    { path: './fonts/vazir-400.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/vazir-500.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/vazir-500.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/vazir-700.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/vazir-700.woff2', weight: '800', style: 'normal' },
+    { path: './fonts/vazir-900.woff2', weight: '900', style: 'normal' },
   ],
   variable: '--font-vazir',
   display: 'swap',
   preload: true,
+  fallback: ['Tahoma', 'Arial', 'sans-serif'],
 });
 
 const barlow = localFont({

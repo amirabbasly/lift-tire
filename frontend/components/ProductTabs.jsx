@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import ProductCard from './ProductCard';
 import Link from 'next/link';
@@ -9,6 +9,9 @@ import { IconArrowLeft } from './Icons';
 export default function ProductTabs({ bestsellers = [], newest = [] }) {
   const [tab, setTab] = useState('best');
   const reduce = useReducedMotion();
+  // انیمیشن فقط بعد از hydration — SSR نباید مخفی رندر شود
+  const [animate, setAnimate] = useState(false);
+  useEffect(() => setAnimate(true), []);
   const tabs = [
     { id: 'best', label: 'پرفروش‌ترین‌ها', items: bestsellers },
     { id: 'new', label: 'جدیدترین‌ها', items: newest },
@@ -45,7 +48,7 @@ export default function ProductTabs({ bestsellers = [], newest = [] }) {
         <AnimatePresence mode="wait">
           <motion.div
             key={tab}
-            initial={reduce ? false : { opacity: 0, y: 12 }}
+            initial={animate ? { opacity: 0, y: 12 } : false}
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? {} : { opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}

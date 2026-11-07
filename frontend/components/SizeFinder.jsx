@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'framer-motion';
 import { IconSearch } from './Icons';
@@ -16,6 +16,8 @@ export default function SizeFinder({ compact = false }) {
   const [rim, setRim] = useState('16');
   const router = useRouter();
   const reduce = useReducedMotion();
+  const [animate, setAnimate] = useState(false);
+  useEffect(() => setAnimate(true), []);
 
   const submit = (e) => {
     e.preventDefault();
@@ -48,9 +50,8 @@ export default function SizeFinder({ compact = false }) {
   return (
     <motion.form
       onSubmit={submit}
-      initial={reduce ? false : { opacity: 0, y: 18 }}
-      whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
+      initial={animate ? { opacity: 0, y: 18 } : false}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className={`relative overflow-hidden rounded-2xl border border-black/[.06] bg-card p-5 shadow-card ${compact ? '' : 'md:p-6'}`}
     >

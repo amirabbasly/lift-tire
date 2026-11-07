@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useCart, useToast } from './Providers';
 import Stars from './Stars';
@@ -11,6 +12,9 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
   const { add } = useCart();
   const { show } = useToast();
   const reduce = useReducedMotion();
+  // انیمیشن فقط بعد از hydration؛ در SSR کارت مرئی است (وگرنه صفحه خالی می‌شد)
+  const [animate, setAnimate] = useState(false);
+  useEffect(() => setAnimate(true), []);
   const off = product.discount || discountPercent(product.price, product.old_price);
   const image = product.image || product.images?.[0]?.url;
   const out = Number(product.stock) <= 0;
@@ -27,10 +31,10 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
 
   return (
     <motion.article
-      initial={reduce ? false : { opacity: 0, y: 14 }}
-      whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-30px' }}
-      transition={{ duration: 0.4, delay: Math.min(index * 0.04, 0.24) }}
+      // نمایش تضمینی: کارت هرگز نباید خالی بماند
+      initial={animate ? { opacity: 0, y: 14 } : false}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: animate ? Math.min(index * 0.04, 0.24) : 0 }}
       className={`group relative overflow-hidden rounded-2xl border border-black/[.06] bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-card ${
         wrap ? 'flex gap-4 p-3' : 'flex flex-col'
       }`}

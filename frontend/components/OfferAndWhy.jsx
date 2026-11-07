@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import CountUp from './CountUp';
 import Reveal from './Reveal';
 import { TRUST } from '@/lib/constants';
 import { assetUrl, faNum } from '@/lib/format';
@@ -65,12 +66,12 @@ export default function OfferAndWhy({ settings }) {
             </ul>
             <div className="mt-5 grid grid-cols-3 gap-3 border-t border-white/10 pt-5">
               {[
-                ['۴۰۰۰+', 'مشتری راضی'],
-                ['۹۸٪', 'رضایت خرید'],
-                ['۲۴ ساعت', 'پاسخ‌گویی'],
-              ].map(([v, l]) => (
+                ['۴۰۰۰+', 'مشتری راضی', 1800],
+                ['۹۸٪', 'رضایت خرید', 1400],
+                ['۲۴ ساعت', 'پاسخ‌گویی', 1100],
+              ].map(([v, l, d]) => (
                 <div key={l} className="text-center">
-                  <p className="num text-lg font-bold text-accent">{v}</p>
+                  <CountUp value={v} duration={d} className="text-lg font-bold text-accent" />
                   <p className="mt-0.5 text-[10.5px] text-white/45">{l}</p>
                 </div>
               ))}

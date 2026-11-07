@@ -4,8 +4,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { IconChevron, IconArrowLeft } from './Icons';
-import { assetUrl, faNum } from '@/lib/format';
+import { assetUrl } from '@/lib/format';
 import { usePointerFine } from '@/lib/useMedia';
+import HeroTire from './HeroTire';
+import CountUp from './CountUp';
 
 const SLIDE_MS = 6000;
 
@@ -15,6 +17,9 @@ export default function HeroSlider({ slides = [], stats = [] }) {
   const [direction, setDirection] = useState(1);
   const reduce = useReducedMotion();
   const pointerFine = usePointerFine();
+  // انیمیشن ورود فقط بعد از hydration؛ در SSR متن هیرو همیشه مرئی است
+  const [animate, setAnimate] = useState(false);
+  useEffect(() => setAnimate(true), []);
   const rootRef = useRef(null);
   const touchStart = useRef(0);
   const { scrollYProgress } = useScroll({ target: rootRef, offset: ['start start', 'end start'] });
@@ -91,21 +96,9 @@ export default function HeroSlider({ slides = [], stats = [] }) {
         <div className="absolute inset-0 bg-gradient-to-t from-graphite-900 via-transparent to-graphite-900/40" />
         <div className="tire-pattern absolute inset-0 opacity-30" />
 
-        {/* لاستیک چرخان با پارالاکس */}
-        <motion.div
-          style={reduce ? undefined : { y: tireY }}
-          className="pointer-events-none absolute right-4 top-5 z-10 hidden select-none lg:block xl:right-8 xl:top-6"
-          aria-hidden="true"
-        >
-          <motion.img
-            src="/images/hero/tire-cutout.png"
-            alt=""
-            width={380}
-            height={380}
-            className="h-[104px] w-[104px] object-contain opacity-80 drop-shadow-[0_16px_30px_rgba(0,0,0,.7)] xl:h-[124px] xl:w-[124px]"
-            animate={reduce ? undefined : { rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 24, ease: 'linear' }}
-          />
+        {/* لاستیک با انیمیشن تیک‌آف/چرخش/ترمز هنگام تغییر اسلاید */}
+        <motion.div style={reduce ? undefined : { y: tireY }} className="z-10">
+          <HeroTire slideId={slide.id} direction={direction} />
         </motion.div>
 
         {/* محتوا */}
@@ -114,7 +107,7 @@ export default function HeroSlider({ slides = [], stats = [] }) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={slide.id}
-                initial="hidden"
+                initial={animate ? 'hidden' : false}
                 animate="show"
                 exit="out"
                 variants={{ show: { transition: { staggerChildren: 0.09, delayChildren: 0.12 } }, out: { opacity: 0, transition: { duration: 0.18 } } }}
@@ -169,8 +162,12 @@ export default function HeroSlider({ slides = [], stats = [] }) {
                   className="mt-7 flex items-center gap-6 border-t border-white/10 pt-5"
                 >
                   {slideStats.slice(0, 2).map((s) => (
-                    <div key={s.label} className="flex items-baseline gap-2">
-                      <dd className="num text-2xl font-bold text-white lg:text-3xl">{faNum(s.value)}</dd>
+                    <div key={`${slide.id}-${s.label}`} className="flex items-baseline gap-2">
+                      <CountUp
+                        value={s.value}
+                        duration={s.value?.includes('۴۰۰۰') ? 1700 : 1200}
+                        className="text-2xl font-bold text-white lg:text-3xl"
+                      />
                       <dt className="text-[11px] text-white/45">{s.label}</dt>
                     </div>
                   ))}
