@@ -80,3 +80,30 @@ export const IconHeart = ({ filled = false, ...p }) => (
     <path d="M12 20s-7-4.3-7-9a3.9 3.9 0 0 1 7-2.4A3.9 3.9 0 0 1 19 11c0 4.7-7 9-7 9Z" />
   </svg>
 );
+export const IconRuler = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <path d="M3.2 9.2 9.2 3.2a1.6 1.6 0 0 1 2.3 0l9.3 9.3a1.6 1.6 0 0 1 0 2.3l-6 6a1.6 1.6 0 0 1-2.3 0L3.2 11.5a1.6 1.6 0 0 1 0-2.3Z" />
+    <path d="M7.6 7.6l2 2M10.8 4.4l2 2M5 10.2l2 2M12.8 8.4l2 2M15.6 5.6l2 2" />
+  </svg>
+);
+export const IconMail = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <rect x="2.8" y="5" width="18.4" height="14" rx="2.6" />
+    <path d="m3.6 7.4 7.5 5.3a1.6 1.6 0 0 0 1.8 0l7.5-5.3" />
+  </svg>
+);
+export const IconLock = (p) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <rect x="4.6" y="10.4" width="14.8" height="10" rx="2.6" />
+    <path d="M8.2 10.4V7.8a3.8 3.8 0 0 1 7.6 0v2.6" />
+    <path d="M12 14.4v2.4" />
+  </svg>
+);
+export const IconEye = ({ off = false, ...p }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12Z" />
+    <circle cx="12" cy="12" r="3.1" />
+    {off && <path d="M4 20 20 4" />}
+  </svg>
+);
+

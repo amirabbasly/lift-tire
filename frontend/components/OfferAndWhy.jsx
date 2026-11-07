@@ -29,7 +29,7 @@ export default function OfferAndWhy({ settings }) {
                 <h3 className="mt-4 text-2xl font-extrabold leading-snug text-white md:text-[28px]">
                   تا {faNum(20)}٪ تخفیف روی
                   <br />
-                  لاستیک‌های اسپرت منتخب
+                  لاستیک‌های منتخب
                 </h3>
                 <p className="mt-2 max-w-sm text-[12.5px] leading-6 text-white/55">
                   مجموعه‌ای از لاستیک‌های تابستانی و پرفورمنس با چسبندگی بالا؛ همراه با نصب رایگان در تهران و ضمانت اصالت.
