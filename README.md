@@ -13,21 +13,29 @@
 
 > 📘 **راهنمای گام‌به‌گام نصب روی سرور تازه Ubuntu 24.04:** [`docs/DEPLOY-ubuntu.md`](docs/DEPLOY-ubuntu.md)
 
-**روش ۱ — PM2 (پیشنهادی، سبک‌تر):**
+**یک دستور — سایت روی HTTP:**
 
 ```bash
-sudo ./scripts/deploy-pm2.sh install   # api + web با PM2، nginx روی سرور، روی HTTP
-sudo ./scripts/deploy-pm2.sh ssl       # certbot → HTTPS
+./deploy.sh up
 ```
 
-**روش ۲ — داکر:**
+سایت کامل روی `http://IP-سرور` بالا می‌آید؛ **بدون هیچ گواهی SSL**.
+
+**بعد، گواهی SSL با certbot نصبی روی سرور (نه داکر، نه Cloudflare):**
 
 ```bash
-./deploy.sh install     # سایت روی HTTP بالا می‌آید (بدون نیاز به گواهی)
-./deploy.sh ssl         # certbot سایت را به HTTPS می‌برد — بدون API Token / بدون Zone
+sudo apt install -y certbot          # یک‌بار
+sudo ./scripts/ssl-certbot.sh        # نصب certbot + صدور گواهی + سوییچ خودکار به HTTPS
 ```
 
-> nginx بدون گواهی هم بالا می‌آید و سایت سرو می‌شود؛ به‌محض وجود گواهی، خودکار به HTTPS سوییچ می‌کند.
+> nginx هرگز به‌خاطر نبودن گواهی کرش نمی‌کند. مسیر گواهی: `/etc/letsencrypt/live/lift-tire.com/`
+
+**پاک‌سازی کامل هرچه ساخته شد:**
+
+```bash
+sudo ./deploy.sh destroy --yes        # کانتینر + ایمیج + volume + گواهی + nginx + پوشهٔ پروژه
+sudo ./deploy.sh destroy --yes --keep-code   # کد و .env بمانند
+```
 
 ## فهرست
 
@@ -368,9 +376,10 @@ cd /var/www/lift-tire.com
 
 ## SSL و دامنه
 
-- گواهی با certbot و روش **webroot** گرفته می‌شود — بدون API Token و بدون دسترسی Zone.
-  - PM2: `sudo ./scripts/deploy-pm2.sh ssl` (گواهی در `/etc/letsencrypt/live/lift-tire.com/`)
-  - داکر: `./deploy.sh ssl` (گواهی در `nginx/certbot/conf/live/lift-tire.com/`)
+- گواهی با **certbot نصبی روی سرور** و روش **webroot** گرفته می‌شود — بدون API Token، بدون Cloudflare.
+  - مسیر گواهی: `/etc/letsencrypt/live/lift-tire.com/`
+  - مسیر ACME: `/var/www/certbot` (به کانتینر nginx مانت می‌شود)
+  - تمدید خودکار: `certbot.timer` + هوک `reload nginx`
 - بدون گواهی هم سایت روی **HTTP** بالا است: در PM2 با `nginx/host/http.conf`، در داکر با `nginx/site/http.conf`. به‌محض وجود گواهی، حالت HTTPS خودکار فعال می‌شود.
 - **تمدید خودکار** را با cron اضافه کنید:
 
@@ -379,7 +388,7 @@ sudo crontab -e
 ```
 
 ```cron
-0 3 * * * cd /var/www/lift-tire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 4 * * * certbot renew --webroot -w /var/www/certbot --quiet && cd /var/www/lift-tire.com/lift-tire && docker compose exec -T nginx nginx -s reload
 ```
 
 ---

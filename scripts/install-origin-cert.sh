@@ -32,7 +32,7 @@ if [ -f .env ] && [ -z "${DOMAIN:-}" ]; then
 fi
 DOMAIN="${DOMAIN:-lift-tire.com}"
 
-DEST="nginx/certbot/conf/live/$DOMAIN"
+DEST="${LETSENCRYPT_DIR:-/etc/letsencrypt}/live/$DOMAIN"
 mkdir -p "$DEST"
 cp "$CERT" "$DEST/fullchain.pem"
 cp "$KEY"  "$DEST/privkey.pem"

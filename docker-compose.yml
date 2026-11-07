@@ -108,8 +108,10 @@ services:
       - ./nginx/site:/opt/nginx-sites:ro
       # انتخاب خودکار حالت در زمان استارت کانتینر
       - ./nginx/entrypoint-mode.sh:/docker-entrypoint.d/40-lifttire-mode.sh:ro
-      - ./nginx/certbot/conf:/etc/letsencrypt:ro
-      - ./nginx/certbot/www:/var/www/certbot:ro
+      # گواهی certbot که روی خودِ سرور نصب شده (certbot apt install)
+      - ${LETSENCRYPT_DIR:-/etc/letsencrypt}:/etc/letsencrypt:ro
+      # مسیر تأیید ACME — certbot روی سرور داخل همین پوشه می‌نویسد
+      - ${ACME_WEBROOT:-/var/www/certbot}:/var/www/certbot:ro
       - uploads:/var/www/uploads:ro
     healthcheck:
       # در حالت HTTP کد ۲۰۰ و در حالت HTTPS ریدایرکت ۳۰۱ هم قبول است

@@ -38,7 +38,4 @@ nginx/site/https.conf
 
 # backups / certs
 backups/
-nginx/certbot/conf/*
-nginx/certbot/www/*
-!nginx/certbot/conf/.gitkeep
-!nginx/certbot/www/.gitkeep
+# گواهی‌ها روی خودِ سرور هستند: /etc/letsencrypt و /var/www/certbot

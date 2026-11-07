@@ -173,63 +173,92 @@ API_INTERNAL_URL=http://api:4000
 
 ---
 
-## ۸) نصب و اجرا
+## ۸) یک دستور: سایت را روی HTTP بالا بیاور
 
 ```bash
 cd /var/www/lift-tire.com/lift-tire
 chmod +x deploy.sh scripts/*.sh nginx/entrypoint-mode.sh
-./deploy.sh install
+./deploy.sh up
 ```
 
-چه اتفاقی می‌افتد:
+`up` این کارها را به‌ترتیب انجام می‌دهد:
 
-1. ایمیج‌های `api` و `web` بیلد می‌شوند (چندمرحله‌ای، خروجی standalone)
-2. `postgres` بالا می‌آید و اسکیما + داده دمو اعمال می‌شود
-3. `api` و `web` اجرا می‌شوند (فقط روی `127.0.0.1`)
-4. `nginx` بالا می‌آید:
-   - **گواهی SSL موجود است** → حالت HTTPS (پورت ۴۴۳ + ریدایرکت ۸۰→۴۴۳)
-   - **گواهی نیست** → حالت HTTP (پورت ۸۰، بدون ریدایرکت) — **سایت همین حالا باز است**
-
-بررسی سریع:
-
-```bash
-docker compose ps
-curl -I http://127.0.0.1
-curl -s http://127.0.0.1/api/health
-```
-
-> اگر دامنه پشت Cloudflare است و SSL mode روی **Flexible** باشد، همین حالت HTTP باعث می‌شود سایت بدون گواهی هم با `https://` از سمت Cloudflare باز شود.
-
----
-
-## ۹) گرفتن گواهی SSL با certbot (بدون API Token، بدون دسترسی Zone)
-
-این اسکریپت از روش **webroot** استفاده می‌کند: nginx در حال اجرا مسیر `/.well-known/acme-challenge/` را سرو می‌کند و certbot فقط همان مسیر را می‌خواند. **هیچ توکن یا دسترسی Zone لازم نیست.**
-
-```bash
-./deploy.sh ssl --dry-run     # تست بدون مصرف سهمیه
-./deploy.sh ssl               # صدور واقعی (پایان کار: nginx خودکار به HTTPS می‌رود)
-```
-
-معادل دستی:
-
-```bash
-./scripts/ssl-certbot.sh --dry-run
-./scripts/ssl-certbot.sh
-docker compose up -d --force-recreate nginx
-```
+1. `.env` را می‌سازد (اگر نبود) و `JWT_SECRET` تصادفی می‌گذارد
+2. پوشه‌های `/var/www/certbot` و `/etc/letsencrypt` را روی سرور آماده می‌کند
+3. ایمیج‌های `api` و `web` را بیلد می‌کند
+4. `postgres` را بالا می‌آورد، رمز را با `.env` تطبیق می‌دهد، seed می‌زند
+5. `api` و `web` را اجرا می‌کند
+6. `nginx` را بالا می‌آورد — **بدون نیاز به گواهی، روی HTTP**
 
 خروجی موفق:
 
 ```
-live/lift-tire.com/fullchain.pem
-live/lift-tire.com/privkey.pem
-✓ nginx در حالت HTTPS کار می‌کند (کد 200).
+✅ سایت روی HTTP بالاست:  http://lift-tire.com   (یا http://46.249.101.79)
 ```
 
-> `./deploy.sh ssl` همان `scripts/ssl-certbot.sh` است به‌همراه ری‌استارت خودکار nginx.
+همین‌جا در مرورگر با IP سرور باز کنید: `http://46.249.101.79`
 
-اگر دامنه پشت Cloudflare است، اسکریپت خودش مسیر تأیید را از بیرون تست می‌کند؛ اگر پروکسی اجازه نداد، پیام می‌دهد که رکوردها را موقتاً **DNS only** کنید (بخش ۲۰).
+> گواهی SSL هنوز لازم نیست؛ سایت کامل کار می‌کند.
+
+---
+
+## ۹) گرفتن گواهی SSL با certbot **نصبی روی سرور**
+
+> ⚠️ این روش **certbot نصبی** است (با `apt`)، نه ایمیج داکر و نه Cloudflare API. هیچ توکن یا دسترسی Zone لازم نیست.
+
+### نصب certbot روی سرور (یک‌بار)
+
+```bash
+apt update
+apt install -y certbot
+certbot --version
+```
+
+> اگر نسخه قدیمی دارید، `snap install certbot --classic` هم کار می‌کند.
+> پلاگین `python3-certbot-nginx` **لازم نیست** — ما از روش webroot استفاده می‌کنیم که با nginx داخل کانتینر هم سازگار است.
+
+### گرفتن گواهی
+
+```bash
+sudo ./scripts/ssl-certbot.sh --dry-run    # تست بدون مصرف سهمیه
+sudo ./scripts/ssl-certbot.sh              # صدور واقعی
+```
+
+اسکریپت این کارها را می‌کند:
+
+1. certbot را چک می‌کند (اگر نبود با `apt` نصب می‌کند)
+2. `nginx` کانتینری را روی HTTP بالا می‌آورد
+3. یک فایل تست در `/var/www/certbot/.well-known/acme-challenge/` می‌گذارد و **از اینترنت** می‌خواندش
+4. `certbot certonly --webroot -w /var/www/certbot` را روی همان سرور اجرا می‌کند
+5. nginx را با `--force-recreate` بالا می‌آورد → خودکار به HTTPS سوییچ می‌کند
+6. `certbot.timer` را فعال و هوک `reload nginx` را نصب می‌کند
+
+خروجی موفق:
+
+```
+✅ گواهی با موفقیت صادر شد: /etc/letsencrypt/live/lift-tire.com/
+   ✓ nginx در حالت HTTPS کار می‌کند (کد 200).
+```
+
+### تمدید خودکار
+
+پکیج certbot اوبونتو `certbot.timer` را نصب می‌کند (دو بار در روز) و خودش تمدید می‌کند. بررسی:
+
+```bash
+systemctl list-timers | grep certbot
+sudo certbot renew --dry-run
+```
+
+هوک ری‌لود nginx کانتینری خودکار نصب می‌شود:
+`/etc/letsencrypt/renewal-hooks/deploy/lifttire-reload-nginx.sh`
+
+### اگر خطا داد
+
+| پیام | معنی | راه‌حل |
+| --- | --- | --- |
+| `Timeout during connect` | پورت ۸۰ از بیرون بسته | `ufw allow 80/tcp && ufw allow 443/tcp` + فایروال پنل ارائه‌دهنده |
+| `Invalid response ... 404` | رکورد A به سرور دیگری می‌رود | رکورد A `@` و `www` را به IP سرور اصلاح کنید |
+| `too many certificates` | سهمیه هفتگی Let's Encrypt | یک ساعت صبر یا `--staging` برای تست |
 
 ---
 
@@ -273,7 +302,7 @@ crontab -e
 0 3 * * * cd /var/www/lift-tire.com && ./deploy.sh backup >> backups/cron.log 2>&1
 
 # تمدید خودکار SSL (هر روز ۴ بامداد)
-0 4 * * * cd /var/www/lift-tire.com && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 4 * * * certbot renew --webroot -w /var/www/certbot --quiet && cd /var/www/lift-tire.com/lift-tire && docker compose exec -T nginx nginx -s reload
 ```
 
 بکاپ‌ها در `backups/` ذخیره و ۱۴ نسخه آخر نگه داشته می‌شود. برای انتقال به فضای ابری:
@@ -430,126 +459,72 @@ ufw status
 ### تمدید خودکار
 
 ```cron
-0 4 * * * cd /var/www/lift-tire.com/lift-tire && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+0 4 * * * certbot renew --webroot -w /var/www/certbot --quiet && cd /var/www/lift-tire.com/lift-tire && docker compose exec -T nginx nginx -s reload
 ```
 
 ---
 
-## ۲۰) دامنهٔ پشت Cloudflare — روش درست SSL
+## ۲۰) اگر دامنه پشت Cloudflare است (اختیاری)
 
-اگر `getent ahostsv4 lift-tire.com` چیزی شبیه `104.21.x.x` یا `172.67.x.x` برگرداند، یعنی رکوردها **Proxied (ابر نارنجی)** هستند و ترافیک از Cloudflare می‌گذرد. در این حالت `certbot` نمی‌تواند چالش HTTP-01 را از سرور شما بخواند (چون درخواست به Cloudflare می‌رسد).
+این روش **هیچ نیاز به API Token یا Zone ندارد**. فقط باید پروکسی موقتاً خاموش شود تا Let's Encrypt بتواند فایل تأیید را بخواند:
 
-### راه ۱ (پیشنهادی) — Cloudflare Origin Certificate
+1. Cloudflare → **DNS** → رکوردهای `@` و `www`:
+   - **Proxy status = DNS only** (ابر خاکستری)
+   - مقدار A = IP سرور:  `curl -4 -s https://api.ipify.org`
+   - رکورد AAAA یا CNAME اضافی را حذف کنید
+2. `sudo ./scripts/ssl-certbot.sh` — اسکریپت خودش تست می‌کند و تا ۳ دقیقه صبر می‌کند
+3. بعد از موفقیت: پروکسی را روشن کنید و **SSL/TLS → Overview → Full (strict)**
+4. **Always Use HTTPS** را روشن کنید
 
-رایگان، ۱۵ ساله، بدون تمدید و بدون cron:
+> ⚠️ حالت **Flexible** را نگه ندارید؛ چون nginx روی HTTP است و ریدایرکت به HTTPS نداریم، حلقهٔ ریدایرکت یا خطای ۵۲۱ می‌گیرید.
 
-1. پنل Cloudflare → **SSL/TLS → Origin Server → Create Certificate**
-   - Hostnames: `lift-tire.com` و `*.lift-tire.com`
-   - Validity: **15 years**
-2. محتوای دو فایل را روی سرور ذخیره کنید (`/root/origin-cert.pem` و `/root/origin-key.pem`).
-3. نصب روی nginx:
-
-```bash
-cd /var/www/lift-tire.com/lift-tire     # مسیر مخزن شما
-./scripts/install-origin-cert.sh /root/origin-cert.pem /root/origin-key.pem
-```
-
-4. پنل Cloudflare → **SSL/TLS → Overview → Full (strict)**
-5. **SSL/TLS → Edge Certificates → Always Use HTTPS: On**
-6. رکوردهای DNS: `A @` و `A www` باید به **IP همین سرور** اشاره کنند (پروکسی می‌تواند روشن بماند).
-
-بررسی:
-
-```bash
-curl -I https://lift-tire.com
-docker compose ps
-```
-
-### راه ۲ — خاموش‌کردن موقت پروکسی و گرفتن گواهی Let's Encrypt
-
-1. Cloudflare → **DNS** → برای `@` و `www` گزینهٔ **Proxy status = DNS only** (ابر خاکستری)
-2. مقدار رکورد A = IP سرور (`curl -4 -s https://api.ipify.org`)
-3. `./scripts/ssl-certbot.sh` (اسکریپت خودش DNS را چک می‌کند)
-4. بعد از موفقیت، پروکسی را دوباره روشن کنید و SSL mode را **Full (strict)** بگذارید.
-
-> تمدید خودکار همیشه با روش **webroot** انجام می‌شود (نه standalone) — دستور cron بخش ۱۱ و ۱۹ همین است.
-
-### اشتباه‌های رایج
-
-| نشانه | علت | راه‌حل |
-| --- | --- | --- |
-| `ERR_TOO_MANY_REDIRECTS` | SSL mode روی **Flexible** و ریدایرکت HTTPS در nginx | حالت را Full (strict) کنید |
-| `502 Bad Gateway` | Cloudflare به origin می‌رسد ولی کانتینر web/api خاموش است | `docker compose ps` و `./deploy.sh logs web` |
-| گواهی معتبر ولی سایت بالا نمی‌آید | nginx در حالت HTTP مانده | `docker compose up -d --force-recreate nginx` |
-| خطای ۵۲۶ / ۵۲۵ | SSL mode Full ولی گواهی روی سرور نصب نیست | Origin cert را نصب کنید |
-
-### پورت‌ها
-
-Cloudflare در حالت Proxy فقط پورت‌های ۸۰ و ۴۴۳ (و چند پورت خاص) را فوروارد می‌کند؛ لازم نیست پورت ۳۰۰۰ یا ۴۰۰۰ را به اینترنت باز کنید — همان `127.0.0.1` در compose درست است.
-
-### اگر خطای 521 یا 522 گرفتید
-
-| کد | معنی | علت در این پروژه |
-| --- | --- | --- |
-| **521** | Cloudflare به origin وصل نمی‌شود | کانتینر `nginx` بالا نیست یا پورت ۸۰/۴۴۳ بسته است (از نسخهٔ فعلی، nginx بدون گواهی هم بالا می‌آید) |
-| **522** | تایم‌اوت اتصال به origin | فایروال سرور یا پنل ارائه‌دهنده پورت‌ها را بسته |
-| **526** | گواهی origin نامعتبر | گواهی Origin نصب نشده یا منقضی است |
-
-سریع‌ترین راه دیدن وضعیت:
-
-```bash
-docker compose ps
-curl -I http://127.0.0.1          # از داخل سرور (بدون Cloudflare)
-ss -lntp | grep -E ':80|:443'
-```
-
-اگر کانتینر `nginx` خاموش یا ری‌استارت‌شونده است، یعنی هنگام استارت نتوانسته کانفیگ بسازد. از نسخهٔ فعلی nginx **بدون گواهی هم بالا می‌آید** (حالت HTTP)؛ پس اول لاگ را ببینید:
-
-```bash
-docker compose logs --tail=40 nginx
-docker compose exec nginx nginx -t
-./deploy.sh restart
-```
-
-اگر بعد از بالا آمدن nginx هم سایت از Cloudflare خطا داد، یا گواهی روی سرور نیست یا پورت ۸۰/۴۴۳ از بیرون بسته است. دو مسیر امن:
-
-- **certbot (HTTP-01، بدون توکن)** → رکوردها را موقتاً `DNS only` کنید و `./deploy.sh ssl` بزنید (بخش ۲۱).
-- **Origin Certificate** → بخش بالا؛ سپس در Cloudflare حالت **Full (strict)**.
-
-> ⚠️ حالت SSL در Cloudflare روی **Flexible** را نگه ندارید؛ مسیر Cloudflare↔سرور رمزنگاری نشده و ممکن است حلقهٔ ریدایرکت بسازد.
+> 🚫 در نسخه فعلی هیچ اسکریپت DNS-01، `cloudflare.ini` یا API Token وجود ندارد. اگر کسی پیشنهاد داد، مربوط به نسخه قدیمی است.
 
 ---
 
-### حالت HTTP به‌صورت خودکار
+## ۲۱) 🚀 رانبوک: از صفر تا سایت آنلاین (دستور کوتاه)
 
-از نسخهٔ فعلی، اگر گواهی نباشد nginx خودش `http.conf` را فعال می‌کند. برای بازگشت اجباری:
+### گام ۰ — پاک‌سازی هر چیزی که قبلاً ساخته شد
 
-```bash
-NGINX_MODE=http  docker compose up -d --force-recreate nginx
-NGINX_MODE=https docker compose up -d --force-recreate nginx   # فقط اگر گواهی موجود است
-```
-
----
-## ۲۱) 🚀 رانبوک کامل: از صفر تا سایت ۱۰۰٪ بالا + certbot
-
-> منطق: nginx همیشه بالا می‌آید (بدون گواهی روی HTTP، با گواهی روی HTTPS). بعد گواهی می‌گیریم و nginx خودکار به HTTPS می‌رود. **هیچ API Token یا دسترسی Zone لازم نیست.**
-
-### گام ۰ — کد جدید + پاک‌سازی مرتب داکر
+اگر نصب‌های قبلی داشتی (کانتینر، ایمیج، volume، گواهی، کانفیگ nginx، پوشهٔ پروژه):
 
 ```bash
 cd /var/www/lift-tire.com/lift-tire
-git pull
-./deploy.sh clean --yes            # داده‌ها (volume) می‌مانند
-# برای شروع کاملاً صفر:  ./deploy.sh clean --yes --volumes
+
+# فقط کانتینرهای همین پروژه
+./deploy.sh clean --yes
+
+# یا پاک‌سازی کاملِ همه‌چیز (کانتینر + ایمیج + volume + گواهی + nginx)
+sudo ./deploy.sh destroy --yes
+
+# اگر می‌خواهی کد و .env بمانند:
+sudo ./deploy.sh destroy --yes --keep-code
 ```
 
-### گام ۱ — `.env`
+`destroy` این‌ها را حذف می‌کند:
+
+```
+✓ کانتینرها و شبکهٔ lifttire
+✓ ایمیج‌های lifttire-api / lifttire-web
+✓ volumeهای lifttire_pgdata و lifttire_uploads
+✓ گواهی /etc/letsencrypt/live/lift-tire.com
+✓ /etc/nginx/sites-enabled/lift-tire.conf و /etc/nginx/lifttire
+✓ /etc/cron.d/lifttire-certbot
+✓ اپ‌های PM2 (اگر بودند)
+✓ خودِ پوشهٔ پروژه (مگر با --keep-code)
+```
+
+### گام ۱ — کد + `.env`
 
 ```bash
-cp .env.example .env       # اگر ندارید
+cd /var/www
+git clone <REPO_URL> lift-tire.com/lift-tire
+cd lift-tire.com/lift-tire
+
+cp .env.example .env
 sed -i "s|CHANGE_ME_TO_A_LONG_RANDOM_SECRET|$(openssl rand -hex 32)|" .env
 sed -i "s|CHANGE_ME_DB_PASSWORD|$(openssl rand -hex 16)|g" .env
-nano .env                  # ADMIN_PASSWORD و ADMIN_EMAIL را بررسی کنید
+nano .env      # ADMIN_PASSWORD را عوض کنید
 ```
 
 حداقل مقادیر:
@@ -561,14 +536,15 @@ JWT_SECRET=<تصادفی>
 POSTGRES_PASSWORD=<تصادفی>
 ADMIN_EMAIL=admin@lift-tire.com
 ADMIN_PASSWORD=<رمز دلخواه>
+LETSENCRYPT_DIR=/etc/letsencrypt
+ACME_WEBROOT=/var/www/certbot
 ```
 
-### گام ۲ — نصب (سایت همین حالا بالا می‌آید)
+### گام ۲ — یک دستور: سایت روی HTTP
 
 ```bash
 chmod +x deploy.sh scripts/*.sh nginx/entrypoint-mode.sh
-./deploy.sh install
-./deploy.sh doctor
+./deploy.sh up
 ```
 
 انتظار:
@@ -577,46 +553,50 @@ chmod +x deploy.sh scripts/*.sh nginx/entrypoint-mode.sh
 lifttire_db      Up (healthy)
 lifttire_api     Up (healthy)
 lifttire_web     Up (healthy)
-lifttire_nginx   Up (healthy)      ← حتی بدون گواهی
+lifttire_nginx   Up (healthy)
 
-Nginx http://127.0.0.1/  → 200
+✅ سایت روی HTTP بالاست:  http://lift-tire.com   (یا http://IP)
 ```
 
-### گام ۳ — گرفتن گواهی با certbot
+**حالا در مرورگر `http://IP-سرور` را باز کن — سایت باید کامل بالا باشد.**
 
-اگر دامنه **بدون پروکسی** است:
+### گام ۳ — گواهی SSL با certbot نصبی (نه داکر، نه Cloudflare)
 
 ```bash
-./deploy.sh ssl --dry-run
-./deploy.sh ssl
+sudo apt install -y certbot          # اگر نصب نیست (اسکریپت خودش هم نصب می‌کند)
+
+sudo ./scripts/ssl-certbot.sh --dry-run   # تست
+sudo ./scripts/ssl-certbot.sh             # واقعی
 ```
 
-اگر دامنه پشت **Cloudflare** است:
+اسکریپت خودش: nginx را HTTP نگه می‌دارد → مسیر ACME را از اینترنت تست می‌کند → گواهی می‌گیرد → nginx را به HTTPS سوییچ می‌کند → تایمر تمدید را فعال می‌کند.
 
-1. پنل Cloudflare → DNS → رکوردهای `@` و `www` → **Proxy status = DNS only** (ابر خاکستری)، مقدار A = IP سرور (`curl -4 -s https://api.ipify.org`)
-2. `./deploy.sh ssl` (اسکریپت خودش بررسی می‌کند و تا ۴ دقیقه صبر می‌کند تا DNS اعمال شود)
-3. بعد از موفقیت: پروکسی را روشن کنید و SSL/TLS → **Full (strict)**
+خروجی موفق:
 
-> اگر نمی‌خواهید پروکسی را خاموش کنید، بدون هیچ API Token هم راه دارید: گواهی Origin از داشبورد Cloudflare (SSL/TLS → Origin Server) و `./scripts/install-origin-cert.sh` — بخش ۲۰.
+```
+✅ گواهی با موفقیت صادر شد: /etc/letsencrypt/live/lift-tire.com/
+   ✓ nginx در حالت HTTPS کار می‌کند (کد 200).
+```
 
-### گام ۴ — تأیید HTTPS و تنظیمات Cloudflare
+### گام ۴ — تأیید
 
 ```bash
 curl -I https://lift-tire.com
-curl -s https://lift-tire.com/healthz
+curl -s https://lift-tire.com/api/health
 ```
 
-| تنظیم | مقدار |
-| --- | --- |
-| SSL/TLS → Overview | **Full (strict)** |
-| Always Use HTTPS | **On** |
-| Proxy status | 🟠 Proxied (اختیاری) |
+### دستورهای روزمره
 
-### گام ۵ — cron (تمدید + بکاپ)
-
-```cron
-0 4 * * * cd /var/www/lift-tire.com/lift-tire && docker run --rm -v $PWD/nginx/certbot/conf:/etc/letsencrypt -v $PWD/nginx/certbot/www:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
-0 3 * * * cd /var/www/lift-tire.com/lift-tire && ./deploy.sh backup >> backups/cron.log 2>&1
+```bash
+./deploy.sh up          # بالا آوردن همه‌چیز (HTTP اگر گواهی نباشد)
+./deploy.sh status      # وضعیت + حالت HTTP/HTTPS
+./deploy.sh doctor      # بررسی کامل (Docker، DNS، گواهی، پاسخ‌ها)
+./deploy.sh logs api    # لاگ
+./deploy.sh restart
+./deploy.sh backup
+sudo ./scripts/ssl-certbot.sh   # گرفتن/تمدید گواهی
+./deploy.sh clean --yes --volumes    # حذف کانتینر + داده
+sudo ./deploy.sh destroy             # پاک‌سازی کامل
 ```
 
 ---

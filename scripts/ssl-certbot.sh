@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════
-#  گرفتن گواهי SSL رایگان Let's Encrypt با certbot — روش webroot
-#  • نیازی به API Token یا دسترسی Zone در Cloudflare نیست
-#  • nginx در حالت HTTP بالاست و مسیر ACME را سرو می‌کند
-#  • بعد از صدور، nginx خودکار به حالت HTTPS سوییچ می‌شود
+#  گرفتن گواهی SSL با certbot نصب‌شده روی خودِ سرور
+#
+#  • certbot با apt نصب می‌شود (نه ایمیج داکر)
+#  • روش webroot: nginx (کانتینر) مسیر تأیید را از /var/www/certbot سرو می‌کند
+#  • هیچ API Token یا دسترسی Zone لازم نیست — Cloudflare در کار نیست
+#  • بعد از صدور، nginx خودکار به HTTPS سوییچ می‌شود
 #
 #  استفاده:
-#    ./scripts/ssl-certbot.sh              # گرفتن/تمدید
-#    ./scripts/ssl-certbot.sh --dry-run    # تست بدون مصرف سهمیه
-#    ./scripts/ssl-certbot.sh --staging    # محیط تست Let's Encrypt
-#    ./scripts/ssl-certbot.sh --force      # عبور از هشدار Cloudflare
-#    ./scripts/ssl-certbot.sh --no-wait    # بدون انتظار برای DNS
+#    sudo ./scripts/ssl-certbot.sh              # گرفتن گواهی + سوییچ به HTTPS
+#    sudo ./scripts/ssl-certbot.sh --dry-run    # تست بدون مصرف سهمیه
+#    sudo ./scripts/ssl-certbot.sh --staging    # محیط تست Let's Encrypt
 # ══════════════════════════════════════════════════════════════
 set -uo pipefail
 
@@ -22,56 +22,51 @@ green()  { printf '\033[32m%s\033[0m\n' "$*"; }
 yellow() { printf '\033[33m%s\033[0m\n' "$*"; }
 bold()   { printf '\033[1m%s\033[0m\n' "$*"; }
 
-DRY=0; STAGING=0; FORCE=0; NOWAIT=0
+DRY=0; STAGING=0
 for a in "$@"; do
   case "$a" in
     --dry-run) DRY=1 ;;
     --staging) STAGING=1 ;;
-    --force)   FORCE=1 ;;
-    --no-wait) NOWAIT=1 ;;
   esac
 done
 
-is_cf_ip() {
-  local ip="$1" a b
-  IFS=. read -r a b _ <<< "$ip"
-  case "$a" in
-    104) [ "${b:-0}" -ge 16 ] 2>/dev/null && [ "${b:-0}" -le 31 ] 2>/dev/null ;;
-    172) [ "${b:-0}" -ge 64 ] 2>/dev/null && [ "${b:-0}" -le 71 ] 2>/dev/null ;;
-    108) [ "${b:-0}" -eq 162 ] 2>/dev/null ;;
-    162) [ "${b:-0}" -ge 158 ] 2>/dev/null && [ "${b:-0}" -le 159 ] 2>/dev/null ;;
-    173) [ "${b:-0}" -eq 245 ] 2>/dev/null ;;
-    103) [ "${b:-0}" -eq 21 ] 2>/dev/null || [ "${b:-0}" -eq 22 ] 2>/dev/null || [ "${b:-0}" -eq 31 ] 2>/dev/null ;;
-    141) [ "${b:-0}" -eq 101 ] 2>/dev/null ;;
-    190) [ "${b:-0}" -eq 93 ] 2>/dev/null ;;
-    188) [ "${b:-0}" -eq 114 ] 2>/dev/null ;;
-    197) [ "${b:-0}" -eq 234 ] 2>/dev/null ;;
-    198) [ "${b:-0}" -eq 41 ] 2>/dev/null ;;
-    *) return 1 ;;
-  esac
-}
-
 # ── تنظیمات ──────────────────────────────────────────────────
 if [ -f .env ]; then
-  [ -z "${DOMAIN:-}" ] && DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
-  [ -z "${EMAIL:-}" ]  && EMAIL="$(grep -E '^ADMIN_EMAIL=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
+  [ -z "${DOMAIN:-}" ]         && DOMAIN="$(grep -E '^DOMAIN=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
+  [ -z "${EMAIL:-}" ]          && EMAIL="$(grep -E '^ADMIN_EMAIL=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
+  [ -z "${ACME_WEBROOT:-}" ]   && ACME_WEBROOT="$(grep -E '^ACME_WEBROOT=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
+  [ -z "${LETSENCRYPT_DIR:-}" ] && LETSENCRYPT_DIR="$(grep -E '^LETSENCRYPT_DIR=' .env | head -1 | cut -d= -f2- | tr -d '"'"'"' ' || true)"
 fi
 DOMAIN="${DOMAIN:-lift-tire.com}"
 EMAIL="${EMAIL:-admin@lift-tire.com}"
+ACME_WEBROOT="${ACME_WEBROOT:-/var/www/certbot}"
+LETSENCRYPT_DIR="${LETSENCRYPT_DIR:-/etc/letsencrypt}"
+CHALLENGE="$ACME_WEBROOT/.well-known/acme-challenge"
 
-CONF="$APP_DIR/nginx/certbot/conf"
-WWW="$APP_DIR/nginx/certbot/www"
-CHALLENGE="$WWW/.well-known/acme-challenge"
+if [ "${SKIP_ROOT_CHECK:-0}" != "1" ] && [ "$(id -u)" -ne 0 ]; then
+  red "✗ این اسکریپت باید با sudo اجرا شود:  sudo ./scripts/ssl-certbot.sh"
+  exit 1
+fi
 
-mkdir -p "$CONF" "$WWW" "$CHALLENGE"
+# ── ۰) certbot نصب است؟ اگر نه، نصب کن ──────────────────────
+if ! command -v certbot >/dev/null 2>&1; then
+  bold "▸ certbot نصب نیست — نصب می‌کنم…"
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq
+  apt-get install -y -qq certbot || { red "✗ نصب certbot ناموفق بود."; exit 1; }
+fi
+CERTBOT_VER="$(certbot --version 2>/dev/null | head -1)"
+green "   ✓ $CERTBOT_VER"
 
-# ── گواهی از قبل موجود است؟ ──────────────────────────────────
-if [ -f "$CONF/live/$DOMAIN/fullchain.pem" ] && [ "$DRY" -eq 0 ] && [ "$STAGING" -eq 0 ]; then
-  end="$(openssl x509 -in "$CONF/live/$DOMAIN/fullchain.pem" -noout -enddate 2>/dev/null | cut -d= -f2 || true)"
+mkdir -p "$CHALLENGE" "$LETSENCRYPT_DIR/live"
+chmod -R a+rX "$ACME_WEBROOT"
+
+# ── ۱) گواهی از قبل هست؟ ────────────────────────────────────
+if [ -f "$LETSENCRYPT_DIR/live/$DOMAIN/fullchain.pem" ] && [ "$DRY" -eq 0 ] && [ "$STAGING" -eq 0 ]; then
+  end="$(openssl x509 -in "$LETSENCRYPT_DIR/live/$DOMAIN/fullchain.pem" -noout -enddate 2>/dev/null | cut -d= -f2 || true)"
   green "✅ گواهی برای $DOMAIN از قبل موجود است${end:+ (انقضا: $end)}."
-  echo "   • تمدید (crontab):  cd $APP_DIR && docker run --rm -v $CONF:/etc/letsencrypt -v $WWW:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload"
-  echo "   • صدور مجدد از صفر:  rm -rf nginx/certbot/conf/live/$DOMAIN && ./scripts/ssl-certbot.sh"
-  # مطمئن شو nginx در حالت HTTPS است
+  echo "   • تمدید دستی:  certbot renew --webroot -w $ACME_WEBROOT && docker compose exec -T nginx nginx -s reload"
+  echo "   • صدور مجدد:   rm -rf $LETSENCRYPT_DIR/live/$DOMAIN && sudo ./scripts/ssl-certbot.sh"
   if ! docker compose logs --tail=30 nginx 2>/dev/null | grep -q "حالت فعال: HTTPS"; then
     yellow "   nginx هنوز در حالت HTTP است → ری‌استارت می‌کنم…"
     docker compose up -d --force-recreate nginx >/dev/null 2>&1 || true
@@ -79,11 +74,15 @@ if [ -f "$CONF/live/$DOMAIN/fullchain.pem" ] && [ "$DRY" -eq 0 ] && [ "$STAGING"
   exit 0
 fi
 
-# ── ۱) nginx باید در حالت HTTP بالا باشد ─────────────────────
+# ── ۲) nginx باید روی HTTP بالا باشد ────────────────────────
 bold "▸ بالا آوردن nginx در حالت HTTP…"
-docker compose up -d nginx >/dev/null 2>&1 || { red "✗ بالا آوردن nginx ناموفق بود. اجرا کنید: ./deploy.sh install"; exit 1; }
+if ! docker compose up -d nginx >/tmp/lifttire-nginx-up.log 2>&1; then
+  red "✗ بالا آوردن nginx ناموفق بود:"
+  sed -n '1,15p' /tmp/lifttire-nginx-up.log
+  echo "   اگر پورت ۸۰ اشغال است:  ss -lntp | grep ':80'"
+  exit 1
+fi
 
-# در حالت HTTP کد ۲۰۰ و در حالت HTTPS (۸۰→۴۴۳) کد ۳۰۱ برمی‌گردد؛ هر دو یعنی nginx زنده است
 alive=0
 for i in $(seq 1 20); do
   hc="$(curl -s -o /dev/null -w '%{http_code}' --max-time 3 http://127.0.0.1/healthz 2>/dev/null || true)"
@@ -92,14 +91,9 @@ for i in $(seq 1 20); do
   esac
   sleep 1
 done
-if [ "$alive" -eq 0 ]; then
-  red "✗ nginx روی پورت ۸۰ پاسخ نداد."
-  echo "   docker compose logs --tail=30 nginx"
-  echo "   اگر پورت ۸۰ اشغال است:  sudo ss -lntp | grep ':80'"
-  exit 1
-fi
+[ "$alive" -eq 0 ] && { red "✗ nginx روی پورت ۸۰ پاسخ نداد."; echo "   docker compose logs --tail=30 nginx"; exit 1; }
 
-# ── ۲) تست واقعی مسیر ACME از بیرون (بدون هیچ API Token) ────
+# ── ۳) تست دسترسی عمومی به مسیر تأیید ──────────────────────
 PROBE="probe-$(date +%s)-$RANDOM"
 printf 'lifttire-%s\n' "$PROBE" > "$CHALLENGE/$PROBE"
 EXPECT="lifttire-$PROBE"
@@ -121,102 +115,66 @@ echo "   IP این سرور : ${SERVER_IP:-نامشخص}"
 echo "   رکورد A     : ${DNS_MAIN:-نامشخص}"
 echo "   رکورد www   : ${DNS_WWW:-نامشخص}"
 
-CF=0
-for ip in $DNS_MAIN $DNS_WWW; do is_cf_ip "$ip" && CF=1; done
-
-OK=0
 if check_reachable; then
-  green "   ✓ مسیر تأیید از اینترنت قابل خواندن است — certbot بدون مشکل کار می‌کند."
-  OK=1
+  green "   ✓ مسیر تأیید از اینترنت قابل خواندن است."
 else
-  echo "   … مسیر تأیید از بیرون خوانده نشد؛ بررسی مجدد…"
-fi
-
-# ── ۳) اگر در دسترس نیست: راهنما و انتظار ───────────────────
-if [ "$OK" -eq 0 ]; then
-  if [ "$CF" -eq 1 ]; then
-    cat <<EOF
-
-$(yellow "دامنه پشت Cloudflare است و پروکسی اجازهٔ رسیدن به مسیر تأیید را نمی‌دهد.")
-$(yellow "بدون هیچ توکن/Zone هم می‌شود certbot گرفت؛ فقط باید پروکسی موقتاً خاموش شود:")
-
-  ۱) پنل Cloudflare → DNS → رکورد  @  و  www
-     Proxy status را روی  **DNS only**  (ابر خاکستری) بگذارید
-     مقدار A باید ${SERVER_IP:-IP سرور} باشد (رکوردهای AAAA/پارکینگ را حذف کنید)
-  ۲) همین اسکریپت را دوباره اجرا کنید:  ./scripts/ssl-certbot.sh
-  ۳) بعد از گرفتن گواهی، پروکسی را روشن کنید و SSL mode را  Full (strict)  کنید
-
-$(bold "در این مدت سایت از کار نمی‌افتد؛ روی HTTP بالاست.")
-EOF
+  yellow "   مسیر تأیید از بیرون خوانده نشد. چک‌لیست:"
+  echo "   • رکورد A دامنه و www باید به ${SERVER_IP:-IP سرور} اشاره کند (بدون پروکسی)"
+  echo "   • فایروال:   ufw allow 80/tcp && ufw allow 443/tcp"
+  echo "   • فایروال پنل ارائه‌دهنده هم پورت ۸۰ را باز کند"
+  echo "   • تست دستی:  curl -v http://$DOMAIN/.well-known/acme-challenge/$PROBE"
+  echo ""
+  if [ "$DRY" -eq 1 ]; then
+    yellow "   → در حالت --dry-run ادامه می‌دهم (نتیجه را خود certbot می‌گوید)."
   else
-    cat <<EOF
-
-$(yellow "مسیر تأیید از اینترنت قابل خواندن نیست. موارد زیر را چک کنید:")
-   • رکورد A دامنه و www باید به ${SERVER_IP:-IP سرور} اشاره کند (بدون پروکسی/CDN)
-   • فایروال سرور:   ufw allow 80/tcp && ufw allow 443/tcp
-   • فایروال پنل ارائه‌دهنده (Hetzner/Arvan/…): پورت ۸۰ باز باشد
-   • رکورد AAAA یا CNAME اضافی روی دامنه وجود نداشته باشد
-   • تست دستی:  curl -v http://$DOMAIN/.well-known/acme-challenge/$PROBE
-EOF
-  fi
-
-  if [ "$FORCE" -eq 1 ]; then
-    yellow "→ با --force، بدون تأیید دسترسی ادامه می‌دهیم."
-  elif [ "$NOWAIT" -eq 1 ]; then
-    red "✗ با --no-wait از انتظار صرف‌نظر شد. بعد از اصلاح، دوباره اجرا کنید."
-    exit 2
-  else
-    echo ""
-    echo "   هر ۵ ثانیه دوباره بررسی می‌کنم (تا ۴ دقیقه). برای انصراف: Ctrl+C"
-    waited=0
-    while [ "$waited" -lt 240 ]; do
+    echo "   هر ۵ ثانیه دوباره بررسی می‌کنم (تا ۳ دقیقه). Ctrl+C = انصراف"
+    waited=0; ok=0
+    while [ "$waited" -lt 180 ]; do
       sleep 5; waited=$((waited + 5))
-      if check_reachable; then
-        green "   ✓ حالا مسیر تأیید در دسترس است (${waited}s)."
-        OK=1
-        break
-      fi
+      if check_reachable; then green "   ✓ حالا در دسترس است (${waited}s)."; ok=1; break; fi
       printf '   … %ss\n' "$waited"
     done
-    if [ "$OK" -eq 0 ]; then
-      red "✗ مسیر تأیید باز نشد. DNS/فایروال را درست کنید و دوباره اجرا کنید."
+    if [ "$ok" -eq 0 ]; then
+      red "✗ مسیر تأیید باز نشد — DNS/فایروال را درست کنید و دوباره اجرا کنید."
+      cleanup_probe; trap - EXIT
       exit 2
     fi
   fi
 fi
 
-# ── ۴) صدور گواهی ───────────────────────────────────────────
+# ── ۴) صدور گواهی با certbot نصبی ──────────────────────────
 bold "▸ درخواست گواهی از Let's Encrypt برای $DOMAIN و www.$DOMAIN …"
-ARGS=(certonly --webroot -w /var/www/certbot --preferred-challenges http
+ARGS=(certonly --webroot -w "$ACME_WEBROOT"
+      --preferred-challenges http
       -d "$DOMAIN" -d "www.$DOMAIN"
       --email "$EMAIL" --agree-tos --no-eff-email --keep-until-expiring)
 [ "$DRY" -eq 1 ] && ARGS+=(--dry-run)
 [ "$STAGING" -eq 1 ] && ARGS+=(--staging)
 
-docker run --rm \
-  -v "$CONF:/etc/letsencrypt" \
-  -v "$WWW:/var/www/certbot" \
-  certbot/certbot "${ARGS[@]}"
+certbot "${ARGS[@]}"
 STATUS=$?
 
-cleanup_probe
-trap - EXIT
+cleanup_probe; trap - EXIT
 
 if [ "$DRY" -eq 1 ]; then
-  [ $STATUS -eq 0 ] && green "✅ تست (dry-run) موفق بود — اجرای واقعی: ./scripts/ssl-certbot.sh" || red "✗ تست ناموفق بود."
+  if [ $STATUS -eq 0 ]; then
+    green "✅ تست (dry-run) موفق بود — اجرای واقعی:  sudo ./scripts/ssl-certbot.sh"
+  else
+    red "✗ تست ناموفق بود."
+  fi
   exit $STATUS
 fi
 
 if [ $STATUS -ne 0 ]; then
   red "✗ صدور گواهی ناموفق بود."
-  echo "   اگر پیام «too many certificates» بود، یک ساعت صبر کنید یا --staging تست کنید."
-  echo "   راهنمای کامل: docs/DEPLOY-ubuntu.md بخش ۱۹ و ۲۰"
+  echo "   سایت همچنان روی HTTP بالاست و در دسترس است."
+  echo "   اگر «too many certificates» بود، یک ساعت صبر کنید یا --staging تست کنید."
   exit 1
 fi
 
-green "✅ گواهی با موفقیت صادر شد."
+green "✅ گواهی با موفقیت صادر شد: $LETSENCRYPT_DIR/live/$DOMAIN/"
 
-# ── ۵) سوییچ خودکار nginx به HTTPS ──────────────────────────
+# ── ۵) سوییچ nginx به HTTPS ─────────────────────────────────
 bold "▸ سوییچ nginx به حالت HTTPS…"
 docker compose up -d --force-recreate nginx >/dev/null 2>&1
 sleep 3
@@ -225,20 +183,33 @@ CODE="$(curl -sk -o /dev/null -w '%{http_code}' --max-time 8 -H "Host: $DOMAIN" 
 if [ "$CODE" = "200" ] || [ "$CODE" = "301" ] || [ "$CODE" = "308" ]; then
   green "   ✓ nginx در حالت HTTPS کار می‌کند (کد $CODE)."
 else
-  yellow "   ⚠ پاسخ محلی HTTPS: ${CODE:-none} — لاگ را ببینید: docker compose logs --tail=40 nginx"
+  yellow "   ⚠ پاسخ محلی HTTPS: ${CODE:-none} — لاگ: docker compose logs --tail=40 nginx"
 fi
-rm -f "$CONF/live/$DOMAIN/README" 2>/dev/null || true
+
+# ── ۶) تمدید خودکار (timer سیستم) ──────────────────────────
+bold "▸ تنظیم تمدید خودکار…"
+# پکیج certbot اوبونتو معمولاً certbot.timer را با خودش می‌آورد
+if systemctl list-timers 2>/dev/null | grep -q certbot.timer; then
+  systemctl enable --now certbot.timer >/dev/null 2>&1 || true
+  # هوک reload برای کانتینر nginx
+  mkdir -p /etc/letsencrypt/renewal-hooks/deploy
+  cat > /etc/letsencrypt/renewal-hooks/deploy/lifttire-reload-nginx.sh <<HOOK
+#!/bin/sh
+# بعد از هر تمدید موفق، nginx کانتینری را reload کن
+cd $APP_DIR && docker compose exec -T nginx nginx -s reload >/dev/null 2>&1 || docker compose restart nginx >/dev/null 2>&1
+HOOK
+  chmod +x /etc/letsencrypt/renewal-hooks/deploy/lifttire-reload-nginx.sh
+  green "   ✓ certbot.timer فعال است (تمدید خودکار دو بار در روز)."
+  echo "     وضعیت:  systemctl list-timers | grep certbot"
+else
+  warn "certbot.timer پیدا نشد؛ در cron بنویسید:"
+  echo "     0 4 * * * certbot renew --webroot -w $ACME_WEBROOT --quiet && cd $APP_DIR && docker compose exec -T nginx nginx -s reload"
+fi
 
 cat <<EOF
 
-$(bold "مرحله بعد:")
-   • در Cloudflare: SSL/TLS → Overview →  Full (strict)
-   • رکوردها می‌توانند دوباره Proxied (ابر نارنجی) باشند
-
-$(bold "بررسی:")
+$(bold "بررسی نهایی:")
    curl -I https://$DOMAIN
-
-$(bold "تمدید خودکار (crontab -e):")
-0 4 * * * cd $APP_DIR && docker run --rm -v $CONF:/etc/letsencrypt -v $WWW:/var/www/certbot certbot/certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload
+   curl -s https://$DOMAIN/api/health
 
 EOF
