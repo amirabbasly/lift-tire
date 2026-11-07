@@ -9,15 +9,24 @@ const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : use
 
 const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
 
-/** رشته فارسی مثل «۴۰۰۰+» را به عدد و پیشوند/پسوند تبدیل می‌کند */
+/**
+ * رشته فارسی مثل «۴۰۰۰+» یا «۱۲,۵۰۰ تومان» را به عدد و پیشوند/پسوند تبدیل می‌کند.
+ * جداکننده‌های هزارگان (ٔ ، ,) هم بخشی از خودِ عدد در نظر گرفته می‌شوند،
+ * وگرنه شمارنده روی اولین رقم متوقف می‌شد.
+ */
 function parse(value) {
   const str = String(value ?? '').trim();
-  const m = str.match(/([۰-۹0-9]+)/);
+  const m = str.match(/([۰-۹0-9][۰-۹0-9٬،,٫.]*)/);
   if (!m) return null;
   const raw = m[1];
-  const num = Number(raw.replace(/[۰-۹]/g, (d) => FA_DIGITS.indexOf(d)).replace(/[^\d]/g, ''));
+  const num = Number(
+    raw
+      .replace(/[۰-۹]/g, (d) => FA_DIGITS.indexOf(d))
+      .replace(/[٬،,٫.]/g, '')
+      .replace(/[^\d]/g, ''),
+  );
   if (!Number.isFinite(num)) return null;
-  return { num, prefix: str.slice(0, m.index), suffix: str.slice(m.index + raw.length), pad: raw.length };
+  return { num, prefix: str.slice(0, m.index), suffix: str.slice(m.index + raw.length) };
 }
 
 /**
