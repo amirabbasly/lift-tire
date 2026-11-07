@@ -48,11 +48,13 @@ export default function MobileDrawer({ open, onClose, settings, categories = [] 
   if (!mounted) return null;
 
   return createPortal(
-    <AnimatePresence>
-      {open && (
-        <div className="lg:hidden" style={{ position: 'relative', zIndex: 95 }}>
+    <>
+      {/* overlay */}
+      <AnimatePresence>
+        {open && (
           <motion.div
-            className="fixed inset-0 z-[95] bg-graphite-900/60 backdrop-blur-sm"
+            key="drawer-overlay"
+            className="fixed inset-0 z-[95] bg-graphite-900/60 backdrop-blur-sm lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -60,8 +62,15 @@ export default function MobileDrawer({ open, onClose, settings, categories = [] 
             onClick={onClose}
             aria-hidden="true"
           />
+        )}
+      </AnimatePresence>
+
+      {/* panel */}
+      <AnimatePresence>
+        {open && (
           <motion.div
-            className="fixed inset-y-0 right-0 z-[96] flex w-[87%] max-w-[350px] flex-col bg-graphite-900 text-white shadow-[0_0_60px_rgba(0,0,0,.5)]"
+            key="drawer-panel"
+            className="fixed inset-y-0 right-0 z-[96] flex w-[87%] max-w-[350px] flex-col bg-graphite-900 text-white shadow-[0_0_60px_rgba(0,0,0,.5)] lg:hidden"
             initial={{ x: reduce ? 0 : '100%' }}
             animate={{ x: 0 }}
             exit={{ x: reduce ? 0 : '100%' }}
@@ -137,9 +146,9 @@ export default function MobileDrawer({ open, onClose, settings, categories = [] 
               <p className="mt-2 text-center text-[11px] text-white/40">شنبه تا پنجشنبه ۹ تا ۱۹</p>
             </div>
           </motion.div>
-        </div>
-      )}
-    </AnimatePresence>,
+        )}
+      </AnimatePresence>
+    </>,
     document.body,
   );
 }
