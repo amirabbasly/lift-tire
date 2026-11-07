@@ -318,10 +318,36 @@ rsync -avz backups/ backup@other-server:/backups/lifttire/
 
 ```bash
 cd /var/www/lift-tire.com
-./deploy.sh update
+sudo ./deploy.sh update
 ```
 
-(بکاپ می‌گیرد → `git pull` → بیلد → ری‌استارت)
+(بکاپ خودکار → `git pull` → بیلد → ری‌استارت؛ دیتابیس و تصاویر آپلودی دست‌نخورده می‌مانند)
+
+### آوردن کد از یک شاخهٔ مشخص
+
+اگر کد جدید روی شاخهٔ دیگری (غیر از شاخهٔ فعلی سرور) است:
+
+```bash
+sudo ./deploy.sh update --branch=arena/efe4c33f-lift-tire
+```
+
+### بروزرسانی بدون داکر (حالت PM2)
+
+اگر سایت را با اسکریپت PM2 بالا آورده‌اید:
+
+```bash
+cd /var/www/lift-tire.com/frontend
+git fetch origin arena/efe4c33f-lift-tire
+git checkout arena/efe4c33f-lift-tire
+git pull --ff-only origin arena/efe4c33f-lift-tire
+npm ci
+npm run build
+cp -r public .next/standalone/
+cp -r .next/static .next/standalone/.next/
+pm2 restart lifttire-web
+```
+
+> کش مرورگر: بعد از بروزرسانی یک‌بار `Ctrl+Shift+R` بزنید تا فایل‌های قدیمی CSS/JS جایگزین شوند.
 
 ---
 

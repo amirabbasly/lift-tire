@@ -156,7 +156,16 @@ do_update() {
   do_backup || warn "بکاپ انجام نشد (ادامه می‌دهیم)."
   info "دریافت آخرین تغییرات کد…"
   if git rev-parse --git-dir >/dev/null 2>&1; then
-    git pull --ff-only || warn "git pull انجام نشد؛ از کد فعلی بیلد می‌گیریم."
+    # شاخه فعلی سرور را نگه می‌داریم؛ با --branch می‌شود شاخه دیگری را آورد
+    if [ -n "${BRANCH_ARG:-}" ]; then
+      info "سوییچ به شاخه ${BRANCH_ARG}…"
+      git fetch origin "${BRANCH_ARG}" || warn "fetch شاخه ${BRANCH_ARG} انجام نشد."
+      git checkout "${BRANCH_ARG}" 2>/dev/null || git checkout -b "${BRANCH_ARG}" "origin/${BRANCH_ARG}" \
+        || warn "سوییچ به شاخه ${BRANCH_ARG} انجام نشد."
+      git pull --ff-only origin "${BRANCH_ARG}" || warn "git pull انجام نشد؛ از کد فعلی بیلد می‌گیریم."
+    else
+      git pull --ff-only || warn "git pull انجام نشد؛ از کد فعلی بیلد می‌گیریم."
+    fi
   fi
   info "بیلد مجدد…"
   $COMPOSE build
@@ -605,6 +614,15 @@ do_ssl_check() {
   return 1
 }
 
+# استخراج --branch=NAME یا --branch NAME از آرگومان‌ها (برای update)
+BRANCH_ARG=""
+for a in "$@"; do
+  case "$a" in
+    --branch=*) BRANCH_ARG="${a#--branch=}" ;;
+  esac
+done
+if [ "${2:-}" = "--branch" ] && [ -n "${3:-}" ]; then BRANCH_ARG="$3"; fi
+
 case "${1:-}" in
   up)      do_up ;;
   install) do_install ;;
@@ -623,6 +641,7 @@ case "${1:-}" in
     echo "  up       یک دستور: بیلد + دیتابیس + seed + nginx روی HTTP (بدون نیاز به SSL)"
     echo "  install  مثل up ولی با گزارش کامل‌تر نصب"
     echo "  update   دریافت کد جدید و بیلد مجدد با بکاپ خودکار"
+    echo "           sudo ./deploy.sh update --branch=arena/efe4c33f-lift-tire"
     echo "  backup   بکاپ دیتابیس و تصاویر آپلودی"
     echo "  restart  ری‌استارت سرویس‌ها"
     echo "  status   وضعیت سرویس‌ها و سلامت API"
