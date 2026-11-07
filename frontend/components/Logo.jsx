@@ -36,10 +36,10 @@ export function LogoMark({ size = 44, className = '' }) {
         <mask id="lt-cut">
           <rect width="64" height="64" fill="white" />
           <path
-            d="M32 44V18M23 27 32 16.5 41 27"
+            d="M32 43V22M24.6 29.5 32 20.6l7.4 8.9"
             fill="none"
             stroke="black"
-            strokeWidth="13"
+            strokeWidth="14"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -52,19 +52,29 @@ export function LogoMark({ size = 44, className = '' }) {
 
       <g mask="url(#lt-cut)">
         {/* بدنه لاستیک */}
-        <circle cx="32" cy="33" r="17.6" fill="none" stroke="url(#lt-ring)" strokeWidth="7" />
-        <circle cx="32" cy="33" r="21.1" fill="none" stroke="#0B0E12" strokeWidth="1.6" strokeOpacity="0.9" />
-        {/* شیارهای آج */}
-        <circle cx="32" cy="33" r="19.2" fill="none" stroke="#0B0E12" strokeWidth="3.6" strokeDasharray="1.6 4.9" />
-        <circle cx="32" cy="33" r="15.2" fill="none" stroke="#0B0E12" strokeOpacity="0.45" strokeWidth="1.5" strokeDasharray="1.2 5.6" />
+        <circle cx="32" cy="33" r="17.8" fill="none" stroke="url(#lt-ring)" strokeWidth="7.2" />
+        {/* ۸ شیار آج — در اندازه‌های کوچک هم خوانا می‌ماند */}
+        <g fill="#0B0E12">
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => (
+            <rect
+              key={a}
+              x="31.1"
+              y="10.6"
+              width="1.8"
+              height="5.4"
+              rx="0.5"
+              transform={`rotate(${a} 32 33)`}
+            />
+          ))}
+        </g>
       </g>
 
       {/* پیکان صعود */}
       <path
-        d="M32 44.5V19M23 28l9-10.5L41 28"
+        d="M32 43V22M24.6 29.5 32 20.6l7.4 8.9"
         fill="none"
         stroke="url(#lt-arrow)"
-        strokeWidth="6"
+        strokeWidth="5.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
