@@ -59,6 +59,13 @@ const FILE_ENV = {
 const DOMAIN = FILE_ENV.DOMAIN || 'lift-tire.com';
 const API_PORT = FILE_ENV.API_PORT || '4000';
 const WEB_PORT = FILE_ENV.WEB_PORT || '3000';
+/**
+ * آدرس شنود (bind):
+ *   • روی سرور واقعی: 127.0.0.1 — فقط nginx به آن دسترسی دارد (امن)
+ *   • در محیط پیش‌نمایش/سندباکس: 0.0.0.0 لازم است تا پروکسی بتواند وصل شود
+ * با BIND_HOST در .env قابل تغییر است.
+ */
+const BIND_HOST = FILE_ENV.BIND_HOST || '127.0.0.1';
 
 /** مسیرهای .env ممکن است برای داکر نوشته شده باشند (/app/...) — اینجا برای PM2 اصلاح می‌شوند */
 function fixPath(p, fallback) {
@@ -117,7 +124,7 @@ module.exports = {
       env: {
         ...common.env,
         PORT: String(API_PORT),
-        HOST: '127.0.0.1', // فقط لوکال‌هاست؛ nginx در همان سرور است
+        HOST: BIND_HOST, // پیش‌فرض 127.0.0.1 (nginx روی همان سرور)
         UPLOAD_DIR: UPLOAD_PATH,
         PGDATA: PG_PATH,
         USE_PGLITE: USE_PGLITE ? 'true' : 'false',
@@ -135,7 +142,7 @@ module.exports = {
       env: {
         ...common.env,
         PORT: String(WEB_PORT),
-        HOSTNAME: '127.0.0.1',
+        HOSTNAME: BIND_HOST,
         // در PM2، API روی همان هاست اجرا می‌شود (نه داخل شبکه داکر)
         API_INTERNAL_URL: `http://127.0.0.1:${API_PORT}`,
         NEXT_PUBLIC_API_BASE: '',
