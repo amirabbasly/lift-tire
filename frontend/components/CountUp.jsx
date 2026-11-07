@@ -55,10 +55,10 @@ export default function CountUp({ value, duration = 1500, className = '', as: Ta
     return () => cancelAnimationFrame(raf);
   }, [parsed, inView, duration, reduce]);
 
-  if (!parsed) return <Tag className={`num ${className}`}>{faNum(value)}</Tag>;
+  if (!parsed) return <Tag className={`num-fa ${className}`}>{faNum(value)}</Tag>;
 
   return (
-    <Tag ref={ref} className={`num ${className}`}>
+    <Tag ref={ref} className={`num-fa ${className}`}>
       {parsed.prefix}
       <span className="tabular-nums">{faNum(display)}</span>
       {parsed.suffix}

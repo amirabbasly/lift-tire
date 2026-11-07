@@ -26,7 +26,7 @@ export default function Counter({ value = 0, suffix = '', duration = 1600, class
   }, [inView, value, duration, reduce]);
 
   return (
-    <span ref={ref} className={`num ${className}`}>
+    <span ref={ref} className={`num-fa ${className}`}>
       {persian ? faNum(display.toLocaleString('en-US')) : display.toLocaleString('en-US')}
       {suffix}
     </span>

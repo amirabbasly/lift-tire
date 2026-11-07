@@ -37,7 +37,12 @@
   .chip {
     @apply inline-flex items-center gap-1 rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-semibold text-steel-500;
   }
-  .num { font-family: var(--font-barlow), sans-serif; font-feature-settings: 'tnum'; letter-spacing: .01em; }
+  /* اعداد: بarlow فقط برای ارقام لاتین (مثل LIFT/TIRE و SKU).
+     ارقام فارسی در Barlow وجود ندارند، پس وزیر باید fallback باشد
+     وگرنه مرورگر به فونت پیش‌فرض سیستم می‌افتد. */
+  .num { font-family: var(--font-barlow), var(--font-vazir), system-ui, sans-serif; font-feature-settings: 'tnum'; letter-spacing: .01em; }
+  /* اعداد فارسی همیشه با وزیر */
+  .num-fa { font-family: var(--font-vazir), system-ui, sans-serif; font-feature-settings: 'tnum'; font-variant-numeric: tabular-nums; letter-spacing: 0; }
   .ltr { direction: ltr; }
   .section { @apply py-10 md:py-14; }
   .hairline { @apply border-black/[.07]; }

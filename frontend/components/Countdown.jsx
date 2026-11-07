@@ -26,7 +26,7 @@ export default function Countdown({ className = '', label = 'تا پایان پ�
     return () => clearInterval(t);
   }, []);
 
-  if (!left) return <span className={`num ${className}`}>--:--:--</span>;
+  if (!left) return <span className={`num-fa ${className}`}>--:--:--</span>;
 
   return (
     <span className={`inline-flex items-center gap-1 ${className}`}>

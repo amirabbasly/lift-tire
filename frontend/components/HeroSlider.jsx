@@ -2,14 +2,81 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { IconChevron, IconArrowLeft } from './Icons';
 import { assetUrl } from '@/lib/format';
 import { usePointerFine } from '@/lib/useMedia';
-import HeroTire from './HeroTire';
 import CountUp from './CountUp';
 
 const SLIDE_MS = 6000;
+
+/**
+ * کورئوگرافی لاستیک هیرو
+ *
+ * enter  → لاستیکِ عکس جدید از بیرون کادر (جهت مقابل) با سرعت می‌آید
+ *          و در فریم آخر «ترمز» می‌گیرد: کمی جلو می‌رود، لرزش کوتاه، جا می‌افتد.
+ * rest   → توقف کامل + سایه/دود ثابت
+ * leave  → تیک‌آف: کمی عقب می‌نشیند، لرزش می‌گیرد، با کشیده‌شدن خط سرعت
+ *          و محو شدن از کادر بیرون می‌رود.
+ *
+ * (x در واحد درصدِ عرض کادر است؛ چون مبنا لااستیک سمت چپ تصویر است،
+ *  حرکت افقی در کل کادر دیده می‌شود.)
+ */
+const slideVariants = {
+  enter: (dir) => ({
+    // جهت: اسلاید بعدی از راست می‌آید، قبلی از چپ
+    x: dir > 0 ? '46%' : '-46%',
+    rotate: dir > 0 ? -2.4 : 2.4,
+    scale: 1.16,
+    opacity: 0,
+    filter: 'blur(7px)',
+  }),
+  rest: (dir) => ({
+    // مسیر ورود → ضربه ترمز → لرزش کوتاه → توقف کامل
+    x: dir > 0
+      ? ['46%', '10%', '-1.2%', '0.6%', '0%']
+      : ['-46%', '-10%', '1.2%', '-0.6%', '0%'],
+    // چرخش می‌کند و با یک لرزش کوتاه (ترمز) می‌ایستد
+    rotate: dir > 0
+      ? [-2.4, -1.1, 0.45, -0.2, 0]
+      : [2.4, 1.1, -0.45, 0.2, 0],
+    scale: [1.16, 1.06, 1.005, 1.002, 1],
+    opacity: [0, 1, 1, 1, 1],
+    filter: ['blur(7px)', 'blur(1px)', 'blur(0px)', 'blur(0px)', 'blur(0px)'],
+    transition: {
+      duration: 1.15,
+      times: [0, 0.5, 0.78, 0.9, 1],
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+  leave: (dir) => ({
+    // تیک‌آف و خروج
+    x: dir > 0 ? '-52%' : '52%',
+    // می‌چرخد و از کادر بیرون می‌رود
+    rotate: dir > 0 ? [0, -1.6, -6] : [0, 1.6, 6],
+    scale: [1, 1.06, 0.9],
+    opacity: [1, 1, 0],
+    filter: ['blur(0px)', 'blur(1.2px)', 'blur(7px)'],
+    transition: {
+      duration: 0.68,
+      times: [0, 0.4, 1],
+      ease: [0.4, 0, 0.9, 0.5],
+    },
+  }),
+};
+
+// حالت کاهش حرکت: فقط fade ساده
+const reducedSlide = {
+  enter: { opacity: 0 },
+  rest: { opacity: 1, transition: { duration: 0.3 } },
+  leave: { opacity: 0, transition: { duration: 0.3 } },
+};
+
+// زوم آرام پس‌زمینه در طول نمایش اسلاید
+const kenBurns = {
+  start: { scale: 1 },
+  end: { scale: 1.07, transition: { duration: 7, ease: 'linear' } },
+};
 
 export default function HeroSlider({ slides = [], stats = [] }) {
   const [index, setIndex] = useState(0);
@@ -22,8 +89,6 @@ export default function HeroSlider({ slides = [], stats = [] }) {
   useEffect(() => setAnimate(true), []);
   const rootRef = useRef(null);
   const touchStart = useRef(0);
-  const { scrollYProgress } = useScroll({ target: rootRef, offset: ['start start', 'end start'] });
-  const tireY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   const count = slides.length;
   const go = useCallback(
@@ -66,15 +131,21 @@ export default function HeroSlider({ slides = [], stats = [] }) {
       aria-label="اسلایدر معرفی"
     >
       <div className="relative h-[480px] w-full sm:h-[520px] lg:h-[600px]">
-        {/* تصاویر اسلاید */}
-        <AnimatePresence mode="sync" initial={false}>
+        {/* ============ تصاویر اسلاید — لاستیک داخل خود عکس حرکت می‌کند ============
+            در این بنرها لاستیک روی سمت چپ کادر است و متن سمت راست.
+            هنگام تغییر اسلاید، همان عکس (با لاستیک و دود و زمینش) کامل از کادر
+            تیک‌آف می‌کند و می‌رود؛ بعد عکس بعدی از سمت مقابل با سرعت وارد می‌شود
+            و با لرزش کوتاه و افت کوچک ترمز می‌گیرد و می‌ایستد. */}
+        <AnimatePresence mode="sync" initial={false} custom={direction}>
           <motion.div
             key={slide.id}
             className="absolute inset-0"
-            initial={{ opacity: 0, scale: direction > 0 ? 1.02 : 0.99 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.01 }}
-            transition={{ duration: reduce ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
+            style={{ transformOrigin: '34% 66%' }}
+            custom={direction}
+            variants={reduce ? reducedSlide : slideVariants}
+            initial="enter"
+            animate="rest"
+            exit="leave"
           >
             <motion.img
               src={assetUrl(slide.image)}
@@ -83,10 +154,43 @@ export default function HeroSlider({ slides = [], stats = [] }) {
               fetchPriority={index === 0 ? 'high' : 'auto'}
               loading={index === 0 ? 'eager' : 'lazy'}
               decoding="async"
-              initial={{ scale: 1 }}
-              animate={{ scale: reduce ? 1 : 1.06 }}
-              transition={{ duration: reduce ? 0 : 7, ease: 'linear' }}
+              variants={reduce ? undefined : kenBurns}
+              initial="start"
+              animate="end"
             />
+
+            {/* جلوه‌های ترمز — داخل خود اسلاید، پس دقیقاً روی محل لاستیک می‌مانند */}
+            {!reduce && (
+              <span className="pointer-events-none absolute inset-0">
+                {/* دود بلند شدن هنگام ترمز گرفتن */}
+                <motion.span
+                  className="absolute left-[4%] top-[34%] h-[50%] w-[44%] rounded-full bg-white/25 blur-3xl"
+                  initial={{ opacity: 0, scale: 0.55, y: 24 }}
+                  animate={{ opacity: [0, 0.5, 0.2, 0], scale: [0.55, 1.05, 1.4, 1.6], y: [24, 2, -16, -30] }}
+                  transition={{ duration: 1.6, delay: 0.55, times: [0, 0.32, 0.66, 1], ease: 'easeOut' }}
+                />
+                {/* خط سرعت‌ها — حس ایستادن ناگهانی */}
+                <motion.span
+                  className="absolute left-[2%] top-[53%] h-[2px] w-[28%] origin-right rounded-full bg-gradient-to-r from-transparent via-white/75 to-white"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: [0, 0.9, 0], scaleX: [0, 1, 1.4] }}
+                  transition={{ duration: 0.55, delay: 0.55, times: [0, 0.5, 1], ease: 'easeOut' }}
+                />
+                <motion.span
+                  className="absolute left-[1%] top-[62%] h-[2px] w-[22%] origin-right rounded-full bg-gradient-to-r from-transparent via-accent/60 to-accent"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: [0, 0.8, 0], scaleX: [0, 1, 1.3] }}
+                  transition={{ duration: 0.6, delay: 0.6, times: [0, 0.5, 1], ease: 'easeOut' }}
+                />
+                {/* اصطکاک لاستیک با زمین */}
+                <motion.span
+                  className="absolute left-[2%] top-[64%] h-[26%] w-[36%] rounded-[50%] bg-accent/25 blur-2xl"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.65, 0] }}
+                  transition={{ duration: 0.95, delay: 0.68, times: [0, 0.55, 1], ease: 'easeOut' }}
+                />
+              </span>
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -96,13 +200,8 @@ export default function HeroSlider({ slides = [], stats = [] }) {
         <div className="absolute inset-0 bg-gradient-to-t from-graphite-900 via-transparent to-graphite-900/40" />
         <div className="tire-pattern absolute inset-0 opacity-30" />
 
-        {/* لاستیک با انیمیشن تیک‌آف/چرخش/ترمز هنگام تغییر اسلاید */}
-        <motion.div style={reduce ? undefined : { y: tireY }} className="z-10">
-          <HeroTire slideId={slide.id} direction={direction} />
-        </motion.div>
-
         {/* محتوا */}
-        <div className="container-x relative flex h-full items-center">
+        <div className="container-x relative z-10 flex h-full items-center">
           <div className="ml-auto w-full max-w-[620px] py-10 text-right lg:max-w-[560px]">
             <AnimatePresence mode="wait">
               <motion.div
