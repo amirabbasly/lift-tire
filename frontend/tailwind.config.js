@@ -27,11 +27,14 @@ module.exports = {
       borderRadius: { xl2: '1.25rem' },
       keyframes: {
         marquee: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-50%)' } },
+        // جابه‌جایی به اندازهٔ دقیقاً یک نسخه از لیست (--mq-shift) → چسبیدن آخرین برند به اولین برند
+        marqueeShift: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(calc(-1 * var(--mq-shift)))' } },
         spinSlow: { to: { transform: 'rotate(360deg)' } },
         shimmer: { '100%': { transform: 'translateX(100%)' } },
       },
       animation: {
         marquee: 'marquee 38s linear infinite',
+        'marquee-shift': 'marqueeShift 38s linear infinite',
         'marquee-fast': 'marquee 22s linear infinite',
         'spin-slow': 'spinSlow 24s linear infinite',
       },

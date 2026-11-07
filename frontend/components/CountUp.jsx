@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInView, useReducedMotion } from 'framer-motion';
 import { faNum } from '@/lib/format';
 
@@ -31,38 +31,61 @@ function parse(value) {
 
 /**
  * شمارنده اعداد فارسی با حفظ پیشوند/پسوند (۴۰۰۰+، ۹۸٪، ۲۴ ساعت).
- * مقدار نهایی همیشه در SSR رندر می‌شود؛ انیمیشن فقط بعد از hydration
- * و وقتی عنصر وارد دید شود اجرا می‌شود — پس هیچ‌وقت جای خالی نمی‌ماند.
+ *
+ * • مقدار نهایی همیشه در SSR رندر می‌شود؛ هیچ‌وقت جای خالی نمی‌ماند.
+ * • انیمیشن بعد از hydration اجرا می‌شود:
+ *     trigger="view"  → وقتی عنصر وارد دید شد (پیش‌فرض)
+ *     trigger="mount" → بلافاصله بعد از mount (برای هیرو که بالای صفحه است)
+ * • قبل از شروع، عدد به صفر برمی‌گردد تا پرش «مقدار نهایی → صفر» دیده نشود،
+ *   سپس آرام از صفر تا مقدار نهایی بالا می‌رود.
+ * • اگر عنصر هرگز وارد دید نشود، مقدار نهایی نمایش داده می‌شود.
  */
-export default function CountUp({ value, duration = 1500, className = '', as: Tag = 'span' }) {
-  const parsed = parse(value);
+export default function CountUp({
+  value,
+  duration = 1500,
+  delay = 0,
+  className = '',
+  as: Tag = 'span',
+  trigger = 'view',
+}) {
+  // مهم: parse باید مemoize شود، وگرنه در هر رندر آبجکت تازه می‌سازد و
+  // افکت انیمیشن با هر رندر کنسل و از نو اجرا می‌شد (عدد روی صفر می‌ماند).
+  const parsed = useMemo(() => parse(value), [value]);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-20px' });
   const reduce = useReducedMotion();
   const [display, setDisplay] = useState(parsed ? parsed.num : 0);
+  const [run, setRun] = useState(false);
   const started = useRef(false);
 
-  // قبل از رنگ‌آمیزی، عدد را صفر کن تا پرش «مقدار نهایی → صفر» دیده نشود
-  useIsoLayoutEffect(() => {
-    if (!parsed || reduce) return;
-    if (inView) setDisplay(0);
-  }, [inView, reduce]);
+  const shouldRun = trigger === 'mount' ? true : inView;
 
   useEffect(() => {
-    if (!parsed || reduce || !inView || started.current) return;
+    if (!shouldRun || !parsed || reduce) return;
+    const t = setTimeout(() => setRun(true), delay);
+    return () => clearTimeout(t);
+  }, [shouldRun, parsed, reduce, delay]);
+
+  // لحظهٔ شروع: عدد را صفر کن تا شمارش واقعاً از صفر آغاز شود
+  useIsoLayoutEffect(() => {
+    if (run && parsed && !reduce) setDisplay(0);
+  }, [run, parsed, reduce]);
+
+  useEffect(() => {
+    if (!run || !parsed || reduce || started.current) return;
     started.current = true;
     let raf = 0;
     const start = performance.now();
     const tick = (now) => {
       const p = Math.min(1, (now - start) / duration);
-      // easeOutExpo برای حس «پر شدن» سریع در ابتدا و توقف نرم در انتها
-      const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      // easeOutCubic: شروع نرم و آرام، پایان ملایم
+      const eased = p === 1 ? 1 : 1 - Math.pow(1 - p, 3);
       setDisplay(Math.round(parsed.num * eased));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [parsed, inView, duration, reduce]);
+  }, [run, parsed, duration, reduce]);
 
   if (!parsed) return <Tag className={`num-fa ${className}`}>{faNum(value)}</Tag>;
 
