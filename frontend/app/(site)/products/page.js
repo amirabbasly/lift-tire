@@ -6,10 +6,22 @@ import { demoFilter, demoHome } from '@/lib/demo';
 
 export const revalidate = 0;
 
-export const metadata = {
-  title: 'فروشگاه لاستیک',
-  description: 'خرید لاستیک خودرو با فیلتر برند، سایز، فصل و قیمت؛ ارسال به سراسر ایران.',
-};
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const rawPage = Array.isArray(params?.page) ? params.page[0] : params?.page;
+  const page = /^[1-9]\d*$/.test(String(rawPage || '')) && Number.isSafeInteger(Number(rawPage)) ? Number(rawPage) : 1;
+  const filters = Object.entries(params || {}).filter(([key, value]) => key !== 'page' && value !== undefined && value !== '');
+  const query = new URLSearchParams();
+  if (page > 1) query.set('page', String(page));
+  for (const [key, value] of filters.sort(([a], [b]) => a.localeCompare(b))) query.set(key, String(value));
+  const canonical = `/products${query.size ? `?${query}` : ''}`;
+  return {
+    title: `فروشگاه لاستیک${page > 1 ? `، صفحه ${page}` : ''}`,
+    description: 'خرید لاستیک خودرو با فیلتر برند، سایز، فصل و قیمت؛ ارسال به سراسر ایران.',
+    alternates: { canonical },
+    ...(filters.length ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 export default async function ProductsPage({ searchParams }) {
   const sp = await searchParams;

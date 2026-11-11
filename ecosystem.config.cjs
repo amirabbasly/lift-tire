@@ -147,6 +147,7 @@ module.exports = {
         API_INTERNAL_URL: `http://127.0.0.1:${API_PORT}`,
         NEXT_PUBLIC_API_BASE: '',
         NEXT_PUBLIC_SITE_URL: FILE_ENV.NEXT_PUBLIC_SITE_URL || `https://${DOMAIN}`,
+        NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: FILE_ENV.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
       },
     },
   ],

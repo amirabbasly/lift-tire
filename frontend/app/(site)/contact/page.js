@@ -5,7 +5,7 @@ import { demoHome } from '@/lib/demo';
 import { faNum } from '@/lib/format';
 import { IconPhone, IconTruck, IconShield } from '@/components/Icons';
 
-export const metadata = { title: 'تماس با ما', description: 'راه‌های ارتباط با فروشگاه لیفت تایر؛ تلفن، آدرس و فرم پیام.' };
+export const metadata = { title: 'تماس با ما', description: 'راه‌های ارتباط با فروشگاه لیفت تایر؛ تلفن، آدرس و فرم پیام.', alternates: { canonical: '/contact' } };
 
 export default async function ContactPage() {
   const settings = (await serverGet('/settings', null)) || demoHome.settings;

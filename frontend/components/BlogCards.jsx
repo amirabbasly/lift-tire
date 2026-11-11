@@ -19,8 +19,8 @@ export default function BlogCards({ posts = [] }) {
               <div className="relative aspect-[16/10] overflow-hidden bg-graphite-800">
                 <img
                   src={assetUrl(p.cover)}
-                  alt={p.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  alt={p.cover_alt || p.title}
+                  className={`h-full w-full transition-transform duration-500 group-hover:scale-105 ${p.cover_fit === 'contain' ? 'object-contain p-3' : 'object-cover'}`}
                   loading="lazy"
                 />
                 <span className="absolute right-3 top-3 rounded-lg bg-accent px-2 py-0.5 text-[10px] font-bold text-white">{p.tag}</span>

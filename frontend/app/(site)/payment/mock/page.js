@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import MockPayment from '@/components/MockPayment';
 
-export const metadata = { title: 'درگاه پرداخت' };
+export const metadata = { title: 'درگاه پرداخت', robots: { index: false, follow: true } };
 export const dynamic = 'force-dynamic';
 
 export default function PaymentMockPage() {

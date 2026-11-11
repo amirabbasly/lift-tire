@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProductCard from './ProductCard';
 import { IconGrid, IconList, IconChevron } from './Icons';
@@ -12,10 +13,11 @@ export default function ProductResults({ items = [], total = 0, page = 1, pages 
   const router = useRouter();
   const sp = useSearchParams();
 
-  const goPage = (p) => {
+  const pageHref = (p) => {
     const params = new URLSearchParams(sp.toString());
-    params.set('page', String(p));
-    router.push(`${basePath}?${params.toString()}`);
+    if (p > 1) params.set('page', String(p));
+    else params.delete('page');
+    return `${basePath}${params.size ? `?${params.toString()}` : ''}`;
   };
 
   const setSort = (e) => {
@@ -70,27 +72,29 @@ export default function ProductResults({ items = [], total = 0, page = 1, pages 
 
       {pages > 1 && (
         <nav className="mt-6 flex items-center justify-center gap-1.5" aria-label="صفحه‌بندی">
-          <button onClick={() => goPage(Math.max(1, page - 1))} disabled={page <= 1} className="grid h-9 w-9 place-items-center rounded-lg border border-black/10 bg-white text-steel-500 disabled:opacity-40">
+          {page > 1 && <Link href={pageHref(page - 1)} aria-label="صفحه قبل" className="grid h-9 w-9 place-items-center rounded-lg border border-black/10 bg-white text-steel-500">
             <IconChevron width={16} height={16} className="rotate-180" />
-          </button>
+          </Link>}
           {Array.from({ length: Math.min(pages, 7) }).map((_, i) => {
             let n = i + 1;
             if (pages > 7 && page > 4) n = Math.min(pages - 6, page - 3) + i;
             return (
-              <button
+              <Link
                 key={n}
-                onClick={() => goPage(n)}
-                className={`num h-9 min-w-9 rounded-lg border px-2 text-[12px] font-bold transition ${
+                href={pageHref(n)}
+                aria-current={n === page ? 'page' : undefined}
+                aria-label={`صفحه ${faNum(n)}`}
+                className={`num grid h-9 min-w-9 place-items-center rounded-lg border px-2 text-[12px] font-bold transition ${
                   n === page ? 'border-graphite-900 bg-graphite-900 text-white' : 'border-black/10 bg-white text-steel-500 hover:border-accent'
                 }`}
               >
                 {faNum(n)}
-              </button>
+              </Link>
             );
           })}
-          <button onClick={() => goPage(Math.min(pages, page + 1))} disabled={page >= pages} className="grid h-9 w-9 place-items-center rounded-lg border border-black/10 bg-white text-steel-500 disabled:opacity-40">
+          {page < pages && <Link href={pageHref(page + 1)} aria-label="صفحه بعد" className="grid h-9 w-9 place-items-center rounded-lg border border-black/10 bg-white text-steel-500">
             <IconChevron width={16} height={16} />
-          </button>
+          </Link>}
         </nav>
       )}
     </div>

@@ -4,7 +4,7 @@ import Counter from '@/components/Counter';
 import { TRUST } from '@/lib/constants';
 import { IconCheck } from '@/components/Icons';
 
-export const metadata = { title: 'درباره لیفت تایر', description: 'لیفت تایر؛ از سال ۱۳۸۴ همراه رانندگان ایرانی در انتخاب لاستیک اصل و ایمن.' };
+export const metadata = { title: 'درباره لیفت تایر', description: 'لیفت تایر؛ از سال ۱۳۸۴ همراه رانندگان ایرانی در انتخاب لاستیک اصل و ایمن.', alternates: { canonical: '/about' } };
 
 export default function AboutPage() {
   return (

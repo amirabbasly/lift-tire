@@ -2,7 +2,7 @@ import PageHeader from '@/components/PageHeader';
 import Accordion from '@/components/Accordion';
 import Link from 'next/link';
 
-export const metadata = { title: 'سوالات متداول', description: 'پاسخ سوالات پرتکرار درباره خرید لاستیک، ارسال، گارانتی و بازگشت کالا.' };
+export const metadata = { title: 'سوالات متداول', description: 'پاسخ سوالات پرتکرار درباره خرید لاستیک، ارسال، گارانتی و بازگشت کالا.', alternates: { canonical: '/faq' } };
 
 const ITEMS = [
   { q: 'چطور سایز لاستیک خودروی خود را پیدا کنم؟', a: 'روی دیواره لاستیک فعلی خود سایزی مثل 205/55 R16 نوشته شده است. عدد اول عرض مقطع، عدد دوم نسبت منظر و عدد بعد از R قطر رینگ است. می‌توانید همین اعداد را در ویجت «سایز لاستیک خودت را پیدا کن» در صفحه اصلی وارد کنید.' },

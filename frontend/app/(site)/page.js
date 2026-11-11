@@ -13,17 +13,22 @@ import SectionTitle from '@/components/SectionTitle';
 import Reveal from '@/components/Reveal';
 import { serverGet } from '@/lib/api';
 import { demoHome } from '@/lib/demo';
+import { getMagazinePosts } from '@/lib/magazine';
 
 export const revalidate = 0;
 
 export const metadata = {
   title: 'خرید لاستیک اصل خودرو با ضمانت اصالت',
   description: 'لیفت تایر؛ فروشگاه تخصصی لاستیک خودرو با ضمانت اصالت و تاریخ تولید، ارسال به سراسر ایران با باربری و پست پیشتاز.',
+  alternates: { canonical: '/' },
 };
 
 export default async function HomePage() {
   const home = (await serverGet('/home', null)) || demoHome;
-  const { banners, categories, brands, deals, bestsellers, newest, posts, settings } = home;
+  const { banners, categories, brands, deals, bestsellers, newest, settings } = home;
+  const magazinePosts = await getMagazinePosts();
+  const featuredArticle = magazinePosts.find((post) => post.slug === 'khodro-chare-national-automotive-services');
+  const homePosts = featuredArticle ? [featuredArticle, ...magazinePosts.filter((post) => post.slug !== featuredArticle.slug)] : magazinePosts;
   const hero = banners?.hero?.length ? banners.hero : demoHome.banners.hero;
   const cats = categories?.length ? categories : demoHome.categories;
   const brandList = brands?.length ? brands : demoHome.brands;
@@ -71,7 +76,7 @@ export default async function HomePage() {
 
       <div className="section">
         <Reveal>
-          <BlogCards posts={posts?.length ? posts : demoHome.posts} />
+          <BlogCards posts={homePosts} />
         </Reveal>
       </div>
     </>

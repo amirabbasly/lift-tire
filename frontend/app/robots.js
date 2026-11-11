@@ -6,7 +6,9 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/admin/', '/checkout', '/payment', '/cart', '/account'],
+        // صفحات حساب/سبد/سفارش قابل خزیدن‌اند تا noindex آن‌ها دیده شود؛
+        // robots.txt وسیله محافظت از اطلاعات محرمانه نیست.
+        disallow: ['/admin', '/api/'],
       },
     ],
     sitemap: `${SITE.url}/sitemap.xml`,

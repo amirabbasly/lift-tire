@@ -1,6 +1,7 @@
 import './globals.css';
 import localFont from 'next/font/local';
 import { Providers } from '@/components/Providers';
+import { SITE } from '@/lib/constants';
 
 // فونت وزیر (Vazir) — چهار وزن، شامل حروف فارسی و لاتین
 // فایل variable رسمی وزیر فقط حروف فارسی دارد، پس از نسخه‌های استاتیک استفاده می‌کنیم.
@@ -31,7 +32,8 @@ const barlow = localFont({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://lift-tire.com'),
+  metadataBase: new URL(SITE.url),
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } } : {}),
   title: {
     default: 'لیفت تایر | خرید لاستیک اصل خودرو با ضمانت اصالت',
     template: '%s | لیفت تایر',
@@ -49,8 +51,10 @@ export const metadata = {
     description: 'خرید لاستیک اصل با ضمانت اصالت و ارسال به سراسر ایران.',
     type: 'website',
     locale: 'fa_IR',
+    siteName: 'لیفت تایر',
     images: ['/images/hero/hero-1.jpg'],
   },
+  twitter: { card: 'summary_large_image' },
 };
 
 export const viewport = {

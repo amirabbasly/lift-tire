@@ -126,8 +126,9 @@ export default function Header({ settings, brands = [], categories = [] }) {
               <li key={n.href}>
                 <Link
                   href={n.href}
+                  aria-current={pathname === n.href || (n.href !== '/' && pathname.startsWith(`${n.href}/`)) ? 'page' : undefined}
                   className={`rounded-lg px-3 py-1.5 text-[13px] font-bold transition ${
-                    pathname === n.href ? 'bg-accent-soft text-accent-dark' : 'text-graphite-800 hover:bg-surface hover:text-accent-dark'
+                    pathname === n.href || (n.href !== '/' && pathname.startsWith(`${n.href}/`)) ? 'bg-accent-soft text-accent-dark' : 'text-graphite-800 hover:bg-surface hover:text-accent-dark'
                   }`}
                 >
                   {n.label}

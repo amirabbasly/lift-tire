@@ -5,6 +5,8 @@ import MobileNav from '@/components/MobileNav';
 import MiniCart from '@/components/MiniCart';
 import { serverGet } from '@/lib/api';
 import { demoHome } from '@/lib/demo';
+import { SITE } from '@/lib/constants';
+import JsonLd from '@/components/JsonLd';
 
 export default async function SiteLayout({ children }) {
   const home = (await serverGet('/home', null)) || demoHome;
@@ -14,6 +16,12 @@ export default async function SiteLayout({ children }) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <JsonLd data={{
+        '@context': 'https://schema.org', '@graph': [
+          { '@type': 'Organization', '@id': `${SITE.url}/#organization`, name: SITE.name, url: `${SITE.url}/`, logo: `${SITE.url}/logo-light.png` },
+          { '@type': 'WebSite', '@id': `${SITE.url}/#website`, name: SITE.name, url: `${SITE.url}/`, inLanguage: 'fa-IR', publisher: { '@id': `${SITE.url}/#organization` } },
+        ],
+      }} />
       <AnnouncementBar />
       <Header settings={settings} brands={brands} categories={categories} />
       <main className="flex-1 pb-20 md:pb-0">{children}</main>

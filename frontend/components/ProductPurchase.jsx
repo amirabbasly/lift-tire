@@ -58,7 +58,7 @@ export default function ProductPurchase({ product }) {
         <span className="num rounded-lg bg-graphite-900 px-2.5 py-1 text-[15px] font-bold text-white" dir="ltr">{product.size}</span>
         <span>امتیاز خریداران: <span className="num font-bold text-graphite-900">{faNum(Number(product.rating).toFixed(1))}</span> از ۵</span>
         <span className="num">({faNum(product.rating_count)} نظر)</span>
-        <span className="text-success">موجود در انبار</span>
+        <span className={out ? 'text-danger' : 'text-success'}>{out ? 'ناموجود' : 'موجود در انبار'}</span>
       </div>
 
       <div className="rounded-2xl border border-black/[.07] bg-white p-4">

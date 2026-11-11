@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import AccountClient from '@/components/AccountClient';
 
-export const metadata = { title: 'حساب کاربری' };
+export const metadata = { title: 'حساب کاربری', robots: { index: false, follow: true } };
 export const dynamic = 'force-dynamic';
 
 export default function AccountPage() {

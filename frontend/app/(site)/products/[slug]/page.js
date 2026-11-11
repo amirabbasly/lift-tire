@@ -7,29 +7,54 @@ import ProductRail from '@/components/ProductRail';
 import SectionTitle from '@/components/SectionTitle';
 import { serverGet } from '@/lib/api';
 import { TRUST } from '@/lib/constants';
+import JsonLd from '@/components/JsonLd';
+import { absoluteUrl, breadcrumbSchema } from '@/lib/seo';
+import { assetUrl } from '@/lib/format';
 
 export const revalidate = 0;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const product = await serverGet(`/products/${slug}`, null);
-  if (!product) return { title: 'محصول' };
+  const product = await serverGet(`/products/${encodeURIComponent(slug)}`, null);
+  if (!product) return { title: 'محصول یافت نشد', robots: { index: false, follow: true } };
+  const title = `${product.name} ${product.size || ''}`.trim();
+  const description = product.short_desc || `${product.name} با سایز ${product.size || ''} در لیفت تایر`;
+  const canonical = `/products/${encodeURIComponent(slug)}`;
   return {
-    title: `${product.name} ${product.size || ''}`.trim(),
-    description: product.short_desc || `${product.name} با سایز ${product.size} در لیفت تایر`,
-    openGraph: { images: [product.image] },
+    title, description, alternates: { canonical },
+    openGraph: { title, description, url: absoluteUrl(canonical), type: 'website', images: product.image ? [assetUrl(product.image)] : undefined },
   };
 }
 
 export default async function ProductPage({ params }) {
   const { slug } = await params;
-  const product = await serverGet(`/products/${slug}`, null);
+  const product = await serverGet(`/products/${encodeURIComponent(slug)}`, null);
   if (!product) notFound();
 
   const related = product.related || [];
+  const productUrl = absoluteUrl(`/products/${encodeURIComponent(slug)}`);
+  const breadcrumbs = [
+    { label: 'خانه', href: '/' }, { label: 'فروشگاه', href: '/products' },
+    ...(product.category ? [{ label: product.category.name, href: `/category/${encodeURIComponent(product.category.slug)}` }] : []),
+    { label: product.name },
+  ];
+  const price = Number(product.price);
+  const productSchema = {
+    '@context': 'https://schema.org', '@type': 'Product', name: product.name,
+    description: product.short_desc || undefined,
+    image: product.image ? [absoluteUrl(assetUrl(product.image))] : undefined,
+    sku: product.sku || undefined,
+    brand: product.brand?.name_fa ? { '@type': 'Brand', name: product.brand.name_fa } : undefined,
+    ...(Number.isFinite(price) && price > 0 ? { offers: {
+      '@type': 'Offer', url: productUrl, priceCurrency: 'IRR', price: price * 10,
+      availability: Number(product.stock) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+    } } : {}),
+  };
 
   return (
     <>
+      <JsonLd data={breadcrumbSchema(breadcrumbs)} />
+      <JsonLd data={productSchema} />
       <nav className="border-b border-black/[.06] bg-white" aria-label="مسیر">
         <div className="container-x flex flex-wrap items-center gap-1.5 py-3 text-[11px] text-muted">
           <Link href="/" className="hover:text-accent">خانه</Link>

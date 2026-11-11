@@ -126,6 +126,7 @@ build_apps() {
   info "بیلد Next.js (standalone)…"
   ( cd frontend && API_INTERNAL_URL="http://127.0.0.1:${API_PORT}" \
       NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://$DOMAIN}" \
+      NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION="${NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION:-}" \
       NEXT_PUBLIC_API_BASE="" \
       npm run build ) || { error "بیلد فرانت‌اند ناموفق بود."; exit 1; }
 

@@ -79,3 +79,21 @@
   color: transparent;
 }
 .clip-diagonal { clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%); }
+
+/* محتوای مجله از پنل یا تحریریه می‌آید؛ پیوندها و فهرست برای هر دو خوانا می‌مانند. */
+.prose-fa h2, .prose-fa h3, .prose-fa h4 { scroll-margin-top: 140px; color: #14181c; font-weight: 800; }
+.prose-fa h2 { margin: 1.8em 0 .65em; font-size: 1.15rem; line-height: 1.8; }
+.prose-fa h3 { margin: 1.35em 0 .5em; font-size: .95rem; }
+.prose-fa p { margin: .8em 0; }
+.prose-fa strong { color: #14181c; }
+.prose-fa a { color: #bd4108; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.prose-fa a:hover { color: #e6530a; }
+.prose-fa ul, .prose-fa ol { margin: .8em 0; padding-inline-start: 1.5rem; }
+.prose-fa ul { list-style: disc; }
+.prose-fa ol { list-style: decimal; }
+.prose-fa li { margin: .4em 0; }
+.prose-fa img { max-width: 100%; height: auto; border-radius: .75rem; }
+.prose-fa table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.prose-fa th, .prose-fa td { border: 1px solid #d9dde0; padding: .5rem; text-align: start; }
+.prose-fa blockquote { border-inline-start: 3px solid #ff6a13; padding-inline-start: 1rem; color: #555; }
+@media (max-width: 1023px) { .prose-fa h2, .prose-fa h3, .prose-fa h4 { scroll-margin-top: 85px; } }

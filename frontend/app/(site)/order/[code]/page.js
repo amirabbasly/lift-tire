@@ -7,7 +7,7 @@ import { faNum, formatDate, formatNumber, toman } from '@/lib/format';
 import { IconCheck, IconTruck, IconShield, IconPhone } from '@/components/Icons';
 
 export const revalidate = 0;
-export const metadata = { title: 'جزئیات سفارش' };
+export const metadata = { title: 'جزئیات سفارش', robots: { index: false, follow: true } };
 
 export default async function OrderPage({ params, searchParams }) {
   const { code } = await params;

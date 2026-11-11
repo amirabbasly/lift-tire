@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import { IconChevron } from './Icons';
+import JsonLd from './JsonLd';
+import { breadcrumbSchema } from '@/lib/seo';
 
 export default function PageHeader({ title, subtitle, breadcrumbs = [], children }) {
   return (
     <div className="border-b border-black/[.06] bg-white">
+      {breadcrumbs.length > 0 && <JsonLd data={breadcrumbSchema([{ label: 'خانه', href: '/' }, ...breadcrumbs])} />}
       <div className="container-x py-5">
         <nav className="mb-2 flex flex-wrap items-center gap-1 text-[11px] text-muted" aria-label="مسیر">
           <Link href="/" className="hover:text-accent">خانه</Link>

@@ -1,7 +1,7 @@
 import PageHeader from '@/components/PageHeader';
 import TrackClient from '@/components/TrackClient';
 
-export const metadata = { title: 'پیگیری سفارش' };
+export const metadata = { title: 'پیگیری سفارش', robots: { index: false, follow: true } };
 
 export default function TrackPage() {
   return (
