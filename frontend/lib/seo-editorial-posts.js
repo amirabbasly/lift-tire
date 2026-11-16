@@ -1,6 +1,6 @@
-// تاریخ تهیه فقط برای ترتیب داخلی است؛ تا انتشار واقعی، تاریخ انتشار ادعا نمی‌شود.
+// این کلید فقط برای ترتیب داخلی است؛ تا انتشار واقعی، تاریخ انتشار ادعا نمی‌شود.
 // هنگام انتشار عمومی، created_at و updated_at را با تاریخ واقعی همان انتشار تنظیم کنید.
-const draftedAt = '2026-11-11T00:00:00Z';
+const internalSortKey = '2026-11-11T00:00:00Z';
 
 export const seoEditorialPosts = [
   {
@@ -8,7 +8,7 @@ export const seoEditorialPosts = [
     title: 'شاخص بار و سرعت لاستیک چیست؟ راهنمای خواندن و انتخاب',
     excerpt: 'اعداد و حروف کنار سایز تایر چه معنایی دارند و هنگام تعویض چگونه با توصیه سازنده خودرو مقایسه می‌شوند؟',
     category: 'buying-guide', tag: 'راهنمای خرید', cover: '/images/blog/blog-2.jpg',
-    author: 'تحریریه لیفت تایر', read_time: 7, sort_at: draftedAt,
+    author: 'تحریریه لیفت تایر', read_time: 7, sort_at: internalSortKey,
     toc: [
       { id: 'where', label: 'شاخص‌ها را کجا ببینیم؟' }, { id: 'load', label: 'معنی شاخص بار' },
       { id: 'speed', label: 'معنی شاخص سرعت' }, { id: 'selection', label: 'چک‌لیست پیش از خرید' },
@@ -45,7 +45,7 @@ export const seoEditorialPosts = [
     title: 'سایش نامنظم لاستیک؛ نشانه‌ها و زمان مراجعه به متخصص',
     excerpt: 'از ساییدگی مرکز و شانه تا لرزش: چگونه تایر را بررسی کنیم و چرا تشخیص قطعی به بازدید نیاز دارد؟',
     category: 'tire-care', tag: 'نگهداری', cover: '/images/blog/blog-3.jpg',
-    author: 'تحریریه لیفت تایر', read_time: 7, sort_at: draftedAt,
+    author: 'تحریریه لیفت تایر', read_time: 7, sort_at: internalSortKey,
     toc: [
       { id: 'inspection', label: 'بازرسی ایمن تایر' }, { id: 'patterns', label: 'الگوهای متداول سایش' },
       { id: 'danger', label: 'نشانه‌های فوری' }, { id: 'maintenance', label: 'پیشگیری و سرویس' },
