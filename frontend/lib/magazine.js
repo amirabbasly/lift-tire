@@ -3,6 +3,7 @@ import sanitizeHtml from 'sanitize-html';
 import { serverGet } from './api';
 import { demoPosts } from './demo';
 import { editorialPosts, correctedSeedPosts } from './editorial-posts';
+import { seoEditorialPosts } from './seo-editorial-posts';
 
 export const MAGAZINE_PAGE_SIZE = 6;
 export const MAGAZINE_CATEGORIES = [
@@ -22,11 +23,15 @@ export function magazineCategory(post) {
   return null; // برچسب‌های دلخواه پنل همچنان در «همه مطالب» نمایش داده می‌شوند.
 }
 
-export const getMagazinePosts = cache(async () => {
+export const getMagazinePosts = cache(async (mode = 'standard') => {
   const response = await serverGet('/posts', null);
-  // آرایه خالی API معتبر است؛ فقط در قطعی API دادهٔ نمایشی قدیمی استفاده می‌شود.
+  // محتوای مدیر ممکن است هر slug تحریریه را جایگزین کرده باشد؛ در قطعی، نسخه ناقص یا ۴۰۴ جعلی ندهید.
+  // تنها صفحه اصلی برای حفظ خروجی و رفتار قبلی خود، fallback نمایشی قبلی را نگه می‌دارد.
+  if (mode !== 'homepage' && !Array.isArray(response)) throw new Error('Cannot load magazine: article API unavailable.');
   const cmsPosts = Array.isArray(response) ? response : demoPosts;
-  const merged = new Map(editorialPosts.map((post) => [post.slug, post]));
+  // فهرست مقاله‌های صفحه اصلی با نسخه فعلی یکسان می‌ماند. مطالب CMS با هر slug حفظ می‌شوند.
+  const builtins = mode === 'homepage' ? editorialPosts : [...editorialPosts, ...seoEditorialPosts];
+  const merged = new Map(builtins.map((post) => [post.slug, post]));
   for (const post of cmsPosts) {
     if (!post?.slug || post.is_published === false) continue;
     const builtin = merged.get(post.slug);
@@ -41,8 +46,8 @@ export const getMagazinePosts = cache(async () => {
     } : normalized);
   }
   return [...merged.values()].sort((a, b) => {
-    const aTime = Date.parse(a.created_at || '') || 0;
-    const bTime = Date.parse(b.created_at || '') || 0;
+    const aTime = Date.parse(a.created_at || a.sort_at || '') || 0;
+    const bTime = Date.parse(b.created_at || b.sort_at || '') || 0;
     return bTime - aTime;
   });
 });

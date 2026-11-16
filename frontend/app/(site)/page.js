@@ -18,15 +18,16 @@ import { getMagazinePosts } from '@/lib/magazine';
 export const revalidate = 0;
 
 export const metadata = {
-  title: 'خرید لاستیک اصل خودرو با ضمانت اصالت',
-  description: 'لیفت تایر؛ فروشگاه تخصصی لاستیک خودرو با ضمانت اصالت و تاریخ تولید، ارسال به سراسر ایران با باربری و پست پیشتاز.',
+  title: 'خرید و بررسی لاستیک خودرو',
+  description: 'در لیفت تایر مشخصات و سایز لاستیک‌ها را بررسی کنید و راهنماهای انتخاب و نگهداری تایر را بخوانید.',
   alternates: { canonical: '/' },
 };
 
 export default async function HomePage() {
   const home = (await serverGet('/home', null)) || demoHome;
   const { banners, categories, brands, deals, bestsellers, newest, settings } = home;
-  const magazinePosts = await getMagazinePosts();
+  // فهرست ثابت قبلی صفحه اصلی حفظ می‌شود؛ مطالب تازه فقط در مجله اضافه می‌شوند.
+  const magazinePosts = await getMagazinePosts('homepage');
   const featuredArticle = magazinePosts.find((post) => post.slug === 'khodro-chare-national-automotive-services');
   const homePosts = featuredArticle ? [featuredArticle, ...magazinePosts.filter((post) => post.slug !== featuredArticle.slug)] : magazinePosts;
   const hero = banners?.hero?.length ? banners.hero : demoHome.banners.hero;

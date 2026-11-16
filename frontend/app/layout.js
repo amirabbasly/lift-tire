@@ -35,11 +35,11 @@ export const metadata = {
   metadataBase: new URL(SITE.url),
   ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } } : {}),
   title: {
-    default: 'لیفت تایر | خرید لاستیک اصل خودرو با ضمانت اصالت',
+    default: 'لیفت تایر | فروشگاه لاستیک و لوازم خودرو',
     template: '%s | لیفت تایر',
   },
   description:
-    'فروشگاه اینترنتی لیفت تایر؛ خرید لاستیک اصل خودرو با ضمانت اصالت و تاریخ تولید، ارسال به سراسر ایران با باربری و پست پیشتاز و مشاوره تخصصی رایگان.',
+    'فروشگاه لیفت تایر؛ بررسی محصولات، سایز و مشخصات تایر خودرو و مطالعه راهنماهای انتخاب و نگهداری.',
   keywords: ['لاستیک', 'خرید لاستیک', 'لاستیک خودرو', 'لیفت تایر', 'Lift Tire'],
   applicationName: 'Lift Tire',
   icons: {
@@ -47,8 +47,8 @@ export const metadata = {
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   openGraph: {
-    title: 'لیفت تایر — لاستیک اصل، ایمنی واقعی',
-    description: 'خرید لاستیک اصل با ضمانت اصالت و ارسال به سراسر ایران.',
+    title: 'لیفت تایر — فروشگاه لاستیک خودرو',
+    description: 'بررسی محصولات و مشخصات لاستیک خودرو و راهنماهای انتخاب تایر در لیفت تایر.',
     type: 'website',
     locale: 'fa_IR',
     siteName: 'لیفت تایر',

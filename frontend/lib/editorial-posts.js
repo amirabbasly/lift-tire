@@ -55,7 +55,7 @@ export const editorialPosts = [
 <p>پروژه با چشم‌انداز ملی معرفی شده است، اما امکان ارائه هر خدمت باید برای شهر و موقعیت مشخص استعلام شود.</p>
 <h3>چطور از قیمت مطلع شویم؟</h3>
 <p>هزینه به نوع خدمت، محل، تجهیزات، قطعات و شرایط حمل وابسته است. پیش از ثبت نهایی درخواست، جزئیات را از خودرو چاره بپرسید.</p>
-<p><strong>منابع معرفی:</strong> اطلاعات این نوشته بر اساس معرفی ارائه‌شده از سوی مجموعه، <a href="https://khodrochare.ir/" target="_blank" rel="sponsored noopener noreferrer">وب‌سایت خودرو چاره</a> و <a href="${virgoolUrl}" target="_blank" rel="noopener noreferrer">معرفی خودرو چاره در ویرگول</a> تنظیم شده است. برای اطلاعات به‌روز و شرایط خدمت، مرجع نهایی خود مجموعه است.</p>`,
+<p><strong>منابع معرفی:</strong> این نوشته بر اساس معرفی ارائه‌شده از سوی مجموعه و <a href="https://khodrochare.ir/" target="_blank" rel="sponsored noopener noreferrer">وب‌سایت خودرو چاره</a> تنظیم شده است. <a href="${virgoolUrl}" target="_blank" rel="noopener noreferrer">صفحه معرفی در ویرگول</a> نیز برای مطالعه ارجاع داده می‌شود؛ متن آن هنگام بررسی قابل دریافت نبود و برای جزئیات به آن استناد نشده است. برای اطلاعات به‌روز و شرایط خدمت، مرجع نهایی خود مجموعه است.</p>`,
   },
   {
     id: 'editorial-buying', slug: 'complete-tire-buying-guide',

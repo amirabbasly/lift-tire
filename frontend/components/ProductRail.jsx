@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import ProductCard from './ProductCard';
 import { IconChevron } from './Icons';
 
-export default function ProductRail({ products = [], cols = 5, leading = null }) {
+export default function ProductRail({ products = [], cols = 5, leading = null, showRating = true, strictData = false }) {
   const ref = useRef(null);
   const scroll = (dir) => {
     const el = ref.current;
@@ -22,7 +22,7 @@ export default function ProductRail({ products = [], cols = 5, leading = null })
         {leading}
         {products.map((p, i) => (
           <div key={p.id} className="w-[calc(50%-6px)] shrink-0 snap-start sm:w-[220px] lg:w-[calc(20%-10px)]">
-            <ProductCard product={p} index={i} />
+            <ProductCard product={p} index={i} showRating={showRating} strictData={strictData} />
           </div>
         ))}
       </div>

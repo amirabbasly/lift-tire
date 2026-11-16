@@ -8,16 +8,18 @@ import Stars from './Stars';
 import { assetUrl, discountPercent, faNum, formatNumber, toman } from '@/lib/format';
 import { IconCart, IconHeart } from './Icons';
 
-export default function ProductCard({ product, layout = 'grid', showCountdown = false, index = 0 }) {
+export default function ProductCard({ product, layout = 'grid', showCountdown = false, index = 0, showRating = true, strictData = false }) {
   const { add } = useCart();
   const { show } = useToast();
   const reduce = useReducedMotion();
   // انیمیشن فقط بعد از hydration؛ در SSR کارت مرئی است (وگرنه صفحه خالی می‌شد)
   const [animate, setAnimate] = useState(false);
   useEffect(() => setAnimate(true), []);
-  const off = product.discount || discountPercent(product.price, product.old_price);
   const image = product.image || product.images?.[0]?.url;
-  const out = Number(product.stock) <= 0;
+  const stockKnown = product.stock !== null && product.stock !== undefined && String(product.stock).trim() !== '' && Number.isFinite(Number(product.stock)) && Number(product.stock) >= 0;
+  const priceKnown = product.price !== null && product.price !== undefined && String(product.price).trim() !== '' && Number.isFinite(Number(product.price)) && Number(product.price) >= 0;
+  const off = strictData && !priceKnown ? 0 : product.discount || discountPercent(product.price, product.old_price);
+  const out = (strictData && (!stockKnown || !priceKnown)) || Number(product.stock) <= 0;
 
   const quickAdd = (e) => {
     e.preventDefault();
@@ -55,7 +57,7 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
           )}
           {out && (
             <span className="absolute inset-x-2 bottom-2 rounded-lg bg-graphite-900/85 py-1 text-center text-[11px] font-bold text-white">
-              ناموجود
+              {strictData && !stockKnown ? 'موجودی نامشخص' : strictData && !priceKnown ? 'قیمت نامشخص' : 'ناموجود'}
             </span>
           )}
           {product.badge && !out && (
@@ -69,7 +71,7 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
       <div className={`flex flex-1 flex-col ${wrap ? 'py-1 pl-1' : 'p-3 pt-2.5'}`}>
         <div className="flex items-center justify-between gap-2">
           <span className="truncate text-[10.5px] font-bold text-accent-dark">{product.brand?.name_fa || product.brand_name}</span>
-          <Stars rating={product.rating} size={11} />
+          {showRating && <Stars rating={product.rating} size={11} />}
         </div>
         <Link href={`/products/${product.slug}`} className="mt-1 line-clamp-2 min-h-[34px] text-[12.5px] font-bold leading-[1.45] text-graphite-900 transition group-hover:text-accent-dark">
           {product.name}
@@ -83,7 +85,7 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
 
         <div className="mt-auto flex items-end justify-between gap-1.5 pt-2.5">
           <div className="min-w-0">
-            {product.old_price ? (
+            {product.old_price && (!strictData || priceKnown) ? (
               <span className="num block text-[10px] text-muted line-through sm:text-[10.5px]">
                 <bdi dir="ltr">{formatNumber(product.old_price)}</bdi>
               </span>
@@ -91,8 +93,7 @@ export default function ProductCard({ product, layout = 'grid', showCountdown = 
               <span className="block h-[13px]" />
             )}
             <span className="num flex items-baseline gap-1 whitespace-nowrap text-[13px] font-extrabold leading-5 text-graphite-900 sm:text-[14px]">
-              <bdi dir="ltr">{formatNumber(product.price)}</bdi>
-              <span className="text-[9.5px] font-bold text-muted sm:text-[11px]">تومان</span>
+              {strictData && !priceKnown ? 'قیمت نامشخص' : <><bdi dir="ltr">{formatNumber(product.price)}</bdi><span className="text-[9.5px] font-bold text-muted sm:text-[11px]">تومان</span></>}
             </span>
           </div>
           <button

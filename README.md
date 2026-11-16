@@ -11,7 +11,9 @@
 
 ---
 
-> 📘 **راهنمای گام‌به‌گام نصب روی سرور تازه Ubuntu 24.04:** [`docs/DEPLOY-ubuntu.md`](docs/DEPLOY-ubuntu.md)
+> ⚠️ **برای سرور موجود/تولید:** دستورهای نصب، به‌روزرسانی و پاک‌سازی قدیمی پایین را اجرا نکنید. روش تولید نامشخص است؛ ابتدا تأیید مالک، شناسایی سرویس و بکاپ معتبر لازم است. از [`docs/seo-deploy-runbook.md`](docs/seo-deploy-runbook.md) استفاده کنید. `deploy.sh update` پس از بعضی خطاها ادامه می‌دهد و اسکریپت PM2 می‌تواند همه فرایندها را restart کند.
+
+> 📘 **راهنمای قدیمی نصب برای سرور تازه و محیط آزمایشی:** [`docs/DEPLOY-ubuntu.md`](docs/DEPLOY-ubuntu.md)
 >
 > 🔎 **ثبت سرچ کنسول، کنترل انتشار و نگهداری سئو:** [`docs/seo-search-console.md`](docs/seo-search-console.md) · **بررسی رقابتی:** [`docs/seo-competitor-review.md`](docs/seo-competitor-review.md)
 
@@ -32,12 +34,7 @@ sudo ./scripts/ssl-certbot.sh        # نصب certbot + صدور گواهی + س
 
 > nginx هرگز به‌خاطر نبودن گواهی کرش نمی‌کند. مسیر گواهی: `/etc/letsencrypt/live/lift-tire.com/`
 
-**پاک‌سازی کامل هرچه ساخته شد:**
-
-```bash
-sudo ./deploy.sh destroy --yes        # کانتینر + ایمیج + volume + گواهی + nginx + پوشهٔ پروژه
-sudo ./deploy.sh destroy --yes --keep-code   # کد و .env بمانند
-```
+**پاک‌سازی:** دستور `destroy` مخرب است و می‌تواند volume، گواهی و فایل‌ها را حذف کند؛ برای انتشار یا رفع خطا از آن استفاده نکنید.
 
 ## فهرست
 
@@ -360,19 +357,11 @@ curl -s https://lift-tire.com/api/health
 
 ### 🔄 بروزرسانی
 
-```bash
-cd /var/www/lift-tire.com
-./deploy.sh update     # بکاپ خودکار → git pull → بیلد → ری‌استارت
-```
+برای سایت موجود فقط پس از تأیید و شناسایی معماری، [رانبوک انتشار و بازگشت امن](docs/seo-deploy-runbook.md) را دنبال کنید. `deploy.sh update` ممکن است با بکاپ یا کد ناموفق ادامه دهد؛ اجرای مستقیم آن برای این انتشار توصیه نمی‌شود.
 
-### 📜 دستورهای دیگر
+### 📜 وضعیت و لاگ
 
-```bash
-./deploy.sh backup     # بکاپ دیتابیس + آپلودها
-./deploy.sh restart
-./deploy.sh logs api   # لاگ یک سرویس
-./deploy.sh seed --force
-```
+پس از تأیید نوع استقرار، از دستورهای فقط‌خواندنی همان سرویس مانند `docker compose ps` و `docker compose logs --tail=100 web` استفاده کنید. از `seed --force` برای انتشار استفاده نکنید؛ می‌تواند داده نمونه را جایگزین کند.
 
 ---
 

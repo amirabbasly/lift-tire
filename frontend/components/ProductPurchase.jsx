@@ -6,22 +6,24 @@ import { motion } from 'framer-motion';
 import { useAuth, useCart, useToast } from './Providers';
 import { api } from '@/lib/api';
 import { discountPercent, faNum, formatNumber, toman } from '@/lib/format';
-import { IconCart, IconHeart, IconTruck, IconShield, IconCheck } from './Icons';
-import Countdown from './Countdown';
+import { IconCart, IconHeart } from './Icons';
 
-export default function ProductPurchase({ product }) {
+export default function ProductPurchase({ product, ratingSummary = null }) {
   const [qty, setQty] = useState(1);
   const [wished, setWished] = useState(false);
   const { add } = useCart();
   const { token } = useAuth();
   const { show } = useToast();
   const router = useRouter();
-  const out = Number(product.stock) <= 0;
-  const off = product.discount || discountPercent(product.price, product.old_price);
+  const stockKnown = product.stock !== null && product.stock !== undefined && String(product.stock).trim() !== '' && Number.isFinite(Number(product.stock)) && Number(product.stock) >= 0;
+  const priceKnown = product.price !== null && product.price !== undefined && String(product.price).trim() !== '' && Number.isFinite(Number(product.price)) && Number(product.price) >= 0;
+  const out = !stockKnown || Number(product.stock) <= 0;
+  const blocked = out || !priceKnown;
+  const off = priceKnown ? product.discount || discountPercent(product.price, product.old_price) : 0;
   const max = Math.max(1, Math.min(Number(product.stock) || 1, 10));
 
   const addToCart = (goCheckout = false) => {
-    if (out) return;
+    if (blocked) return;
     add(product, qty);
     show(`«${product.name}» به سبد خرید اضافه شد.`);
     if (goCheckout) router.push('/checkout');
@@ -56,15 +58,14 @@ export default function ProductPurchase({ product }) {
 
       <div className="flex flex-wrap items-center gap-3 text-[12px] text-muted">
         <span className="num rounded-lg bg-graphite-900 px-2.5 py-1 text-[15px] font-bold text-white" dir="ltr">{product.size}</span>
-        <span>امتیاز خریداران: <span className="num font-bold text-graphite-900">{faNum(Number(product.rating).toFixed(1))}</span> از ۵</span>
-        <span className="num">({faNum(product.rating_count)} نظر)</span>
-        <span className={out ? 'text-danger' : 'text-success'}>{out ? 'ناموجود' : 'موجود در انبار'}</span>
+        {ratingSummary && <span>میانگین نظرهای تأییدشده: <span className="num font-bold text-graphite-900">{faNum(ratingSummary.rating.toFixed(1))}</span> از ۵ <span className="num">({faNum(ratingSummary.count)} نظر)</span></span>}
+        <span className={out ? 'text-danger' : 'text-success'}>{!stockKnown ? 'موجودی نامشخص' : out ? 'ناموجود' : 'موجود در انبار'}</span>
       </div>
 
       <div className="rounded-2xl border border-black/[.07] bg-white p-4">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            {product.old_price ? (
+            {priceKnown && product.old_price ? (
               <div className="flex items-center gap-2">
                 <span className="num text-[12px] text-muted line-through">{formatNumber(product.old_price)}</span>
                 <span className="num rounded-md bg-danger px-1.5 py-0.5 text-[11px] font-bold text-white">{faNum(off)}٪ تخفیف</span>
@@ -72,16 +73,14 @@ export default function ProductPurchase({ product }) {
             ) : (
               <span className="block h-4" />
             )}
-            <p className="num mt-1 text-[22px] font-extrabold text-graphite-900">{toman(product.price)}</p>
+            <p className="num mt-1 text-[22px] font-extrabold text-graphite-900">{priceKnown ? toman(product.price) : 'قیمت نامشخص'}</p>
           </div>
-          <div className="text-left">
-            <Countdown label="پایان پیشنهاد" />
-          </div>
+
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-black/[.06] pt-4">
           {out ? (
-            <span className="rounded-xl bg-danger/10 px-4 py-2.5 text-[13px] font-bold text-danger">این محصول فعلاً ناموجود است</span>
+            <span className="rounded-xl bg-danger/10 px-4 py-2.5 text-[13px] font-bold text-danger">{stockKnown ? 'این محصول فعلاً ناموجود است' : 'موجودی این محصول مشخص نیست'}</span>
           ) : (
             <>
               <div className="flex items-center overflow-hidden rounded-xl border border-black/10">
@@ -89,7 +88,6 @@ export default function ProductPurchase({ product }) {
                 <span className="num w-10 text-center text-sm font-extrabold">{faNum(qty)}</span>
                 <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="px-3.5 py-2.5 text-lg font-bold text-steel-500 transition hover:bg-surface" aria-label="کاهش">−</button>
               </div>
-              <span className="text-[11px] text-muted">هر لاستیک به‌صورت جداگانه فروخته می‌شود</span>
             </>
           )}
         </div>
@@ -98,13 +96,13 @@ export default function ProductPurchase({ product }) {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => addToCart(false)}
-            disabled={out}
+            disabled={blocked}
             className="btn-accent !py-3.5"
           >
             <IconCart width={18} height={18} /> افزودن به سبد خرید
           </motion.button>
           <div className="flex gap-2">
-            <button onClick={() => addToCart(true)} disabled={out} className="btn-dark flex-1 !py-3.5 text-[12px] sm:!px-5">
+            <button onClick={() => addToCart(true)} disabled={blocked} className="btn-dark flex-1 !py-3.5 text-[12px] sm:!px-5">
               خرید سریع
             </button>
             <button
@@ -117,18 +115,6 @@ export default function ProductPurchase({ product }) {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2 border-t border-black/[.06] pt-4 sm:grid-cols-4">
-          {[
-            [IconShield, 'ضمانت اصالت'],
-            [IconTruck, 'ارسال سراسر ایران'],
-            [IconCheck, '۷ روز بازگشت'],
-            [IconCheck, 'مشاوره تخصصی'],
-          ].map(([Ic, label]) => (
-            <span key={label} className="flex items-center gap-1.5 text-[10.5px] text-steel-500">
-              <Ic width={14} height={14} className="text-accent" /> {label}
-            </span>
-          ))}
-        </div>
       </div>
 
       <ul className="space-y-2 rounded-2xl border border-black/[.07] bg-white p-4 text-[12px] text-steel-500">

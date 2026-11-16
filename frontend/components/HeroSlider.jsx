@@ -146,10 +146,11 @@ export default function HeroSlider({ slides = [], stats = [] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [direction, setDirection] = useState(1);
-  const reduce = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
   const pointerFine = usePointerFine();
-  // انیمیشن ورود فقط بعد از hydration؛ در SSR متن هیرو همیشه مرئی است
+  // رندر اول سرور و مرورگر یکسان است؛ تنظیم کاهش حرکت پس از hydration اعمال می‌شود.
   const [animate, setAnimate] = useState(false);
+  const reduce = animate && prefersReducedMotion;
   useEffect(() => setAnimate(true), []);
   // آیا تصاویر تقسیم‌شده (پس‌زمینه + لاستیک) در دسترس هستند؟
   const [split, setSplit] = useState(true);

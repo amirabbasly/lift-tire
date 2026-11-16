@@ -6,6 +6,7 @@ import Stars from './Stars';
 import { api } from '@/lib/api';
 import { useToast } from './Providers';
 import { faNum, formatDate } from '@/lib/format';
+import { publicReviews } from '@/lib/reviews';
 import { IconStar } from './Icons';
 
 const TABS = [
@@ -14,15 +15,15 @@ const TABS = [
   { id: 'reviews', label: 'نظرات کاربران' },
 ];
 
-export default function DetailTabs({ product }) {
+export default function DetailTabs({ product, initialReviews = null }) {
   const [tab, setTab] = useState('desc');
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState(initialReviews);
   const [form, setForm] = useState({ name: '', phone: '', rating: 5, comment: '' });
   const [sending, setSending] = useState(false);
   const { show } = useToast();
 
   useEffect(() => {
-    api(`/reviews?product_id=${product.id}`).then(setReviews).catch(() => setReviews([]));
+    api(`/reviews?product_id=${product.id}`).then((data) => setReviews(publicReviews(data))).catch(() => setReviews(null));
   }, [product.id]);
 
   const submit = async (e) => {
@@ -59,7 +60,7 @@ export default function DetailTabs({ product }) {
             className={`relative shrink-0 px-5 py-3.5 text-[12.5px] font-bold transition ${tab === t.id ? 'text-accent-dark' : 'text-steel-500 hover:text-graphite-900'}`}
           >
             {t.label}
-            {t.id === 'reviews' && reviews.length > 0 && <span className="num mr-1 text-[10px] text-muted">({faNum(reviews.length)})</span>}
+            {t.id === 'reviews' && reviews?.length > 0 && <span className="num mr-1 text-[10px] text-muted">({faNum(reviews.length)})</span>}
             {tab === t.id && <motion.span layoutId="detail-tab" className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-accent" />}
           </button>
         ))}
@@ -90,8 +91,9 @@ export default function DetailTabs({ product }) {
             {tab === 'reviews' && (
               <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
                 <div className="space-y-3">
-                  {reviews.length === 0 && <p className="text-[12.5px] text-muted">هنوز نظری برای این محصول ثبت نشده است. اولین نظر را شما بنویسید.</p>}
-                  {reviews.map((r) => (
+                  {reviews === null && <p role="status" className="text-[12.5px] text-muted">دریافت نظرها فعلاً ممکن نیست.</p>}
+                  {reviews?.length === 0 && <p className="text-[12.5px] text-muted">در حال حاضر نظر تأییدشده‌ای برای نمایش وجود ندارد.</p>}
+                  {(reviews || []).map((r) => (
                     <div key={r.id} className="rounded-xl border border-black/[.06] bg-surface/40 p-3.5">
                       <div className="flex items-center justify-between">
                         <span className="text-[12px] font-extrabold text-graphite-900">{r.name}</span>

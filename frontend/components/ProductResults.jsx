@@ -65,7 +65,7 @@ export default function ProductResults({ items = [], total = 0, page = 1, pages 
       ) : (
         <div className={view === 'grid' ? 'grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4' : 'flex flex-col gap-3'}>
           {items.map((p, i) => (
-            <ProductCard key={p.id} product={p} layout={view === 'list' ? 'list' : 'grid'} index={i} />
+            <ProductCard key={p.id} product={p} layout={view === 'list' ? 'list' : 'grid'} index={i} showRating={false} strictData />
           ))}
         </div>
       )}

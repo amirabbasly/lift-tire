@@ -25,6 +25,17 @@ export async function api(path, { method = 'GET', body, token, headers = {} } = 
   return data;
 }
 
+/** برای مسیرهایی که باید ۴۰۴ واقعی را از قطعی API تفکیک کنند. */
+export async function serverGetResult(path) {
+  try {
+    const res = await fetch(`${INTERNAL}/api${path}`, { cache: 'no-store' });
+    if (!res.ok) return { status: res.status, data: null };
+    return { status: res.status, data: await res.json() };
+  } catch {
+    return { status: 0, data: null };
+  }
+}
+
 /** درخواست سمت سرور با fallback — هرگز صفحه سفید نمی‌دهد */
 export async function serverGet(path, fallback = null) {
   try {

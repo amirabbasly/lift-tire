@@ -1,4 +1,6 @@
-# 🚀 راهنمای کامل دیپلوی «لیفت تایر» روی سرور تازه Ubuntu 24.04
+# 🚀 راهنمای قدیمی نصب «لیفت تایر» روی سرور تازه Ubuntu 24.04
+
+> ⚠️ **هشدار برای سرور موجود و تولید:** این سند قدیمی، دستورهای نصب اولیه، seed، حذف یا تغییر سرویس دارد و دستور انتشار این تغییرات نیست. `deploy.sh update` ممکن است بعد از خطای بکاپ یا دریافت کد ادامه دهد و اسکریپت PM2 می‌تواند همه فرایندها را restart کند. برای سایت موجود، ابتدا معماری و بکاپ را بررسی و پس از تأیید مالک از [رانبوک امن انتشار](seo-deploy-runbook.md) استفاده کنید. هیچ دستور مخرب یا تغییر سرویس دیگر را بدون تأیید اجرا نکنید.
 
 این راهنما از صفر تا آنلاین‌شدن سایت را پوشش می‌دهد؛ فرض بر این است که یک VPS تازه با **Ubuntu 24.04 LTS** خریده‌اید و دامنه `lift-tire.com` را در اختیار دارید.
 
@@ -316,38 +318,9 @@ rsync -avz backups/ backup@other-server:/backups/lifttire/
 
 ## ۱۲) بروزرسانی سایت
 
-```bash
-cd /var/www/lift-tire.com
-sudo ./deploy.sh update
-```
+این بخش قدیمی جایگزین شده است. برای سایت موجود، بدون تشخیص Docker/PM2، ثبت نسخه، بکاپ قابل بازبینی و تأیید مالک، هیچ به‌روزرسانی اجرا نکنید. از [رانبوک امن انتشار و بازگشت](seo-deploy-runbook.md) استفاده کنید. `deploy.sh update` و `scripts/deploy-pm2.sh update` برای این انتشار توصیه نمی‌شوند؛ اولی ممکن است بعد از شکست بکاپ یا دریافت کد ادامه دهد و دومی می‌تواند همه فرایندهای PM2 را restart کند.
 
-(بکاپ خودکار → `git pull` → بیلد → ری‌استارت؛ دیتابیس و تصاویر آپلودی دست‌نخورده می‌مانند)
-
-### آوردن کد از یک شاخهٔ مشخص
-
-اگر کد جدید روی شاخهٔ دیگری (غیر از شاخهٔ فعلی سرور) است:
-
-```bash
-sudo ./deploy.sh update --branch=arena/efe4c33f-lift-tire
-```
-
-### بروزرسانی بدون داکر (حالت PM2)
-
-اگر سایت را با اسکریپت PM2 بالا آورده‌اید:
-
-```bash
-cd /var/www/lift-tire.com/frontend
-git fetch origin arena/efe4c33f-lift-tire
-git checkout arena/efe4c33f-lift-tire
-git pull --ff-only origin arena/efe4c33f-lift-tire
-npm ci
-npm run build
-cp -r public .next/standalone/
-cp -r .next/static .next/standalone/.next/
-pm2 restart lifttire-web
-```
-
-> کش مرورگر: بعد از بروزرسانی یک‌بار `Ctrl+Shift+R` بزنید تا فایل‌های قدیمی CSS/JS جایگزین شوند.
+> کش مرورگر: بعد از بروزرسانی موفق، یک‌بار `Ctrl+Shift+R` بزنید تا فایل‌های قدیمی CSS/JS جایگزین شوند.
 
 ---
 
@@ -756,8 +729,7 @@ sudo ./scripts/deploy-pm2.sh status      # وضعیت PM2 + کد پاسخ‌ها
 sudo ./scripts/deploy-pm2.sh doctor      # بررسی کامل سلامت
 sudo ./scripts/deploy-pm2.sh logs        # لاگ زنده
 sudo ./scripts/deploy-pm2.sh logs lifttire-api
-sudo ./scripts/deploy-pm2.sh restart
-sudo ./scripts/deploy-pm2.sh update      # git pull + بیلد + ری‌استارت
+# update/restart از این اسکریپت برای تولید ایمن فرض نمی‌شود؛ رانبوک جدید را ببینید.
 sudo ./scripts/deploy-pm2.sh nginx http  # بازگشت اجباری به HTTP
 sudo ./scripts/deploy-pm2.sh nginx https # سوییچ به HTTPS (اگر گواهی هست)
 ```
@@ -781,8 +753,8 @@ sudo ./scripts/deploy-pm2.sh nginx https # سوییچ به HTTPS (اگر گوا�
 | --- | --- | --- |
 | `pm2 list` → `errored` | پورت اشغال یا خطای دیتابیس | `pm2 logs lifttire-api --nostream --lines 40` |
 | صفحه ۵۰۲ | PM2 بالا نیست | `pm2 list` سپس `pm2 start ecosystem.config.cjs` |
-| صفحه ۴۰۴ روی همه مسیرها | `public`/`.next/static` کپی نشده | `sudo ./scripts/deploy-pm2.sh update` |
-| `nginx: [emerg] bind() to 0.0.0.0:80 failed` | nginx/apache دیگر یا کانتینر قدیمی | `./deploy.sh clean --yes` و `systemctl stop apache2` |
+| صفحه ۴۰۴ روی همه مسیرها | `public`/`.next/static` کپی نشده | release و کپی دارایی‌ها را طبق [رانبوک امن](seo-deploy-runbook.md) بررسی کنید. |
+| `nginx: [emerg] bind() to 0.0.0.0:80 failed` | سرویس دیگری پورت را گرفته است | مالک پورت را فقط بررسی کنید؛ هیچ سرویس نامرتبطی را بدون تأیید متوقف نکنید. |
 | بعد از ری‌بوت سایت پایین است | `pm2 startup` اجرا نشده | گام ۴ را انجام دهید |
 | `EACCES` روی `/var/www/...` | مالکیت پوشه | `chown -R root:root /var/www/lift-tire.com` (فقط ریشه لازم است) |
 
